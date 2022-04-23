@@ -16,17 +16,18 @@ public class Tile
         X = x;
         Y = y;
         HeightValue = heightvalue;
-        if (heightvalue < 0.42)
+ 
+        if (heightvalue < 0.48)
             _Biome = new TilesBiomes(Enums.Biome.DEEPWATER,0,60,255);
-        else if (heightvalue <= 0.52)
+        else if (heightvalue <= 0.54)
             _Biome = new TilesBiomes(Enums.Biome.SHALLOWWATER,53,195,255);
-        else if (heightvalue <= 0.53)
+        else if (heightvalue <= 0.55)
             _Biome = new TilesBiomes(Enums.Biome.SAND,249,221,84);
-        else if (heightvalue <= 0.59)
+        else if (heightvalue <= 0.58)
             _Biome = new TilesBiomes(Enums.Biome.GRASS,57,205,72);
-        else if (heightvalue <= 0.64)
+        else if (heightvalue <= 0.67)
             _Biome = new TilesBiomes(Enums.Biome.FOREST,2,137,15);
-        else if (heightvalue <= 0.69)
+        else if (heightvalue <= 0.7)
             _Biome = new TilesBiomes(Enums.Biome.ROCK,191,185,183);
         else
             _Biome = new TilesBiomes(Enums.Biome.SNOW,236,256,238);
