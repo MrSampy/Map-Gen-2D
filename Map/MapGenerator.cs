@@ -31,6 +31,7 @@ public class MapGenerator
             }
         }
         FindNeighbours();
+        UpdateBitmasks();
     }
 
     private void FindNeighbours()
@@ -45,5 +46,12 @@ public class MapGenerator
                 Tiles[x, y].BottomTile = (x + 1 >= Width) ? null : Tiles[x+1,y];
             }
         }
+    }
+
+    private void UpdateBitmasks()
+    {
+        for (int x = 0; x < Width; x++)
+            for (int y = 0; y < Height; y++)
+                Tiles[x,y].UpdateBitmask();
     }
 }
