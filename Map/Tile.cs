@@ -12,6 +12,7 @@ public class Tile
     public Tile? TopTile;
     public Tile? BottomTile;
     public int Bitmask;
+    public bool IsBorder;
     public Tile(int x, int y, double heightvalue)
     {
         X = x;
@@ -36,16 +37,25 @@ public class Tile
     }   
         public void UpdateBitmask()
         {
-            int count = 0;
-            if (TopTile._Biome == _Biome)
-                count += 1;
-            else if (RightTile._Biome == _Biome)
-                count += 2;
-            else if (BottomTile._Biome == _Biome)
-                count += 4;
-            else if (LeftTile._Biome == _Biome)
-                count += 8;
-            Bitmask = count;
-        }
+            int counter = 0;
+            if (TopTile != null && TopTile._Biome.TBiome==_Biome.TBiome)
+                counter += 1;
+            if (RightTile != null && RightTile._Biome.TBiome==_Biome.TBiome)
+                counter += 2;
+            if (BottomTile != null && BottomTile._Biome.TBiome==_Biome.TBiome)
+                counter += 4;
+            if (LeftTile != null && LeftTile._Biome.TBiome==_Biome.TBiome)
+                counter += 8;
+            Bitmask = counter;
+            IsBorder = (Bitmask != 15);
+           if (IsBorder)
+            {
+                _Biome.Blue = (int) (_Biome.Blue * 0.8);
+                _Biome.Red = (int) (_Biome.Red * 0.8);
+                _Biome.Green = (int) (_Biome.Green * 0.8);
 
+            }
+
+        }
+        
 }

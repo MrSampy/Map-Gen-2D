@@ -47,7 +47,7 @@ public class MapGenerator
             }
         }
     }
-
+    
     private void UpdateBitmasks()
     {
         for (int x = 0; x < Width; x++)
