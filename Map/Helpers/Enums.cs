@@ -12,4 +12,10 @@ public class Enums
         ROCK,
         SNOW
     }
+    
+    public enum TileGroupType
+    {
+        Water, 
+        Land
+    }
 }

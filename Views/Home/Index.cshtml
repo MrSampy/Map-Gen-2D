@@ -25,7 +25,7 @@ function drawmap() {
     for (int x = 0; x < map.Width; x++)
     {
         for (int y = 0; y < map.Height; y++)
-        {   <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x,y]._Biome.Red,@map.Tiles[x,y]._Biome.Green,@map.Tiles[x,y]._Biome.Blue))</script>
+        {   <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x,y]._Biome._Color.Red,@map.Tiles[x,y]._Biome._Color.Green,@map.Tiles[x,y]._Biome._Color.Blue))</script>
             startx += 5;
         }
         startx = 10;
