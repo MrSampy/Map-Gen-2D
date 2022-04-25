@@ -1,7 +1,5 @@
 namespace Course_work.Map.Helpers;
 
-
-
 public class Color
 {
     public int Red { get; set; }

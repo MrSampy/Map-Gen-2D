@@ -8,10 +8,13 @@ public class MapGenerator
     public int Width { get; set; }
     public int Height { get; set; }
     public Tile[,] Tiles;
+    public int NumOfGeoZones = 11;
+    public int LengthofGeoZone { get; set; }
     public MapGenerator(int width, int height)
     {   
-        Width = width;
+        Width = width; 
         Height = height;
+        LengthofGeoZone = (int)(Width/NumOfGeoZones);
         Tiles = new Tile[Width,Height];
         Seed = Rnd.Next(1,1000);
         PerlinNoise perlinNoise = new PerlinNoise(Seed);

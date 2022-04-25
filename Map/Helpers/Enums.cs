@@ -18,4 +18,14 @@ public class Enums
         Water, 
         Land
     }
+
+    public enum HeatType
+    {
+        COLDEST,
+        COLDER,
+        COLD,
+        WARM,
+        WARMER,
+        WAMEST
+    }
 }
