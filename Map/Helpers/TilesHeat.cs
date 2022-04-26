@@ -1,3 +1,4 @@
+using Course_work.Map.Helpers.Storages;
 namespace Course_work.Map.Helpers;
 
 public class TilesHeat

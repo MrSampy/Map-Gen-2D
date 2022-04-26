@@ -1,4 +1,4 @@
-namespace Course_work.Map.Helpers;
+namespace Course_work.Map.Helpers.Storages;
 
 public class Enums
 {
