@@ -1,16 +1,10 @@
 namespace Course_work.Map.Helpers;
 
-public class TilesBiome
+public class TilesBiome:TilesProperty
 {
     public Constants.Biome TBiome { get; init; }
-    public RgbColor _Color;
-    public TilesBiome(Constants.Biome bi, RgbColor color)
+    public TilesBiome(Constants.Biome biome, RgbColor color):base(color)
     {
-        TBiome = bi;
-        _Color = color;
-    }
-    public void Darkify(double k)
-    { 
-        _Color = new RgbColor((int) (_Color.Red * k), (int) (_Color.Green * k), (int) (_Color.Blue * k));
+        TBiome = biome;
     }
 }

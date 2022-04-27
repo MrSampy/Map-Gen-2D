@@ -5,21 +5,7 @@
     var map = new MapGenerator(200, 200);
     ViewData["Title"] = "Home Page";
 }
-<script>
-let functionarr = [];
-function drawRect(x,y,red,green,blue) {
-      let canvas = document.getElementById("canvas");
-      if (canvas.getContext) {
-        let ctx = canvas.getContext("2d");
-        ctx.fillStyle = `rgb(${red},${green},${blue})`;
-        ctx.fillRect (x, y, 5, 5);
-      }
-    }
-function drawmap() {
-  for (const func of functionarr)
-    func();
-}
-</script>
+<script src="js/site.js"></script>
 @{
     int startx=10, starty = 10, newwidth=map.Width*5,newhight=map.Height*5;
     for (int x = 0; x < map.Width; x++)

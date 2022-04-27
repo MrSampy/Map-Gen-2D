@@ -1,16 +1,10 @@
 namespace Course_work.Map.Helpers;
 
-public class TilesHeat
+public class TilesHeat:TilesProperty
 {
     public Constants.HeatType THeat { get; set; }
-        public RgbColor _Color;
-        public TilesHeat(Constants.HeatType heat, RgbColor color)
+    public TilesHeat(Constants.HeatType heat, RgbColor color):base(color)
         {
             THeat = heat;
-            _Color = color;
-        }
-        public void Darkify(double k)
-        { 
-            _Color = new RgbColor((int) (_Color.Red * k), (int) (_Color.Green * k), (int) (_Color.Blue * k));
         }
 }
