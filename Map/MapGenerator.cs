@@ -1,4 +1,5 @@
 using Course_work.Map.Helpers;
+
 namespace Course_work.Map;
 
 public class MapGenerator
@@ -56,5 +57,35 @@ public class MapGenerator
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)
                 Tiles[x,y].UpdateBitmask();
+    }
+
+    private void UpdateHeatMap()
+    {
+        int counter = 0, numberofzone=0;
+        bool isdowm = false;
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+              Tiles[x,y].UpdateHeatTile((Constants.HeatType)numberofzone);
+              if (isdowm)
+                  --numberofzone;
+              else
+                  ++numberofzone;
+            }
+
+            if (numberofzone==5)
+            {
+                isdowm = true;
+            }
+            if (counter == LengthofGeoZone)
+            {
+                numberofzone = isdowm ? --numberofzone : ++numberofzone;
+
+            }
+
+            ++counter;
+        }
+
     }
 }

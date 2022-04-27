@@ -1,13 +1,16 @@
-using Course_work.Map.Helpers.Storages;
 namespace Course_work.Map.Helpers;
 
 public class TilesHeat
 {
-    public Enums.HeatType THeat { get; set; }
-        public Color _Color;
-        public TilesHeat(Enums.HeatType heat, Color color)
+    public Constants.HeatType THeat { get; set; }
+        public RgbColor _Color;
+        public TilesHeat(Constants.HeatType heat, RgbColor color)
         {
             THeat = heat;
             _Color = color;
+        }
+        public void Darkify(double k)
+        { 
+            _Color = new RgbColor((int) (_Color.Red * k), (int) (_Color.Green * k), (int) (_Color.Blue * k));
         }
 }
