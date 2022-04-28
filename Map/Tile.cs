@@ -19,40 +19,40 @@ public class Tile
         HeightValue = heightvalue;
         
         if (heightvalue < Constants.HeightValDeepWat)
-        {
             _Biome = new TilesBiome(Constants.Biome.DeepWater, Constants.DeepWater);
-            Heat = new TilesHeat(Constants.HeatType.Cold, Constants.Cold);
-        }
         else if (heightvalue <= Constants.HeightValShalWat)
-        {
             _Biome = new TilesBiome(Constants.Biome.ShallowWater, Constants.ShallowWater);
-            Heat = new TilesHeat(Constants.HeatType.Warm, Constants.Warm);
-        }
         else if (heightvalue <= Constants.HeightValSand)
-        {
             _Biome = new TilesBiome(Constants.Biome.Sand, Constants.Sand);
-            Heat = new TilesHeat(Constants.HeatType.Warmer, Constants.Warmer);
-        }
         else if (heightvalue <= Constants.HeightValGrass)
-        {
             _Biome = new TilesBiome(Constants.Biome.Grass, Constants.Grass);
-            Heat = new TilesHeat(Constants.HeatType.Warmest, Constants.Warmest);
-        }
         else if (heightvalue <= Constants.HeightValForest)
-        {
             _Biome = new TilesBiome(Constants.Biome.Forest, Constants.Forest);
-            Heat = new TilesHeat(Constants.HeatType.Warm, Constants.Warm);
-        }
         else if (heightvalue <= Constants.HeightValRock)
-        {
             _Biome = new TilesBiome(Constants.Biome.Rock, Constants.Rock);
-            Heat = new TilesHeat(Constants.HeatType.Colder, Constants.Colder);
-        }
         else
-        {
             _Biome = new TilesBiome(Constants.Biome.Snow, Constants.Snow);
+        
+        if(heightvalue < Constants.HeatValColder1)
+            Heat = new TilesHeat(Constants.HeatType.Colder, Constants.Colder);
+        else if(heightvalue <= Constants.HeatValCold1)
+            Heat = new TilesHeat(Constants.HeatType.Cold, Constants.Cold);
+        else if(heightvalue <= Constants.HeatValWarm1)
+            Heat = new TilesHeat(Constants.HeatType.Warm, Constants.Warm);
+        else if(heightvalue <= Constants.HeatValWarmer1)
+            Heat = new TilesHeat(Constants.HeatType.Warmer, Constants.Warmer);
+        else if(heightvalue <= Constants.HeatValWarmest)
+            Heat = new TilesHeat(Constants.HeatType.Warmest, Constants.Warmest);
+        else if(heightvalue <= Constants.HeatValWarmer2)
+            Heat = new TilesHeat(Constants.HeatType.Warmer, Constants.Warmer);
+        else if(heightvalue <= Constants.HeatValWarm2)
+            Heat = new TilesHeat(Constants.HeatType.Warm, Constants.Warm);
+        else if(heightvalue <= Constants.HeatValCold2)
+            Heat = new TilesHeat(Constants.HeatType.Cold, Constants.Cold);
+        else if(heightvalue < Constants.HeatValColder2)
+            Heat = new TilesHeat(Constants.HeatType.Colder, Constants.Colder);
+        else
             Heat = new TilesHeat(Constants.HeatType.Coldest, Constants.Coldest);
-        }
 
         Type = (_Biome.TBiome == Constants.Biome.DeepWater || _Biome.TBiome == Constants.Biome.ShallowWater)
             ? (Constants.TileGroupType.Water)
@@ -77,33 +77,10 @@ public class Tile
            {
                double shadFactor = 0.8;
                 _Biome.Darkify(shadFactor);
+                Heat.Darkify(0);
            }
 
         }
-
-        public void UpdateHeatTile(Constants.HeatType type)
-        {
-            if (IsBorder)
-            {   Heat.Darkify(0);
-                return;
-            }
-            int currHeatype = (int)Heat.THeat, tempHeattype=(int)type;
-            if (tempHeattype != currHeatype)
-                tempHeattype = (tempHeattype > currHeatype) ? (tempHeattype - 1) : (tempHeattype + 1);
-            
-            Heat.THeat = (Constants.HeatType) tempHeattype;
-            if (Heat.THeat == Constants.HeatType.Coldest)
-                Heat._Color = Constants.Coldest;
-            else if (Heat.THeat == Constants.HeatType.Colder)
-                Heat._Color = Constants.Colder;
-            else if (Heat.THeat == Constants.HeatType.Cold)
-                Heat._Color = Constants.Cold;
-            else if (Heat.THeat == Constants.HeatType.Warm)
-                Heat._Color = Constants.Warm;
-            else if (Heat.THeat == Constants.HeatType.Warmer)
-                Heat._Color = Constants.Warmer;
-            else if (Heat.THeat == Constants.HeatType.Warmest)
-                Heat._Color = Constants.Warmest;
-        }
+        
 
 }

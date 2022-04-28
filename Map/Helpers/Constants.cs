@@ -42,11 +42,24 @@ public static class Constants
         Warmer,
         Warmest
     }
-    public const double HeightValDeepWat = 0.48;
-    public const double HeightValShalWat = 0.54;
-    public const double HeightValSand = 0.55;
-    public const double HeightValGrass = 0.58;
-    public const double HeightValForest = 0.67;
-    public const double HeightValRock = 0.7;
+    public const double HeightValDeepWat = 0.47;
+    public const double HeightValShalWat = 0.53;
+    public const double HeightValSand = 0.54;
+    public const double HeightValGrass = 0.6;
+    public const double HeightValForest = 0.66;
+    public const double HeightValRock = 0.69;
+    
+    public const double HeatValColder1 = 0.43;
+    public const double HeatValCold1 = 0.52;
+    public const double HeatValWarm1 = 0.55;
+    public const double HeatValWarmer1 = 0.57;
+    public const double HeatValWarmest = 0.58;
+    public const double HeatValWarmer2 = 0.61;
+    public const double HeatValWarm2 = 0.63;
+    public const double HeatValCold2 = 0.67;
+    public const double HeatValColder2 = 0.71;
+
+    
+
 
 }
