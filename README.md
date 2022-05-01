@@ -1,2 +1,0 @@
-# Course-work
- Map Generator

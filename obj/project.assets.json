@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/Course-work/Course-work.csproj",
-      "projectName": "Course-work",
-      "projectPath": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/Course-work/Course-work.csproj",
+      "projectUniqueName": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/src/CourseWork/CourseWork.csproj",
+      "projectName": "CourseWork",
+      "projectPath": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/src/CourseWork/CourseWork.csproj",
       "packagesPath": "/home/serhiy/.nuget/packages/",
-      "outputPath": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/Course-work/obj/",
+      "outputPath": "/home/serhiy/Studying/Prog/Kursach/attempts/Course-work/src/CourseWork/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/serhiy/.nuget/NuGet/NuGet.Config"

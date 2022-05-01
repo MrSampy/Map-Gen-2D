@@ -1,4 +1,4 @@
-namespace Course_work.Map.Helpers;
+namespace CourseWork.Map.Helpers;
 
 public class TilesHeat:TilesProperty
 {

@@ -1,8 +1,6 @@
-﻿@using Course_work.Map;
-@using Course_work.Map.Helpers;
-
+﻿@using CourseWork.Map
 @{
-    var map = new MapGenerator(200, 200);
+    var map = new MapBuilder(200, 200);
     ViewData["Title"] = "Home Page";
 }
 <script src="js/site.js"></script>
