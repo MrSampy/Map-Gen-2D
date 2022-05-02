@@ -41,17 +41,19 @@ public class Tile
         }
         IsLand = (_Biome.TBiome != Constants.Biome.DeepWater && _Biome.TBiome != Constants.Biome.ShallowWater);
 
-    }   
-        public void UpdateBitmask()
-        {
+    }
+
+    private bool IsEqualBiome(Tile tile) => (tile != null && tile._Biome.TBiome == _Biome.TBiome);
+    public void UpdateBitmask()
+        {   
             int counter = 0;
-            if (TopTile != null && TopTile._Biome.TBiome==_Biome.TBiome)
+            if (IsEqualBiome(TopTile))
                 counter += 1;
-            if (RightTile != null && RightTile._Biome.TBiome==_Biome.TBiome)
+            if (IsEqualBiome(RightTile))
                 counter += 2;
-            if (BottomTile != null && BottomTile._Biome.TBiome==_Biome.TBiome)
+            if (IsEqualBiome(BottomTile))
                 counter += 4;
-            if (LeftTile != null && LeftTile._Biome.TBiome==_Biome.TBiome)
+            if (IsEqualBiome(LeftTile))
                 counter += 8;
             Bitmask = counter;
             IsBorder = (counter != 15);
@@ -67,14 +69,15 @@ public class Tile
 
         public Tile GetNextPixRiver(Tile skipble)
         {
+            bool IsNextTile(Tile tile) => (tile != null && tile.HeightValue > tile.HeightValue && tile.X != skipble.X && tile.Y != skipble.Y );
             Tile temptile = new Tile(-1,-1,10);
-            if (LeftTile != null && temptile.HeightValue > LeftTile.HeightValue && LeftTile.X != skipble.X && LeftTile.Y != skipble.Y)
+            if (IsNextTile(LeftTile))
                 temptile = LeftTile;    
-            if (RightTile != null && temptile.HeightValue > RightTile.HeightValue && RightTile.X != skipble.X && RightTile.Y != skipble.Y)
+            if (IsNextTile(RightTile))
                 temptile = RightTile;
-            if (TopTile != null && temptile.HeightValue > TopTile.HeightValue && TopTile.X != skipble.X && TopTile.Y != skipble.Y)
+            if (IsNextTile(TopTile))
                 temptile = TopTile;
-            if (BottomTile != null && temptile.HeightValue > BottomTile.HeightValue && BottomTile.X != skipble.X && BottomTile.Y != skipble.Y)
+            if (IsNextTile(BottomTile))
                 temptile = BottomTile;
             return temptile;
         }
