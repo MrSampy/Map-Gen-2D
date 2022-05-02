@@ -1,11 +1,11 @@
 namespace CourseWork.Map.Helpers;
 
-public class TilesBiome:TilesProperty
+public class TilesBiome : TilesProperty
 {
     public Constants.Biome TBiome { get; init; }
-    public TilesBiome(Constants.Biome biome, RgbColor color):base(color)
+
+    public TilesBiome(Constants.Biome biome, RgbColor color) : base(color)
     {
         TBiome = biome;
     }
-
 }

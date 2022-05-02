@@ -5,18 +5,18 @@
 }
 <script src="js/site.js"></script>
 @{
-    int startx=10, starty = 10, newwidth=map.Width*11,newhight=map.Height*11,lenofpix = 5, border = 20;
+    int startx = 10, starty = 10, newwidth = map.Width * 11, newhight = map.Height * 11, lenofpix = 5, border = 20;
     int anothery = map.Width * lenofpix + border;
     for (int x = 0; x < map.Width; x++)
     {
         for (int y = 0; y < map.Height; y++)
         {
-            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x,y]._Biome._Color.Red,
-                                 @map.Tiles[x,y]._Biome._Color.Green,
-                                 @map.Tiles[x,y]._Biome._Color.Blue,@lenofpix))
-                    functionarr.push(() => drawRect(@startx,@(anothery+starty),@map.Tiles[x,y].Heat._Color.Red,
-                                 @map.Tiles[x,y].Heat._Color.Green,
-                                 @map.Tiles[x,y].Heat._Color.Blue, @lenofpix))
+            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y]._Biome._Color.Red,
+                                 @map.Tiles[x, y]._Biome._Color.Green,
+                                 @map.Tiles[x, y]._Biome._Color.Blue,@lenofpix))
+                    functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
+                                 @map.Tiles[x, y].Heat._Color.Green,
+                                 @map.Tiles[x, y].Heat._Color.Blue, @lenofpix))
             </script>
             startx += lenofpix;
         }
