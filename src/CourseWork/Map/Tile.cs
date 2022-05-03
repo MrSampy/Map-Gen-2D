@@ -7,9 +7,9 @@ public class Tile
     public int X { get; }
     public int Y { get; }
     public double HeightValue { get; }
-    public readonly TilesBiome _Biome;
-    public TilesHeat Heat;
-    public bool IsLand;
+    public TilesBiome Biome;
+    public readonly TilesHeat Heat;
+    public readonly bool IsLand;
     public Tile? LeftTile, RightTile, TopTile, BottomTile;
     public bool IsBorder, HasRiver;
     public int Bitmask;
@@ -20,12 +20,12 @@ public class Tile
         Y = y;
         HasRiver = false;
         HeightValue = heightvalue;
-        _Biome = new TilesBiome(Constants.Biome.Snow, Constants.Snow);
+        Biome = new TilesBiome(Constants.Biomes.Snow, Constants.Snow);
         foreach (var elem in Constants.HeightVals)
         {
             if (heightvalue < elem.Key)
             {
-                _Biome = new TilesBiome(elem.Value.TBiome, elem.Value._Color);
+                Biome = new TilesBiome(elem.Value.TBiome, elem.Value._Color);
                 break;
             }
         }
@@ -40,10 +40,10 @@ public class Tile
             }
         }
 
-        IsLand = (_Biome.TBiome != Constants.Biome.DeepWater && _Biome.TBiome != Constants.Biome.ShallowWater);
+        IsLand = (Biome.TBiome != Constants.Biomes.DeepWater && Biome.TBiome != Constants.Biomes.ShallowWater);
     }
 
-    private bool IsEqualBiome(Tile tile) => (tile != null && tile._Biome.TBiome == _Biome.TBiome);
+    private bool IsEqualBiome(Tile tile) => (tile != null && tile.Biome.TBiome == Biome.TBiome);
 
     public void UpdateBitmask()
     {
@@ -62,25 +62,33 @@ public class Tile
         if (IsBorder)
         {
             double shadFactor = 0.8;
-            _Biome.Darkify(shadFactor);
-            Heat.Darkify(0);
+            Biome.Darkify(shadFactor);
+            if(Biome.TBiome!=Constants.Biomes.River)
+                Heat.Darkify(0);
         }
     }
 
-    public Tile GetNextPixRiver(Tile skipble)
+    public Tile GetNextPixRiver(Tile skippble)
     {
-        bool IsNextTile(Tile tile) => (tile != null && tile.HeightValue > tile.HeightValue && tile.X != skipble.X &&
-                                       tile.Y != skipble.Y);
+        bool IsNextTile(Tile tile1, Tile tile2) => (tile1 != null && skippble!=tile1 && tile1.HeightValue < tile2.HeightValue);
 
         Tile temptile = new Tile(-1, -1, 10);
-        if (IsNextTile(LeftTile))
+        if (IsNextTile(LeftTile, temptile))
+        {
             temptile = LeftTile;
-        if (IsNextTile(RightTile))
+        }
+        if (IsNextTile(RightTile,temptile))
+        {
             temptile = RightTile;
-        if (IsNextTile(TopTile))
+        }
+        if (IsNextTile(TopTile,temptile))
+        {
             temptile = TopTile;
-        if (IsNextTile(BottomTile))
+        }
+        if (IsNextTile(BottomTile,temptile))
+        {   
             temptile = BottomTile;
-        return temptile;
+        }
+        return new Tile(temptile.X,temptile.Y,temptile.HeightValue);
     }
 }

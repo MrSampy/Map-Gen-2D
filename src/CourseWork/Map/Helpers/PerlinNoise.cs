@@ -26,7 +26,7 @@ public class PerlinNoise
         InitGradients();
     }
 
-    public double MakeNumber(double x, double y)
+    public double MakeNumber(int x, int y)
     {
         double tempnum = 0, lerpcoef = -0.5;
         for (int counter = 1; counter < 4; counter++)
@@ -42,7 +42,7 @@ public class PerlinNoise
         return tempnum;
     }
 
-    public double Noise(double x, double y, double z)
+    private double Noise(double x, double y, double z)
     {
         int ix = (int) Math.Floor(x), iy = (int) Math.Floor(y), iz = (int) Math.Floor(z);
         double dx0 = x - ix, dy0 = y - iy, dz0 = z - iz;

@@ -10,13 +10,13 @@ public class MapBuilder
     public int Height { get; }
     public int MaxRiverCount { get; }
     public Tile[,] Tiles;
-    public List<River> Rivers = new List<River>();
+    public List<Tile[]> Rivers = new List<Tile[]>();
 
     public MapBuilder(int width, int height)
     {
         Width = width;
         Height = height;
-        MaxRiverCount = Rnd.Next(0, 3);
+        MaxRiverCount = Rnd.Next(0, 5);
         Tiles = new Tile[Width, Height];
         Seed = Rnd.Next(1, 1000);
         PerlinNoise perlinNoise = new PerlinNoise(Seed, Width, Height);
@@ -29,6 +29,7 @@ public class MapBuilder
         }
 
         FindNeighbours();
+        GenerateRivers();
         UpdateBitmasks();
     }
 
@@ -49,26 +50,42 @@ public class MapBuilder
     private void UpdateBitmasks()
     {
         for (int x = 0; x < Width; x++)
-        for (int y = 0; y < Height; y++)
-            Tiles[x, y].UpdateBitmask();
+            for (int y = 0; y < Height; y++)
+                Tiles[x, y].UpdateBitmask();
     }
 
-    private void FindPath(Tile starttyle, Tile lasttyle, ref River river)
+    private void FindPath(Tile starttile, ref List<Tile> river)
     {
+        ref Tile temptile = ref Tiles[starttile.X,starttile.Y];
+        if (temptile.IsLand && !temptile.HasRiver)
+        {  
+            temptile.HasRiver = true;
+            river.Add(temptile);
+            FindPath(temptile.GetNextPixRiver(temptile), ref river);
+        }
     }
 
     private void GenerateRivers()
     {
-        List<Tile> r = new List<Tile>();
-
         int riverCount = MaxRiverCount;
         while (riverCount != 0)
         {
             int x = Rnd.Next(0, Width - 1), y = Rnd.Next(0, Height - 1);
-            if (!Tiles[x, y].IsLand || Tiles[x, y].HeightValue < Constants.MinRiverHeight)
+            if (Tiles[x, y].HeightValue < Constants.MinRiverHeight)
                 continue;
-            River river = new River();
-            FindPath(Tiles[x, y], null, ref river);
+            List<Tile> river = new List<Tile>();
+            Console.WriteLine($"{Tiles[x,y].Biome.TBiome}");
+            FindPath(Tiles[x, y], ref river);
+            Rivers.Add(river.ToArray());
+            --riverCount;
         }
+
+        for (int i = 0; i < Rivers.Count; i++)
+            for (int j = 0; j < Rivers[i].Length; j++)
+                Tiles[Rivers[i][j].X, Rivers[i][j].Y].Biome = new TilesBiome(Constants.Biomes.River,Constants.ShallowWater);
+            
+       
+        
+        
     }
 }

@@ -18,7 +18,7 @@ public static class Constants
     public static RgbColor Warmer = new RgbColor(255, 168, 54);
     public static RgbColor Warmest = new RgbColor(252, 92, 60);
 
-    public enum Biome
+    public enum Biomes
     {
         DeepWater,
         ShallowWater,
@@ -26,7 +26,8 @@ public static class Constants
         Grass,
         Forest,
         Rock,
-        Snow
+        Snow,
+        River
     }
 
     public enum HeatType
@@ -58,12 +59,12 @@ public static class Constants
 
     public static readonly Dictionary<double, TilesBiome> HeightVals = new()
     {
-        {HeightValDeepWat, new TilesBiome(Biome.DeepWater, DeepWater)},
-        {HeightValShalWat, new TilesBiome(Biome.ShallowWater, ShallowWater)},
-        {HeightValSand, new TilesBiome(Biome.Sand, Sand)},
-        {HeightValGrass, new TilesBiome(Biome.Grass, Grass)},
-        {HeightValForest, new TilesBiome(Biome.Forest, Forest)},
-        {HeightValRock, new TilesBiome(Biome.Rock, Rock)}
+        {HeightValDeepWat, new TilesBiome(Biomes.DeepWater, DeepWater)},
+        {HeightValShalWat, new TilesBiome(Biomes.ShallowWater, ShallowWater)},
+        {HeightValSand, new TilesBiome(Biomes.Sand, Sand)},
+        {HeightValGrass, new TilesBiome(Biomes.Grass, Grass)},
+        {HeightValForest, new TilesBiome(Biomes.Forest, Forest)},
+        {HeightValRock, new TilesBiome(Biomes.Rock, Rock)}
     };
 
     public static readonly Dictionary<double, TilesHeat> HeatVals = new()

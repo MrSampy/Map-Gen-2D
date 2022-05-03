@@ -11,9 +11,9 @@
     {
         for (int y = 0; y < map.Height; y++)
         {
-            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y]._Biome._Color.Red,
-                                 @map.Tiles[x, y]._Biome._Color.Green,
-                                 @map.Tiles[x, y]._Biome._Color.Blue,@lenofpix))
+            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome._Color.Red,
+                                 @map.Tiles[x, y].Biome._Color.Green,
+                                 @map.Tiles[x, y].Biome._Color.Blue,@lenofpix))
                     functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
                                  @map.Tiles[x, y].Heat._Color.Green,
                                  @map.Tiles[x, y].Heat._Color.Blue, @lenofpix))
