@@ -9,6 +9,8 @@ public class PerlinNoise
     private readonly double WidthDivisor;
     private readonly double HeightDivisor;
     private readonly double[] Decrcoeffs = {0.8, 0.2, 0.1};
+    private readonly int Smoothcoef = 3;
+    private readonly int Lerpcoef = 2;
 
     public PerlinNoise(int seed, int width, int height)
     {
@@ -31,14 +33,14 @@ public class PerlinNoise
         double tempnum = 0, lerpcoef = -0.5;
         for (int counter = 1; counter < 4; counter++)
         {
-            double newx = Math.Pow(2, counter) * x * WidthDivisor,
-                newy = Math.Pow(2, counter) * y * HeightDivisor;
+            double newx = Math.Pow(Lerpcoef, counter) * x * WidthDivisor,
+                newy = Math.Pow(Lerpcoef, counter) * y * HeightDivisor;
             tempnum += (Noise(newx, newy, lerpcoef) + 1) / 2 * Decrcoeffs[counter - 1];
             lerpcoef += 0.5;
         }
 
         tempnum = Math.Min(1, Math.Max(0, tempnum));
-        tempnum = Math.Round(tempnum, 3);
+        tempnum = Math.Round(tempnum, Smoothcoef);
         return tempnum;
     }
 
@@ -74,17 +76,17 @@ public class PerlinNoise
         {
             double z = 1f - 2f * _random.NextDouble();
             double r = Math.Sqrt(1f - z * z);
-            double theta = 2 * Math.PI * _random.NextDouble();
-            _gradients[i * 3] = r * Math.Cos(theta);
-            _gradients[i * 3 + 1] = r * Math.Sin(theta);
-            _gradients[i * 3 + 2] = z;
+            double theta = Lerpcoef * Math.PI * _random.NextDouble();
+            _gradients[i * Smoothcoef] = r * Math.Cos(theta);
+            _gradients[i * Smoothcoef + 1] = r * Math.Sin(theta);
+            _gradients[i * Smoothcoef + Lerpcoef] = z;
         }
     }
 
     private double Lattice(int ix, int iy, int iz, double dx, double dy, double dz)
     {
         int index = Index(ix, iy, iz);
-        int g = index * 3;
+        int g = index * Smoothcoef;
         return _gradients[g] * dx + _gradients[g + 1] * dy + _gradients[g + 2] * dz;
     }
 
@@ -97,5 +99,5 @@ public class PerlinNoise
     }
 
     private double Lerp(double t, double value0, double value1) => value0 + t * (value1 - value0);
-    private double Smooth(double x) => x * x * (3 - 2 * x);
+    private double Smooth(double x) => Math.Pow(x, Lerpcoef) * (Smoothcoef - Lerpcoef * x);
 }

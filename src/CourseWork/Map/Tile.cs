@@ -12,7 +12,7 @@ public class Tile
     public readonly bool IsLand;
     public Tile? LeftTile, RightTile, TopTile, BottomTile;
     public bool IsBorder, HasRiver;
-    public int Bitmask;
+    public Tile?[] Neighbours;
 
     public Tile(int x, int y, double heightvalue)
     {
@@ -47,48 +47,23 @@ public class Tile
 
     public void UpdateBitmask()
     {
-        int counter = 0;
-        if (IsEqualBiome(TopTile))
-            counter += 1;
-        if (IsEqualBiome(RightTile))
-            counter += 2;
-        if (IsEqualBiome(BottomTile))
-            counter += 4;
-        if (IsEqualBiome(LeftTile))
-            counter += 8;
-        Bitmask = counter;
-        IsBorder = (counter != 15);
-
+        IsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
         if (IsBorder)
         {
             double shadFactor = 0.8;
             Biome.Darkify(shadFactor);
-            if(Biome.TBiome!=Constants.Biomes.River)
+            if (Biome.TBiome != Constants.Biomes.River)
                 Heat.Darkify(0);
         }
     }
 
     public Tile GetNextPixRiver(Tile skippble)
     {
-        bool IsNextTile(Tile tile1, Tile tile2) => (tile1 != null && skippble!=tile1 && tile1.HeightValue < tile2.HeightValue);
+        bool IsNextTile(Tile tile1, Tile tile2) =>
+            (tile1 != null && skippble != tile1 && tile1.HeightValue < tile2.HeightValue);
 
         Tile temptile = new Tile(-1, -1, 10);
-        if (IsNextTile(LeftTile, temptile))
-        {
-            temptile = LeftTile;
-        }
-        if (IsNextTile(RightTile,temptile))
-        {
-            temptile = RightTile;
-        }
-        if (IsNextTile(TopTile,temptile))
-        {
-            temptile = TopTile;
-        }
-        if (IsNextTile(BottomTile,temptile))
-        {   
-            temptile = BottomTile;
-        }
-        return new Tile(temptile.X,temptile.Y,temptile.HeightValue);
+        temptile = Neighbours.Aggregate(temptile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc));
+        return temptile;
     }
 }
