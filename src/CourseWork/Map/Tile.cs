@@ -40,7 +40,9 @@ public class Tile
             }
         }
 
-        IsLand = (Biome.TBiome != Constants.Biomes.DeepWater && Biome.TBiome != Constants.Biomes.ShallowWater);
+        bool isDeepWater = Biome.TBiome != Constants.Biomes.DeepWater;
+        bool isShalWater = Biome.TBiome != Constants.Biomes.ShallowWater;
+        IsLand = (isDeepWater && isShalWater);
     }
 
     private bool IsEqualBiome(Tile tile) => (tile != null && tile.Biome.TBiome == Biome.TBiome);

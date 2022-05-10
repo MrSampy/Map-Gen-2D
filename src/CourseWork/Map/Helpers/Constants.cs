@@ -80,5 +80,5 @@ public static class Constants
         {HeatValColder2, new TilesHeat(HeatType.Colder, Colder)},
     };
 
-    public const double MinRiverHeight = HeightValSand;
+    public const double MinRiverHeight = 0.58;
 }

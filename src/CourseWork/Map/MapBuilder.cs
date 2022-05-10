@@ -8,17 +8,17 @@ public class MapBuilder
     private int Seed { get; }
     public int Width { get; }
     public int Height { get; }
-    public int MaxRiverCount { get; }
     public Tile[,] Tiles;
-    public List<Tile[]> Rivers = new List<Tile[]>();
+    private RiversInfo Rivers;
 
     public MapBuilder(int width, int height)
     {
         Width = width;
         Height = height;
-        MaxRiverCount = Rnd.Next(1, 5);
+        Rivers = new RiversInfo(width, height);
         Tiles = new Tile[Width, Height];
         Seed = Rnd.Next(1, 1000);
+
         PerlinNoise perlinNoise = new PerlinNoise(Seed, Width, Height);
         for (int x = 0; x < width; x++)
         {
@@ -61,38 +61,68 @@ public class MapBuilder
         ref Tile temptile = ref Tiles[starttile.X, starttile.Y];
         if (river.Contains(temptile))
         {
-            river.Clear();
             return;
         }
-
         if (temptile.IsLand && !temptile.HasRiver)
         {
             river.Add(temptile);
             Tile nexttile = temptile.GetNextPixRiver(Convert.ToBoolean(river.Count) ? river.Last() : temptile);
-            temptile.HasRiver = true;
             FindPath(nexttile, ref river);
         }
+        
     }
 
     private void GenerateRivers()
     {
-        int riverCount = MaxRiverCount;
+        Console.WriteLine($"{Rivers.MaxRiverWidth}");
+        int riverCount = Rivers.MaxRiverCount;
         while (riverCount != 0)
         {
-            int x = Rnd.Next(0, Width - 1), y = Rnd.Next(0, Height - 1);
+            int x = Rnd.Next(0, Width - 1);
+            int y = Rnd.Next(0, Height - 1);
             if (Tiles[x, y].HeightValue < Constants.MinRiverHeight)
                 continue;
             List<Tile> river = new List<Tile>();
             FindPath(Tiles[x, y], ref river);
-            if (river.Count == 0 || river.Last().Biome.TBiome != Constants.Biomes.Sand)
+            bool isSand = river.Last().Biome.TBiome != Constants.Biomes.Sand;
+            if (isSand)
                 continue;
-            Rivers.Add(river.ToArray());
+            
+            foreach (var riv in river)
+                Tiles[riv.X, riv.Y].HasRiver = true;
+            
+            bool isXChange = true;
+            for (int i = 0; i < river.Count; ++i)
+            {
+                isXChange = (river[i]!=river.Last())?river[i + 1].Y != river[i].Y:isXChange;
+                for (int j = 1; j <= Rivers.MaxRiverWidth; j++)
+                {
+                    if (isXChange)
+                    {
+                        if (river[i].X + j < Width)
+                            Tiles[river[i].X + j, river[i].Y].HasRiver = true;
+                        if (river[i].X - j >= 0)
+                            Tiles[river[i].X - j, river[i].Y].HasRiver = true;
+                        
+                    }
+                    else
+                    {
+                        if (river[i].Y + j < Height)
+                            Tiles[river[i].X, river[i].Y + j].HasRiver = true;
+                        if (river[i].Y - j >= 0)
+                            Tiles[river[i].X, river[i].Y - j].HasRiver = true;
+                    }
+                }
+                
+            }
+            
             --riverCount;
         }
-
-        for (int i = 0; i < Rivers.Count; i++)
-        for (int j = 0; j < Rivers[i].Length; j++)
-            Tiles[Rivers[i][j].X, Rivers[i][j].Y].Biome =
-                new TilesBiome(Constants.Biomes.River, Constants.ShallowWater);
+        
+        for (int x = 0; x < Width; x++)
+        for (int y = 0; y < Height; y++)
+            if(Tiles[x,y].HasRiver)
+                Tiles[x,y].Biome = new TilesBiome(Constants.Biomes.ShallowWater, Constants.ShallowWater);
+        
     }
 }
