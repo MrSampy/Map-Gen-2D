@@ -1,6 +1,6 @@
 ﻿@using CourseWork.Map
 @{
-    var map = new MapBuilder(500, 500);
+    var map = new MapBuilder(200, 200,5);
     ViewData["Title"] = "Home Page";
 }
 <script src="js/site.js"></script>
@@ -9,24 +9,28 @@
     int starty = 10;
     int newwidth = map.Width * 11;
     int newhight = map.Height * 11;
-    int lenofpix = 1; 
-    int border = 20;
-    int anothery = map.Width * lenofpix + border;
+    const int border = 20;
+    int anothery = map.Width * map.LenofPixel + border;
+    int anotherx = map.Height * map.LenofPixel + border;
     for (int x = 0; x < map.Width; x++)
     {
         for (int y = 0; y < map.Height; y++)
         {
             <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome._Color.Red,
                                  @map.Tiles[x, y].Biome._Color.Green,
-                                 @map.Tiles[x, y].Biome._Color.Blue,@lenofpix))
+                                 @map.Tiles[x, y].Biome._Color.Blue,@map.LenofPixel))
                     functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
                                  @map.Tiles[x, y].Heat._Color.Green,
-                                 @map.Tiles[x, y].Heat._Color.Blue, @lenofpix))
+                                 @map.Tiles[x, y].Heat._Color.Blue, @map.LenofPixel))
+                    functionarr.push(() => drawRect(@(startx + anotherx),@starty,@map.Tiles[x, y].Moisture._Color.Red,
+                                 @map.Tiles[x, y].Moisture._Color.Green,
+                                 @map.Tiles[x, y].Moisture._Color.Blue, @map.LenofPixel))
+                                 
             </script>
-            startx += lenofpix;
+            startx += map.LenofPixel;
         }
         startx = 10;
-        starty += lenofpix;
+        starty += map.LenofPixel;
     }
 }
 <body onload="drawmap()">

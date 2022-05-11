@@ -2,9 +2,9 @@ namespace CourseWork.Map.Helpers;
 
 public class RgbColor
 {
-    public int Red { get; init; }
-    public int Green { get; init; }
-    public int Blue { get; init; }
+    public int Red { get; }
+    public int Green { get; }
+    public int Blue { get; }
 
     public RgbColor(int red, int green, int blue)
     {

@@ -10,11 +10,13 @@ public class MapBuilder
     public int Height { get; }
     public Tile[,] Tiles;
     private RiversInfo Rivers;
+    public int LenofPixel { get; }
 
-    public MapBuilder(int width, int height)
+    public MapBuilder(int width, int height, int lenpfpix)
     {
         Width = width;
         Height = height;
+        LenofPixel = lenpfpix;
         Rivers = new RiversInfo(width, height);
         Tiles = new Tile[Width, Height];
         Seed = Rnd.Next(1, 1000);
@@ -103,7 +105,6 @@ public class MapBuilder
                             Tiles[river[i].X + j, river[i].Y].HasRiver = true;
                         if (river[i].X - j >= 0)
                             Tiles[river[i].X - j, river[i].Y].HasRiver = true;
-                        
                     }
                     else
                     {
@@ -118,11 +119,23 @@ public class MapBuilder
             
             --riverCount;
         }
-        
+
         for (int x = 0; x < Width; x++)
-        for (int y = 0; y < Height; y++)
-            if(Tiles[x,y].HasRiver)
-                Tiles[x,y].Biome = new TilesBiome(Constants.Biomes.ShallowWater, Constants.ShallowWater);
-        
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (Tiles[x, y].HasRiver)
+                {
+                    Tiles[x, y].Biome = new TilesBiome(Constants.Biomes.ShallowWater, Constants.ShallowWater);
+                    int newMois = (int)Tiles[x, y].Moisture.TMoisture - 1; 
+                    foreach (var elem in Constants.MoistureVals)
+                    {
+                        if ((int)elem.Value.TMoisture == newMois)
+                            Tiles[x, y].Moisture = new TilesMoisture(elem.Value.TMoisture,elem.Value._Color);
+                    }
+                }
+            }
+        }
+
     }
 }
