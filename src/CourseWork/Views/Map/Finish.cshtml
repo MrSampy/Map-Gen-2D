@@ -1,0 +1,13 @@
+@{
+
+    ViewData["Title"] = "Finish";
+}
+
+<script src="js/site.js"></script>
+<h1>@ViewData["Title"]</h1>
+<br />
+
+@using (Html.BeginForm("Index", "Map", FormMethod.Get))
+{
+    <p><input type="submit" class="form-submit-button" value="Restart"/></p>
+}

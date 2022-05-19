@@ -1,38 +1,29 @@
-@using CourseWork.Map
+
 @{
-    var map = new MapBuilder(200, 200,5);
-    ViewData["Title"] = "Map";
+
+    ViewData["Title"] = "Home Page";
+    string[] sizes = {"200x200", "300x300", "400x400", "500x500", "600x600","700x700","800x800"};
 }
-<script src="js/site.js"></script>
-@{
-    int startx = 10;
-    int starty = 10;
-    int newwidth = map.Width * 11;
-    int newhight = map.Height * 11;
-    const int border = 20;
-    int anothery = map.Width * map.LenofPixel + border;
-    int anotherx = map.Height * map.LenofPixel + border;
-    for (int x = 0; x < map.Width; x++)
-    {
-        for (int y = 0; y < map.Height; y++)
+
+<h1>@ViewData["Title"]</h1>
+<br />
+
+@using (Html.BeginForm("Index", "Map"))
+{
+    <label>Chose the size of map:</label>
+    <select name="sizeId">
+        @for (int i = 0; i < sizes.Length; ++i)
         {
-            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome._Color.Red,
-                                 @map.Tiles[x, y].Biome._Color.Green,
-                                 @map.Tiles[x, y].Biome._Color.Blue,@map.LenofPixel))
-                    functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
-                                 @map.Tiles[x, y].Heat._Color.Green,
-                                 @map.Tiles[x, y].Heat._Color.Blue, @map.LenofPixel))
-                    functionarr.push(() => drawRect(@(startx + anotherx),@starty,@map.Tiles[x, y].Moisture._Color.Red,
-                                 @map.Tiles[x, y].Moisture._Color.Green,
-                                 @map.Tiles[x, y].Moisture._Color.Blue, @map.LenofPixel))
-                                 
-            </script>
-            startx += map.LenofPixel;
+            <option value="@i">@sizes[i]</option>
         }
-        startx = 10;
-        starty += map.LenofPixel;
-    }
+    </select>
+    <select name="lenOfPix">
+        @for (int i = 1; i <= 5; ++i)
+        {
+            <option value="@(i)">@(i)px</option>
+        }
+    </select>
+    
+    <input class="form-submit-button" type="submit" value="Submit"/>
 }
-<body onload="drawmap()">
-<canvas id="canvas" width="@newwidth" height="@newhight"></canvas>
-</body>
+

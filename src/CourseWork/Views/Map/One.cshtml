@@ -1,0 +1,51 @@
+
+@{
+    ViewData["Title"] = "Height Map";
+
+}
+
+@{
+    int startx = 10;
+    int starty = 10;
+    int newwidth = MapController.Map.Width*MapController.Map.LenofPixel+startx*MapController.Map.LenofPixel;
+    int newhight = MapController.Map.Height*MapController.Map.LenofPixel+startx*MapController.Map.LenofPixel;
+    for (int x = 0; x < MapController.Map.Width; x++)
+    {
+        for (int y = 0; y < MapController.Map.Height; y++)
+        {
+            <script>
+            functionarr.push(() => drawRect(@startx,@starty,@MapController.Map.Tiles[x, y].Biome._Color.Red,
+                                                            @MapController.Map.Tiles[x, y].Biome._Color.Green,
+                                                            @MapController.Map.Tiles[x, y].Biome._Color.Blue,
+                                                            @MapController.Map.LenofPixel))
+            </script>
+            startx += MapController.Map.LenofPixel;
+        }
+        startx = 10;
+        starty += MapController.Map.LenofPixel;
+    }
+
+
+
+}
+<body onload="drawmap()">
+<canvas id="canvas" width="@newwidth" height="@newhight"></canvas>
+
+<div class = "block">
+<h1>@ViewData["Title"]</h1>
+<br /> 
+
+@using (Html.BeginForm("Three", "Map", FormMethod.Post))
+{
+    <p><input type="submit" class="form-submit-button" value="Prev"/></p>
+}
+@using (Html.BeginForm("Finish", "Map", FormMethod.Post))
+{
+    <p><input type="submit" class="form-submit-button" value=" End "></p>
+}
+@using (Html.BeginForm("Two", "Map", FormMethod.Post))
+{
+    <p><input type="submit" class="form-submit-button" value=" Next "></p>
+}
+</div>
+</body>

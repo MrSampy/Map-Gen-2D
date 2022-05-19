@@ -1,27 +1,8 @@
-﻿
-@{
-    
+﻿@{
     ViewData["Title"] = "Home Page";
-    string[] sizes = {"200x200","300x300","400x400","500x500","600x600"};
-}
-<h1>@ViewData["Title"]</h1>
-<link href="css/site.css" rel="stylesheet" type="text/css">
-@using (Html.BeginForm("Index", "Home"))
-{
-    <label>Chose the size of map:</label>
-    <select name="sizeId">
-        @for (int i = 0; i < sizes.Length; ++i)
-        {
-            <option value="@i">@sizes[i]</option>
-        }
-    </select>
-    <select name="lenOfPix">
-        @for (int i = 1; i <= 5; ++i)
-        {
-            <option value="@(i)">@(i)px</option>
-        }
-    </select>
-    
-    <input class="button" type="submit" value="Submit"/>
 }
 
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>

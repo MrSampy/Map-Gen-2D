@@ -84,7 +84,7 @@ public static class Constants
     private const double MoistureValDry2 = 0.67;
     private const double MoistureValWet2 = 0.7;
     
-    public const double MinRiverHeight = 0.58;
+    public const double MinRiverHeight = 0.62;
     
     public static readonly Dictionary<double, TilesBiome> HeightVals = new()
     {
