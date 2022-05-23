@@ -17,23 +17,27 @@ public class MapController:Controller
         int[] numbers = {200, 300, 400, 500, 600, 700, 800};
         Side = numbers[sizeId.GetValueOrDefault(0)];
         LenofPix = lenOfPix.GetValueOrDefault(1);
-        Map= new MapBuilder(Side, Side, LenofPix);
+        Map = new MapBuilder(Side, Side, LenofPix);
+        ViewBag.Map = Map;
         return View("One");
     }
 
-    [HttpPost]
+    
     public IActionResult One()
     {
+        ViewBag.Map = Map;
         return View();
     }
-    [HttpPost]
+    
     public IActionResult Two()
-    {
+    { 
+        ViewBag.Map = Map;
        return View();
     }
-    [HttpPost]
+    
     public IActionResult Three()
     {
+        ViewBag.Map = Map;
         return View();
     }
     public IActionResult Finish()

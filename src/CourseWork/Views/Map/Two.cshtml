@@ -1,49 +1,40 @@
 
 @{
+    Layout = "_Layout2";
     ViewData["Title"] = "Heat Map";
 
 }
+
 @{
     int startx = 10;
     int starty = 10;
-    int newwidth = MapController.Map.Width*MapController.Map.LenofPixel+startx*MapController.Map.LenofPixel;
-    int newhight = MapController.Map.Height*MapController.Map.LenofPixel+startx*MapController.Map.LenofPixel;
-    for (int x = 0; x < MapController.Map.Width; x++)
+    int newwidth = ViewBag.Map.Width*ViewBag.Map.LenofPixel+startx*ViewBag.Map.LenofPixel;
+    int newhight = ViewBag.Map.Height*ViewBag.Map.LenofPixel+startx*ViewBag.Map.LenofPixel;
+    for (int x = 0; x < ViewBag.Map.Width; x++)
     {
-        for (int y = 0; y < MapController.Map.Height; y++)
+        for (int y = 0; y < ViewBag.Map.Height; y++)
         {
             <script>
-            functionarr.push(() => drawRect(@startx,@starty,@MapController.Map.Tiles[x, y].Heat._Color.Red,
-                                                            @MapController.Map.Tiles[x, y].Heat._Color.Green,
-                                                            @MapController.Map.Tiles[x, y].Heat._Color.Blue,
-                                                            @MapController.Map.LenofPixel))
+           
+            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Heat._Color.Red,
+                                                            @ViewBag.Map.Tiles[x, y].Heat._Color.Green,
+                                                            @ViewBag.Map.Tiles[x, y].Heat._Color.Blue,
+                                                            @ViewBag.Map.LenofPixel,1))
             </script>
-            startx += MapController.Map.LenofPixel;
+            startx += ViewBag.Map.LenofPixel;
         }
         startx = 10;
-        starty += MapController.Map.LenofPixel;
+        starty += ViewBag.Map.LenofPixel;
     }
 
 
 
 }
 
-<body onload="drawmap()">
-<canvas id="canvas" width="@newwidth" height="@newhight"></canvas>
-<div class = "block">
-    <h1>@ViewData["Title"]</h1>
-    <br />
-    @using (Html.BeginForm("One", "Map", FormMethod.Post))
-    {
-        <p><input class="form-submit-button" type="submit" value=" Prev "></p>
-    }
-    @using (Html.BeginForm("Finish", "Map", FormMethod.Post))
-    {
-        <p><input class="form-submit-button" type="submit" value=" End "></p>
-    }
-    @using (Html.BeginForm("Three", "Map", FormMethod.Post))
-    {
-        <p><input class="form-submit-button" type="submit"  value=" Next "></p>
-    }
-</div>
+<body>
+<canvas id="canvas2" width="@newwidth" height="@newhight"></canvas>
+   @Html.ActionLink("Prev", "One", "Map")
+   @Html.ActionLink("End", "Finish", "Map")
+   @Html.ActionLink("Next", "Three", "Map")
+
 </body>
