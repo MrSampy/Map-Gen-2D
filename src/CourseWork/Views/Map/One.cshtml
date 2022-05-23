@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout2";
 ViewData["Title"] = "Height Map";
-
+    ViewBag.Num = 0;
 }
 
 @{
@@ -29,7 +29,9 @@ ViewData["Title"] = "Height Map";
 <body>
 <canvas id="canvas1" width="@newwidth" height="@newhight"></canvas>
     @Html.ActionLink("Prev", "Three", "Map")
-    @Html.ActionLink("End", "Finish", "Map")
+    @Html.ActionLink("Restart", "Index", "Map")
     @Html.ActionLink("Next", "Two", "Map")
-
+<button onclick="saveCanvasAsImageFile(0,`Height Map`)">
+Download
+</button>
 </body>

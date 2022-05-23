@@ -2,6 +2,7 @@
 @{
     Layout = "_Layout2";
     ViewData["Title"] = "Moisture Map";
+    ViewBag.Num = 2;
 }
 @{
     int startx = 10;
@@ -31,7 +32,9 @@
 <body>
 <canvas id="canvas3" width="@newwidth" height="@newhight"></canvas>
     @Html.ActionLink("Prev", "Two", "Map")
-    @Html.ActionLink("End", "Finish", "Map")
+    @Html.ActionLink("Restart", "Index", "Map")
     @Html.ActionLink("Next", "One", "Map")
-
+<button onclick="saveCanvasAsImageFile(2,`Moisture Map`)">
+Download
+</button>
 </body>

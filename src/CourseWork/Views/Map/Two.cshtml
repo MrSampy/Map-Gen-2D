@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout2";
     ViewData["Title"] = "Heat Map";
-
+    ViewBag.Num = 1;
 }
 
 @{
@@ -34,7 +34,9 @@
 <body>
 <canvas id="canvas2" width="@newwidth" height="@newhight"></canvas>
    @Html.ActionLink("Prev", "One", "Map")
-   @Html.ActionLink("End", "Finish", "Map")
+   @Html.ActionLink("Restart", "Index", "Map")
    @Html.ActionLink("Next", "Three", "Map")
-
+  <button onclick="saveCanvasAsImageFile(1,`Heat Map`)">
+  Download
+  </button>
 </body>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,14 +21,31 @@
             func();
         
     }
+    
+    function getImage(canvas){
+        var imageData = canvas.toDataURL();
+        var image = new Image();
+        image.src = imageData;
+        return image;
+    }
+    
+    function saveImage(image,name) {
+        var link = document.createElement("a");
+    
+        link.setAttribute("href", image.src);
+        link.setAttribute("download", name);
+        link.click();
+    }
+    
+    function saveCanvasAsImageFile(num,name){
+        var image = getImage(document.getElementById(canvs[num]));
+        saveImage(image,name);
+    }
     </script> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/Course_work.styles.css" asp-append-version="true"/>
 </head>
-@{
-    int newwidth = MapController.Map.Width*MapController.Map.LenofPixel+10*MapController.Map.LenofPixel;
-    int newhight = MapController.Map.Height*MapController.Map.LenofPixel+10*MapController.Map.LenofPixel;
-}
+
 <body onload="drawmap()">
 
 <h1>@ViewData["Title"]</h1>
