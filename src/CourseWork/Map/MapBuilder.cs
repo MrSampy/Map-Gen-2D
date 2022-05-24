@@ -10,6 +10,7 @@ public class MapBuilder
     public int Height { get; }
     public Tile[,] Tiles;
     private RiversInfo Rivers;
+    private CastlesInfo Castles;
     public int LenofPixel { get; }
 
     public MapBuilder(int width, int height, int lenpfpix)
@@ -18,6 +19,7 @@ public class MapBuilder
         Height = height;
         LenofPixel = lenpfpix;
         Rivers = new RiversInfo(width, height);
+        Castles = new CastlesInfo(width,height);
         Tiles = new Tile[Width, Height];
         Seed = Rnd.Next(1, 1000);
 
@@ -33,6 +35,7 @@ public class MapBuilder
         FindNeighbours();
         GenerateRivers();
         UpdateBitmasks();
+        UpdateCastles();
     }
 
     private void FindNeighbours()
@@ -91,7 +94,7 @@ public class MapBuilder
             river.Add(tempTile);
             bool isClear = Convert.ToBoolean(river.Count);
             Tile nextTile = tempTile.GetNextPixRiver(isClear ? river.Last() : tempTile);
-            if ((isClear || Rnd.Next(9) == 0) && river.Count>=2)
+            if ((isClear || Rnd.Next(10) == 0) && river.Count>=2)
             {
                 Tile newtTile = tempTile.Neighbours[Rnd.Next(3)];
                     bool isVal = newtTile != nextTile && newtTile != river[river.Count - 2];
@@ -148,8 +151,8 @@ public class MapBuilder
         int riverCount = Rivers.MaxRiverCount;
         while (riverCount != 0)
         {
-            int x = Rnd.Next(0, Width - 1);
-            int y = Rnd.Next(0, Height - 1);
+            int x = Rnd.Next(Rivers.MaxRiverWidth, Width - Rivers.MaxRiverWidth - 1);
+            int y = Rnd.Next(Rivers.MaxRiverWidth, Height - Rivers.MaxRiverWidth - 1);
             if (Tiles[x, y].HeightValue < Constants.MinRiverHeight)
                 continue;
             List<Tile> river = new List<Tile>();
@@ -200,4 +203,58 @@ public class MapBuilder
 
         UpdateRivers();
     }
+
+    private void UpdateCastles()
+    {
+        int castleCount = Castles.MaxCastleNumber;
+        while (castleCount != 0)
+        {
+            int x = Rnd.Next(Castles.WallLength, Width - Castles.WallLength - 1);
+            int y = Rnd.Next(Castles.WallLength, Height - Castles.WallLength - 1);
+            bool isSuitable = false;
+            List<Tile> Walls;
+            List<Tile> Floors;
+            for (int i = x; i < Castles.WallLength+x; i++)
+            {
+               for (int j = y; j < Castles.WallLength+y; j++)
+                {
+                    bool range = Tiles[i, j].HeightValue > Constants.MaxStructureVal || Tiles[i,j].HeightValue<Constants.MinStructureVal;
+                    bool isFree = Tiles[i, j].HasRiver || Tiles[i, j].Structure;
+                    if (isFree || range)
+                    {
+                        isSuitable = true;
+                        break;
+                    }
+                    
+
+                }   
+            }
+            if(isSuitable)
+                continue;
+            int xUp=x+Castles.WallWidth;
+            int xDown=x+Castles.WallLength - Castles.WallWidth - 1;
+            int yUp=y+Castles.WallWidth;
+            int yDown=y+Castles.WallLength - Castles.WallWidth - 1;
+            
+            
+            for (int i = x; i < Castles.WallLength+x; i++)
+            {
+                for (int j = y; j < Castles.WallLength+y; j++)
+                {
+                    bool isx = i < xUp || i > xDown;
+                    bool isy = j < yUp || j > yDown;
+                    Tiles[i, j].Biome._Color = (isx || isy) ? Constants.Wall : Constants.Floor;
+                    Tiles[i, j].Structure = true;
+                }
+            }
+            --castleCount;
+        }
+
+
+    }
+
+
+
+
+
 }

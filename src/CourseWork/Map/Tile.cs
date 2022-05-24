@@ -14,6 +14,7 @@ public class Tile
     public Tile? LeftTile, RightTile, TopTile, BottomTile;
     public bool IsBorder, HasRiver;
     public Tile?[] Neighbours;
+    public bool Structure;
 
     public Tile(int x, int y, double heightvalue)
     {
@@ -21,6 +22,7 @@ public class Tile
         Y = y;
         HasRiver = false;
         HeightValue = heightvalue;
+        Structure = false;
         Biome = new TilesBiome(Constants.Biomes.Snow, Constants.Snow);
         foreach (var elem in Constants.HeightVals)
         {

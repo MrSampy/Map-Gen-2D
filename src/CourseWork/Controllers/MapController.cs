@@ -40,8 +40,4 @@ public class MapController:Controller
         ViewBag.Map = Map;
         return View();
     }
-    public IActionResult Finish()
-    {
-        return View();
-    }
 }

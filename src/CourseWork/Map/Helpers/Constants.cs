@@ -25,6 +25,11 @@ public static class Constants
     public static readonly RgbColor Dryer = new RgbColor(255, 239, 0);
     public static readonly RgbColor Driest = new RgbColor(255, 119, 0);
 
+    public static readonly RgbColor Wall = new RgbColor(58, 53, 53);
+    public static readonly RgbColor Floor = new RgbColor(90, 53, 42);
+    public static readonly RgbColor Road = new RgbColor(201, 180, 48);
+    public static readonly RgbColor Bridge = new RgbColor(97, 79, 0);
+
     public enum Biomes
     {
         DeepWater,
@@ -34,7 +39,11 @@ public static class Constants
         Forest,
         Rock,
         Snow,
-        River
+        River,
+        Wall,
+        Floor,
+        Road,
+        Bridge
     }
 
     public enum HeatType
@@ -47,6 +56,7 @@ public static class Constants
         Warmest
     }
     
+
     public enum MoistureType
     {
         Wettest,
@@ -63,7 +73,7 @@ public static class Constants
     private const double HeightValGrass = 0.6;
     private const double HeightValForest = 0.66;
     private const double HeightValRock = 0.69;
-
+    
     private const double HeatValColder1 = 0.45;
     private const double HeatValCold1 = 0.52;
     private const double HeatValWarm1 = 0.55;
@@ -85,7 +95,8 @@ public static class Constants
     private const double MoistureValWet2 = 0.7;
     
     public const double MinRiverHeight = 0.62;
-    
+    public const double MaxStructureVal = 0.65;
+    public const double MinStructureVal = 0.56;
     public static readonly Dictionary<double, TilesBiome> HeightVals = new()
     {
         {HeightValDeepWat, new TilesBiome(Biomes.DeepWater, DeepWater)},
@@ -96,6 +107,14 @@ public static class Constants
         {HeightValRock, new TilesBiome(Biomes.Rock, Rock)}
     };
 
+    public static readonly Dictionary<Biomes,TilesBiome> Structures = new()
+    {
+        {Biomes.Wall, new TilesBiome(Biomes.Wall,Wall)},
+        {Biomes.Floor, new TilesBiome(Biomes.Floor,Floor)},
+        {Biomes.Road, new TilesBiome(Biomes.Road,Road)},
+        {Biomes.Bridge, new TilesBiome(Biomes.Bridge,Bridge)}
+        
+    };
     public static readonly Dictionary<double, TilesMoisture> MoistureVals = new()
     {
         {MoistureValWettest, new TilesMoisture(MoistureType.Wettest, Wettest)},
