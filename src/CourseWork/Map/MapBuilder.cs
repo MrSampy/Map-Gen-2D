@@ -212,8 +212,54 @@ public class MapBuilder
     }
 
     private void UpdateCastles()
-    {           
-        int castleCount = Castles.MaxCastleNumber;
+    {
+        List<Tile?> roads = new List<Tile?>();
+        void FillMainPath(ref List<Tile> path)
+        {
+            for (int i = 0; i < path.Count; i++)
+                if (!Structures.Contains(Tiles[path[i].X, path[i].Y]))
+                    Tiles[path[i].X, path[i].Y].Biome._Color = (!path[i].HasRiver)?Constants.Road:Constants.Bridge;
+            
+            Structures.AddRange(path);
+            roads.AddRange(path);
+            path.Clear();
+        }
+
+        void FillFullPAth(List<Tile> path)
+        {
+            Tile tempTile;
+            bool isXChange = true;
+            for (int i = 0; i < path.Count; ++i)
+            {
+                isXChange = (path[i]!=path.Last())?path[i + 1].Y != path[i].Y:isXChange;
+                for (int j = 1; j <= Castles.RoadWidth; j++)
+                {
+                    if (isXChange)
+                    {
+                        tempTile = (path[i].X + j < Width) ? (Tiles[path[i].X + j, path[i].Y]) : Structures.Last();
+                        if (tempTile.IsLand && !Structures.Contains(tempTile))
+                            Tiles[tempTile.X, tempTile.Y].Biome._Color = (!tempTile.HasRiver)?Constants.Road:Constants.Bridge;
+                        tempTile = (path[i].X - j >= 0) ? (Tiles[path[i].X - j, path[i].Y]) : Structures.Last();
+                        if (tempTile.IsLand && !Structures.Contains(tempTile))
+                            Tiles[tempTile.X, tempTile.Y].Biome._Color = (!tempTile.HasRiver)?Constants.Road:Constants.Bridge;
+                    }
+                    else
+                    {
+                        tempTile = (path[i].Y + j < Height) ? (Tiles[path[i].X, path[i].Y + j]) : Structures.Last();
+                        if (tempTile.IsLand && !Structures.Contains(tempTile))
+                            Tiles[tempTile.X, tempTile.Y].Biome._Color = (!tempTile.HasRiver)?Constants.Road:Constants.Bridge;
+                        tempTile = (path[i].Y - j >= 0) ? (Tiles[path[i].X, path[i].Y - j]) : Structures.Last();
+                        if (tempTile.IsLand && !Structures.Contains(tempTile))
+                            Tiles[tempTile.X, tempTile.Y].Biome._Color = (!tempTile.HasRiver)?Constants.Road:Constants.Bridge;
+                    }
+                }
+
+                
+                
+            }
+
+        }
+
         while (true)
         {
             int x = Rnd.Next(Castles.WallLength, Width - Castles.WallLength - 1);
@@ -223,21 +269,44 @@ public class MapBuilder
             break;
         }
         List<Tile?> road = new List<Tile?>();
+        int attempts = 20;
         while (true)
-        {
+        {   
             int index = Rnd.Next(0, Cast[0].CWalls.Count - 1);
             road.Add(Cast[0].CWalls[index]);
-            if(!FindRoad(ref road))
+            if (!FindRoad(ref road))
                 continue;
+            
+
+            FillMainPath(ref road);
+            Structures.AddRange(road);
+            roads.AddRange(road);
+            road.Clear();
             break;
+
         }
 
-        for (int i = 0; i < road.Count; i++)
+
+        int castleCount = Castles.MaxCastleNumber;
+        while (castleCount != 0)
         {
-            if(!Structures.Contains(Tiles[road[i].X, road[i].Y]))
-                Tiles[road[i].X, road[i].Y].Biome._Color = Constants.Road;
+          /*  if (attempts == 0)
+                break;*/
+            int index = Rnd.Next(2,roads.Count-2);
+            if(roads[index].Biome._Color!=Constants.Road)
+                continue;
+            road.Add(roads[index]);
+            if (!FindRoad(ref road))
+            {
+               // --attempts;
+                continue;
+            }
+
+            FillMainPath(ref road);
+            --castleCount;
         }
         
+    FillFullPAth(roads);
     }
 
     private bool CreateCastle(int x,int y)
@@ -294,26 +363,30 @@ public class MapBuilder
     private bool FindRoad(ref List<Tile> road)
     {
         int numb = 0;
-        int counter = 50;
         bool isStop = false;
-        
+        int counter = 10;
         while (true)
         {
             if(Rnd.Next(5)==0)
                 numb = Rnd.Next(3);
             Tile? tempTile = road.Last().Neighbours[numb];
-            if (tempTile == null || !tempTile.IsLand || Structures.Contains(tempTile) || road.Contains(tempTile))
+            tempTile = (tempTile == null) ? road.Last() : tempTile;
+            bool isStructure = Structures.Contains(tempTile) || road.Contains(tempTile);
+            if (!tempTile.IsLand || isStructure)
             {
                 road.Clear();
                 return false;
             }
             road.Add(tempTile);
-            if (road.Count == counter)
+            if (road.Count == Castles.MinPathLength)
                 isStop = true;
             if (isStop && Rnd.Next(5) == 0)
             {
                 if(CreateCastle(tempTile.X,tempTile.Y))
                     break;
+                --counter;
+                if (counter == 0)
+                    return false;
             }
 
         }
