@@ -17,14 +17,18 @@ public static class Constants
     public static readonly RgbColor Warm = new RgbColor(255, 255, 54);
     public static readonly RgbColor Warmer = new RgbColor(255, 168, 54);
     public static readonly RgbColor Warmest = new RgbColor(252, 92, 60);
-    
     public static readonly RgbColor Wettest = new RgbColor(0, 0, 134);
     public static readonly RgbColor Wetter = new RgbColor(0, 137, 255);
     public static readonly RgbColor Wet = new RgbColor(0, 222, 255);
     public static readonly RgbColor Dry = new RgbColor(137, 255, 0);
     public static readonly RgbColor Dryer = new RgbColor(255, 239, 0);
     public static readonly RgbColor Driest = new RgbColor(255, 119, 0);
-
+    
+    public static readonly RgbColor Strawberry = new RgbColor(255, 0, 0);
+    public static readonly RgbColor Blueberry = new RgbColor(0, 43, 255);
+    public static readonly RgbColor Iron = new RgbColor(255, 236, 156);
+    public static readonly RgbColor Coal = new RgbColor(0, 0, 0);
+    
     public static readonly RgbColor Wall = new RgbColor(58, 53, 53);
     public static readonly RgbColor Floor = new RgbColor(90, 53, 42);
     public static readonly RgbColor Road = new RgbColor(201, 180, 48);
@@ -39,11 +43,7 @@ public static class Constants
         Forest,
         Rock,
         Snow,
-        River,
-        Wall,
-        Floor,
-        Road,
-        Bridge
+        River
     }
 
     public enum HeatType
@@ -97,6 +97,8 @@ public static class Constants
     public const double MinRiverHeight = 0.62;
     public const double MaxStructureVal = 0.65;
     public const double MinStructureVal = 0.56;
+    public const int RangeOfObj = 20; 
+
     public static readonly Dictionary<double, TilesBiome> HeightVals = new()
     {
         {HeightValDeepWat, new TilesBiome(Biomes.DeepWater, DeepWater)},
@@ -106,15 +108,14 @@ public static class Constants
         {HeightValForest, new TilesBiome(Biomes.Forest, Forest)},
         {HeightValRock, new TilesBiome(Biomes.Rock, Rock)}
     };
-
-    public static readonly Dictionary<Biomes,TilesBiome> Structures = new()
+    public static readonly Dictionary<RgbColor, Biomes> SmallObj = new()
     {
-        {Biomes.Wall, new TilesBiome(Biomes.Wall,Wall)},
-        {Biomes.Floor, new TilesBiome(Biomes.Floor,Floor)},
-        {Biomes.Road, new TilesBiome(Biomes.Road,Road)},
-        {Biomes.Bridge, new TilesBiome(Biomes.Bridge,Bridge)}
-        
+        {Strawberry, Biomes.Grass},
+        {Blueberry, Biomes.Grass},
+        {Iron, Biomes.Rock},
+        {Coal, Biomes.Rock}
     };
+
     public static readonly Dictionary<double, TilesMoisture> MoistureVals = new()
     {
         {MoistureValWettest, new TilesMoisture(MoistureType.Wettest, Wettest)},

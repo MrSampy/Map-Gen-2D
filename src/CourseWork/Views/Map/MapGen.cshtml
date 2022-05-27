@@ -10,27 +10,27 @@
     int newwidth = map.Width * 11;
     int newhight = map.Height * 11;
     const int border = 20;
-    int anothery = map.Width * map.LenofPixel + border;
-    int anotherx = map.Height * map.LenofPixel + border;
+    int anothery = map.Width * map.LenOfPixel + border;
+    int anotherx = map.Height * map.LenOfPixel + border;
     for (int x = 0; x < map.Width; x++)
     {
         for (int y = 0; y < map.Height; y++)
         {
             <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome._Color.Red,
                                  @map.Tiles[x, y].Biome._Color.Green,
-                                 @map.Tiles[x, y].Biome._Color.Blue,@map.LenofPixel))
+                                 @map.Tiles[x, y].Biome._Color.Blue,@map.LenOfPixel))
                     functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
                                  @map.Tiles[x, y].Heat._Color.Green,
-                                 @map.Tiles[x, y].Heat._Color.Blue, @map.LenofPixel))
+                                 @map.Tiles[x, y].Heat._Color.Blue, @map.LenOfPixel))
                     functionarr.push(() => drawRect(@(startx + anotherx),@starty,@map.Tiles[x, y].Moisture._Color.Red,
                                  @map.Tiles[x, y].Moisture._Color.Green,
-                                 @map.Tiles[x, y].Moisture._Color.Blue, @map.LenofPixel))
+                                 @map.Tiles[x, y].Moisture._Color.Blue, @map.LenOfPixel))
                                  
             </script>
-            startx += map.LenofPixel;
+            startx += map.LenOfPixel;
         }
         startx = 10;
-        starty += map.LenofPixel;
+        starty += map.LenOfPixel;
     }
 }
 <body onload="drawmap()">

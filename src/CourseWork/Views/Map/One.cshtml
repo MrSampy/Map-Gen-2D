@@ -8,8 +8,8 @@ ViewData["Title"] = "Height Map";
 @{
     int startx = 10;
     int starty = 10;
-    int newwidth = ViewBag.Map.Width*ViewBag.Map.LenofPixel+startx*ViewBag.Map.LenofPixel;
-    int newhight = ViewBag.Map.Height*ViewBag.Map.LenofPixel+startx*ViewBag.Map.LenofPixel;
+    int newwidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
+    int newhight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
     for (int x = 0; x < ViewBag.Map.Width; x++)
     {
         for (int y = 0; y < ViewBag.Map.Height; y++)
@@ -18,12 +18,12 @@ ViewData["Title"] = "Height Map";
             functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Biome._Color.Red,
                                                             @ViewBag.Map.Tiles[x, y].Biome._Color.Green,
                                                             @ViewBag.Map.Tiles[x, y].Biome._Color.Blue,
-                                                            @ViewBag.Map.LenofPixel,0))
+                                                            @ViewBag.Map.LenOfPixel,0))
             </script>
-            startx += ViewBag.Map.LenofPixel;
+            startx += ViewBag.Map.LenOfPixel;
         }
         startx = 10;
-        starty += ViewBag.Map.LenofPixel;
+        starty += ViewBag.Map.LenOfPixel;
     }
 }
 <body>

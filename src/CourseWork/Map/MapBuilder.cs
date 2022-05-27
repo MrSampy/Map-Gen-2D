@@ -8,31 +8,31 @@ public class MapBuilder
     private int Seed { get; }
     public int Width { get; }
     public int Height { get; }
-    public Tile[,] Tiles;
-    private RiversInfo Rivers;
-    private CastlesInfo Castles;
-    private List<Castle> Cast;
-    private List<Tile> Structures;
-    
-    public int LenofPixel { get; }
+    public int LenOfPixel { get; }
+    private readonly int NumOfRanges;
+    public readonly Tile[,] Tiles;
+    private readonly RiversInfo Rivers;
+    private readonly CastlesInfo Castles;
+    private readonly List<Castle> Cast;
+    private readonly List<Tile> Structures;
     private struct Castle
     {
         public List<Tile> CWalls;
         public Castle(List<Tile> w) => CWalls = w;
 
     }
-    public MapBuilder(int width, int height, int lenpfpix)
+    public MapBuilder(int width, int height, int lenofpix)
     {
         Width = width;
         Height = height;
-        LenofPixel = lenpfpix;
+        LenOfPixel = lenofpix;
         Rivers = new RiversInfo(width, height);
         Castles = new CastlesInfo(width,height);
         Tiles = new Tile[Width, Height];
         Seed = Rnd.Next(1, 1000);
         Cast = new List<Castle>();
         Structures = new List<Tile>();
-
+        NumOfRanges = Height / 50;
         PerlinNoise perlinNoise = new PerlinNoise(Seed, Width, Height);
         for (int x = 0; x < width; x++)
         {
@@ -43,13 +43,14 @@ public class MapBuilder
         }
 
         FindNeighbours();
+        foreach (var elem in Constants.SmallObj)
+            CreateSmallObjects(elem.Key,elem.Value,50);
         GenerateRivers();
         UpdateBitmasks();
-        UpdateCastles();
+       // UpdateCastles();
         
         
     }
-
     private void FindNeighbours()
     {
         for (int x = 0; x < Width; x++)
@@ -65,14 +66,12 @@ public class MapBuilder
             }
         }
     }
-
     private void UpdateBitmasks()
     {
         for (int x = 0; x < Width; x++)
         for (int y = 0; y < Height; y++)
             Tiles[x, y].UpdateBitmask();
     }
-
     private void UpdateRivers()
     {
         for (int x = 0; x < Width; x++)
@@ -116,7 +115,6 @@ public class MapBuilder
         }
         
     }
-
     private void Extend(int riverLength, out List<int[]> extend)
     {   
         extend = new List<int[]>();
@@ -153,6 +151,32 @@ public class MapBuilder
         }
     }
 
+    private void CreateSmallObjects(RgbColor color, Constants.Biomes biome, int attemp)
+    {
+        int counter = NumOfRanges;
+        
+        while (attemp!=0)
+        {
+            if(counter == 0)
+                break;
+           
+            int x = Rnd.Next(1, Width - Constants.RangeOfObj - 2);
+            int y = Rnd.Next(1, Height - Constants.RangeOfObj - 2);
+            if (Tiles[x, y].Biome.TBiome != biome)
+            {
+                --attemp;
+            }
+            else
+            {
+                for (int i = x; i < Constants.RangeOfObj+x; ++i)
+                for (int j = y; j < Constants.RangeOfObj+y; ++j)
+                    if (Tiles[i, j].Biome.TBiome == biome && Rnd.Next(20) == 0)
+                        Tiles[i, j].Biome._Color = color;
+                --counter;
+            }
+        }        
+        
+    }
     private void GenerateRivers()
     {
         int riverCount = Rivers.MaxRiverCount;
@@ -210,7 +234,6 @@ public class MapBuilder
 
         UpdateRivers();
     }
-
     private void UpdateCastles()
     {
         List<Tile?> roads = new List<Tile?>();
@@ -269,7 +292,7 @@ public class MapBuilder
             break;
         }
         List<Tile?> road = new List<Tile?>();
-        int attempts = 20;
+        //int attempts = 20;
         while (true)
         {   
             int index = Rnd.Next(0, Cast[0].CWalls.Count - 1);
@@ -308,7 +331,6 @@ public class MapBuilder
         
     FillFullPAth(roads);
     }
-
     private bool CreateCastle(int x,int y)
     {
         bool isSuitable = false;
@@ -359,7 +381,6 @@ public class MapBuilder
         Cast.Add(new Castle(walls));
         return true;
     }
-
     private bool FindRoad(ref List<Tile> road)
     {
         int numb = 0;
@@ -395,7 +416,4 @@ public class MapBuilder
 
     }
     
-
-
-
 }
