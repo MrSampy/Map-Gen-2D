@@ -16,15 +16,15 @@
     {
         for (int y = 0; y < map.Height; y++)
         {
-            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome._Color.Red,
-                                 @map.Tiles[x, y].Biome._Color.Green,
-                                 @map.Tiles[x, y].Biome._Color.Blue,@map.LenOfPixel))
-                    functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat._Color.Red,
-                                 @map.Tiles[x, y].Heat._Color.Green,
-                                 @map.Tiles[x, y].Heat._Color.Blue, @map.LenOfPixel))
-                    functionarr.push(() => drawRect(@(startx + anotherx),@starty,@map.Tiles[x, y].Moisture._Color.Red,
-                                 @map.Tiles[x, y].Moisture._Color.Green,
-                                 @map.Tiles[x, y].Moisture._Color.Blue, @map.LenOfPixel))
+            <script>functionarr.push(() => drawRect(@startx,@starty,@map.Tiles[x, y].Biome.Color.Red,
+                                 @map.Tiles[x, y].Biome.Color.Green,
+                                 @map.Tiles[x, y].Biome.Color.Blue,@map.LenOfPixel))
+                    functionarr.push(() => drawRect(@startx,@(anothery + starty),@map.Tiles[x, y].Heat.Color.Red,
+                                 @map.Tiles[x, y].Heat.Color.Green,
+                                 @map.Tiles[x, y].Heat.Color.Blue, @map.LenOfPixel))
+                    functionarr.push(() => drawRect(@(startx + anotherx),@starty,@map.Tiles[x, y].Moisture.Color.Red,
+                                 @map.Tiles[x, y].Moisture.Color.Green,
+                                 @map.Tiles[x, y].Moisture.Color.Blue, @map.LenOfPixel))
                                  
             </script>
             startx += map.LenOfPixel;

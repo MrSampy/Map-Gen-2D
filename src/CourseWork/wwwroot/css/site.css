@@ -12,3 +12,9 @@
   position: absolute;
   right: 0;
 }
+.tablet{
+  position: absolute;
+  right: 0;
+  border: black;
+  font-size: 1.1rem;
+}

@@ -9,7 +9,7 @@ public class RiversInfo
     {
         var riverCoef = 0.000015;
         Random rnd = Random.Shared;
-        MaxRiverCount = rnd.Next(1,5);
-        MaxRiverWidth = (int)Math.Ceiling(width * length * riverCoef);
+        MaxRiverCount = rnd.Next(1, 5);
+        MaxRiverWidth = (int) Math.Ceiling(width * length * riverCoef);
     }
 }
