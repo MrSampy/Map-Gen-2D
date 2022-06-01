@@ -10,15 +10,15 @@ public class CastlesInfo
 
     public CastlesInfo(int width, int height)
     {
-        var wallCoef = 0.00004;
-        var castleCoef = 0.0003;
-        var widthCoef = 0.000015;
-        Random rnd = Random.Shared;
+        const double wallCof = 0.00004;
+        const double castleCof = 0.0003;
+        const double widthCof = 0.000015;
+        var rnd = Random.Shared;
         MaxCastleNumber = rnd.Next(1, 4);
-        int square = width * height;
-        WallLength = (int) Math.Ceiling(square * castleCoef);
-        WallWidth = (int) Math.Ceiling(square * wallCoef);
-        RoadWidth = (int) Math.Ceiling(square * widthCoef);
+        var square = width * height;
+        WallLength = (int) Math.Ceiling(square * castleCof);
+        WallWidth = (int) Math.Ceiling(square * wallCof);
+        RoadWidth = (int) Math.Ceiling(square * widthCof);
         MinPathLength = height / 3;
     }
 }

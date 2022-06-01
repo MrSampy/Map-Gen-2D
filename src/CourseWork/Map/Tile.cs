@@ -29,37 +29,28 @@ public class Tile
         Structure = false;
         Neighbours = new Tile[4];
         Biome = new TilesBiome(Constants.Biomes.Snow, Constants.Snow);
-        foreach (var elem in Constants.HeightVals)
+        foreach (var elem in Constants.HeightValues.Where(elem => heightValue < elem.Key))
         {
-            if (heightValue < elem.Key)
-            {
-                Biome = new TilesBiome(elem.Value.TBiome, elem.Value.Color);
-                break;
-            }
+            Biome = new TilesBiome(elem.Value.TBiome, elem.Value.Color);
+            break;
         }
 
         Heat = new TilesHeat(Constants.HeatType.Coldest, Constants.Coldest);
-        foreach (var elem in Constants.HeatVals)
+        foreach (var elem in Constants.HeatValues.Where(elem => heightValue < elem.Key))
         {
-            if (heightValue < elem.Key)
-            {
-                Heat = new TilesHeat(elem.Value.THeat, elem.Value.Color);
-                break;
-            }
+            Heat = new TilesHeat(elem.Value.THeat, elem.Value.Color);
+            break;
         }
 
         Moisture = new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter);
-        foreach (var elem in Constants.MoistureVals)
+        foreach (var elem in Constants.MoistureValues.Where(elem => heightValue < elem.Key))
         {
-            if (heightValue < elem.Key)
-            {
-                Moisture = new TilesMoisture(elem.Value.TMoisture, elem.Value.Color);
-                break;
-            }
+            Moisture = new TilesMoisture(elem.Value.TMoisture, elem.Value.Color);
+            break;
         }
 
-        bool isDeepWater = Biome.TBiome != Constants.Biomes.DeepWater;
-        bool isShallWater = Biome.TBiome != Constants.Biomes.ShallowWater;
+        var isDeepWater = Biome.TBiome != Constants.Biomes.DeepWater;
+        var isShallWater = Biome.TBiome != Constants.Biomes.ShallowWater;
         IsLand = (isDeepWater && isShallWater);
     }
 
@@ -71,19 +62,17 @@ public class Tile
         if (_isBorder)
         {
             const double shadFactor = 0.8;
-            Biome.Darkify(shadFactor);
-            if (Biome.TBiome != Constants.Biomes.River)
-            {
-                Moisture.Darkify(0);
-                Heat.Darkify(0);
-            }
+            Biome.Darkish(shadFactor);
+            if (Biome.TBiome == Constants.Biomes.River) return;
+            Moisture.Darkish(0);
+            Heat.Darkish(0);
         }
     }
 
-    public Tile GetNextPixRiver(Tile skippble)
+    public Tile GetNextPixRiver(Tile skipped)
     {
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
-            (tile1 != null && skippble != tile1 && tile1.HeightValue < tile2.HeightValue);
+            (tile1 != null && skipped != tile1 && tile1.HeightValue < tile2.HeightValue);
 
         Tile tempTile = new Tile(-1, -1, 10);
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc));

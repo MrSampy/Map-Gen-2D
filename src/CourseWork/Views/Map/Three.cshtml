@@ -14,9 +14,9 @@
         for (int y = 0; y < ViewBag.Map.Height; y++)
         {
             <script>
-            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Moisture._Color.Red,
-                                                            @ViewBag.Map.Tiles[x, y].Moisture._Color.Green,
-                                                            @ViewBag.Map.Tiles[x, y].Moisture._Color.Blue,
+            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Moisture.Color.Red,
+                                                            @ViewBag.Map.Tiles[x, y].Moisture.Color.Green,
+                                                            @ViewBag.Map.Tiles[x, y].Moisture.Color.Blue,
                                                             @ViewBag.Map.LenOfPixel,2))
             </script>
             startx += ViewBag.Map.LenOfPixel;

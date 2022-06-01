@@ -16,9 +16,9 @@
         {
             <script>
            
-            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Heat._Color.Red,
-                                                            @ViewBag.Map.Tiles[x, y].Heat._Color.Green,
-                                                            @ViewBag.Map.Tiles[x, y].Heat._Color.Blue,
+            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Heat.Color.Red,
+                                                            @ViewBag.Map.Tiles[x, y].Heat.Color.Green,
+                                                            @ViewBag.Map.Tiles[x, y].Heat.Color.Blue,
                                                             @ViewBag.Map.LenOfPixel,1))
             </script>
             startx += ViewBag.Map.LenOfPixel;

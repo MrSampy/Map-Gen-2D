@@ -66,7 +66,7 @@ public static class Constants
     }
 
     private const double HeightValDeepWat = 0.48;
-    private const double HeightValShalWat = 0.53;
+    private const double HeightValShallWat = 0.53;
     private const double HeightValSand = 0.54;
     private const double HeightValGrass = 0.6;
     private const double HeightValForest = 0.66;
@@ -97,10 +97,10 @@ public static class Constants
     public const double MinStructureVal = 0.56;
     public const int RangeOfObj = 20;
     
-    public static readonly Dictionary<double, TilesBiome> HeightVals = new()
+    public static readonly Dictionary<double, TilesBiome> HeightValues = new()
     {
         {HeightValDeepWat, new TilesBiome(Biomes.DeepWater, DeepWater)},
-        {HeightValShalWat, new TilesBiome(Biomes.ShallowWater, ShallowWater)},
+        {HeightValShallWat, new TilesBiome(Biomes.ShallowWater, ShallowWater)},
         {HeightValSand, new TilesBiome(Biomes.Sand, Sand)},
         {HeightValGrass, new TilesBiome(Biomes.Grass, Grass)},
         {HeightValForest, new TilesBiome(Biomes.Forest, Forest)},
@@ -115,7 +115,7 @@ public static class Constants
         {Coal, Biomes.Rock}
     };
 
-    public static readonly Dictionary<double, TilesMoisture> MoistureVals = new()
+    public static readonly Dictionary<double, TilesMoisture> MoistureValues = new()
     {
         {MoistureValWettest, new TilesMoisture(MoistureType.Wettest, Wettest)},
         {MoistureValWetter, new TilesMoisture(MoistureType.Wetter, Wetter)},
@@ -128,7 +128,7 @@ public static class Constants
         {MoistureValWet2, new TilesMoisture(MoistureType.Wet, Wet)}
     };
 
-    public static readonly Dictionary<double, TilesHeat> HeatVals = new()
+    public static readonly Dictionary<double, TilesHeat> HeatValues = new()
     {
         {HeatValColder1, new TilesHeat(HeatType.Colder, Colder)},
         {HeatValCold1, new TilesHeat(HeatType.Cold, Cold)},
