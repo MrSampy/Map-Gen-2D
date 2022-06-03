@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen;
 
-public class Map
+public sealed class Map
 {
     public int Width { get; }
     public int Height { get; }

@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class RiversInfo
+public sealed class RiversInfo
 {
     public int MaxRiverCount { get; }
     public int MaxRiverWidth { get; }

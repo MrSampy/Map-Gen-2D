@@ -4,7 +4,7 @@
 <head>
     <title>@ViewData["Title"]</title>
     <script>
-    let functionarr = [];
+    let functionArr = [];
     const canvs = [`canvas1`,`canvas2`,`canvas3`];
     function drawRect(x, y, red, green, blue, lenofpix,num) {
         let canvas = document.getElementById(canvs[num]);
@@ -16,21 +16,21 @@
     }
     
     
-    function drawmap() {
-        for (const func of functionarr)
+    function drawMap() {
+        for (const func of functionArr)
             func();
         
     }
     
     function getImage(canvas){
-        var imageData = canvas.toDataURL();
-        var image = new Image();
+        let imageData = canvas.toDataURL();
+        let image = new Image();
         image.src = imageData;
         return image;
     }
     
     function saveImage(image,name) {
-        var link = document.createElement("a");
+        let link = document.createElement("a");
     
         link.setAttribute("href", image.src);
         link.setAttribute("download", name);
@@ -38,7 +38,7 @@
     }
     
     function saveCanvasAsImageFile(num,name){
-        var image = getImage(document.getElementById(canvs[num]));
+        let image = getImage(document.getElementById(canvs[num]));
         saveImage(image,name);
     }
     </script> 
@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="~/Course_work.styles.css" asp-append-version="true"/>
 </head>
 
-<body onload="drawmap()">
+<body onload="drawMap()">
 
 <h1>@ViewData["Title"]</h1>
 <br /> 

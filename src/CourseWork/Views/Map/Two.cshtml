@@ -6,25 +6,25 @@
 }
 
 @{
-    int startx = 10;
-    int starty = 10;
-    int newwidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
-    int newhight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
+    int startX = 10;
+    int startY = 10;
+    int newWidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
+    int newHeight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
     for (int x = 0; x < ViewBag.Map.Width; x++)
     {
         for (int y = 0; y < ViewBag.Map.Height; y++)
         {
             <script>
            
-            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Heat.Color.Red,
+            functionArr.push(() => drawRect(@startX,@startY,@ViewBag.Map.Tiles[x, y].Heat.Color.Red,
                                                             @ViewBag.Map.Tiles[x, y].Heat.Color.Green,
                                                             @ViewBag.Map.Tiles[x, y].Heat.Color.Blue,
                                                             @ViewBag.Map.LenOfPixel,1))
             </script>
-            startx += ViewBag.Map.LenOfPixel;
+            startX += ViewBag.Map.LenOfPixel;
         }
-        startx = 10;
-        starty += ViewBag.Map.LenOfPixel;
+        startX = 10;
+        startY += ViewBag.Map.LenOfPixel;
     }
 
 
@@ -32,7 +32,7 @@
 }
 
 <body>
-<canvas id="canvas2" width="@newwidth" height="@newhight"></canvas>
+<canvas id="canvas2" width="@newWidth" height="@newHeight"></canvas>
    @Html.ActionLink("Prev", "One", "Map")
    @Html.ActionLink("Restart", "Index", "Map")
    @Html.ActionLink("Next", "Three", "Map")

@@ -2,7 +2,7 @@ using CourseWork.MapGen.Helpers;
 
 namespace CourseWork.MapGen;
 
-public class Tile
+public sealed class Tile
 {
     public int X { get; }
     public int Y { get; }

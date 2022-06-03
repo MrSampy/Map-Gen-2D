@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class PerlinNoise
+public sealed class PerlinNoise
 {
     private const int GradientSizeTable = 256;
     private readonly Random _random;

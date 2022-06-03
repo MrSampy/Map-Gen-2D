@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class TilesMoisture : TilesProperty
+public sealed class TilesMoisture : TilesProperty
 {
     public Constants.MoistureType TMoisture { get; }
 

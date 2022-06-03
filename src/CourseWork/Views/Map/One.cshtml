@@ -8,28 +8,28 @@ ViewData["Title"] = "Height Map";
 }
 
 @{
-    int startx = 10;
-    int starty = 10;
-    int newwidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
-    int newhight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startx*ViewBag.Map.LenOfPixel;
+    int startX = 10;
+    int startY = 10;
+    int newWidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
+    int newHeight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
     for (int x = 0; x < ViewBag.Map.Width; x++)
     {
         for (int y = 0; y < ViewBag.Map.Height; y++)
         {
             <script>
-            functionarr.push(() => drawRect(@startx,@starty,@ViewBag.Map.Tiles[x, y].Biome.Color.Red,
+            functionArr.push(() => drawRect(@startX,@startY,@ViewBag.Map.Tiles[x, y].Biome.Color.Red,
                                                             @ViewBag.Map.Tiles[x, y].Biome.Color.Green,
                                                             @ViewBag.Map.Tiles[x, y].Biome.Color.Blue,
                                                             @ViewBag.Map.LenOfPixel,0))
             </script>
-            startx += ViewBag.Map.LenOfPixel;
+            startX += ViewBag.Map.LenOfPixel;
         }
-        startx = 10;
-        starty += ViewBag.Map.LenOfPixel;
+        startX = 10;
+        startY += ViewBag.Map.LenOfPixel;
     }
 }
 <body>
-<canvas id="canvas1" width="@newwidth" height="@newhight"></canvas>
+<canvas id="canvas1" width="@newWidth" height="@newHeight"></canvas>
     @Html.ActionLink("Prev", "Three", "Map")
     @Html.ActionLink("Restart", "Index", "Map")
     @Html.ActionLink("Next", "Two", "Map")

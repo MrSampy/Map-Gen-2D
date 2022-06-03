@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class RgbColor
+public sealed class RgbColor
 {
     public int Red { get; }
     public int Green { get; }

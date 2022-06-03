@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class TilesHeat : TilesProperty
+public sealed class TilesHeat : TilesProperty
 {
     public Constants.HeatType THeat { get; }
 

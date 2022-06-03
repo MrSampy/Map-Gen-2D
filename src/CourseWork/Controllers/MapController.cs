@@ -4,7 +4,7 @@ namespace CourseWork.Controllers;
 
 public class MapController:Controller
 {
-    public static Map Map;
+    private static Map Map;
     [HttpGet]
     public IActionResult Index() => View();
     

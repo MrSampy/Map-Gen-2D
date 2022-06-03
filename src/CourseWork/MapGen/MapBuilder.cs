@@ -1,7 +1,7 @@
 using CourseWork.MapGen.Helpers;
 namespace CourseWork.MapGen;
 
-public class MapBuilder
+public sealed class MapBuilder
 {
     private static readonly Random Random = Random.Shared;
     private readonly Map _map;
@@ -197,8 +197,8 @@ public class MapBuilder
 
     private void AddCastles()
     {
+        int stop = _map.Height / 100;
         var roads = new List<Tile>();
-
         void FillMainPath(ref List<Tile> path)
         {
             foreach (var tile in path.Where(tile => !_structures.Contains(_map.Tiles[tile.X, tile.Y])))
@@ -207,7 +207,6 @@ public class MapBuilder
             roads.AddRange(path);
             path.Clear();
         }
-
         void FillFullPAth(List<Tile> path)
         {
             void MakeStructure(Tile tile)
@@ -215,9 +214,7 @@ public class MapBuilder
                 if (tile.IsLand && !_structures.Contains(tile))
                     _map.Tiles[tile.X, tile.Y].Biome.Color =
                         (!tile.HasRiver) ? Constants.Road : Constants.Bridge;
-                
             }
-
             var isXChange = true;
             for (var i = 0; i < path.Count; ++i)
             {
@@ -227,72 +224,82 @@ public class MapBuilder
                     Tile tempTile;
                     if (isXChange)
                     {
-                        tempTile = (path[i].X + j < _map.Width) ? (_map.Tiles[path[i].X + j, path[i].Y]) : _structures.Last();
+                        tempTile = (path[i].X + j < _map.Width)
+                            ? (_map.Tiles[path[i].X + j, path[i].Y])
+                            : _structures.Last();
                         MakeStructure(tempTile);
-                        tempTile = (path[i].X - j >= 0) ? (_map.Tiles[path[i].X - j, path[i].Y]) : _structures.Last();
+                        tempTile = (path[i].X - j >= 0)
+                            ? (_map.Tiles[path[i].X - j, path[i].Y])
+                            : _structures.Last();
                         MakeStructure(tempTile);
                     }
                     else
                     {
-                        tempTile = (path[i].Y + j < _map.Height) ? (_map.Tiles[path[i].X, path[i].Y + j]) : _structures.Last();
+                        tempTile = (path[i].Y + j < _map.Height)
+                            ? (_map.Tiles[path[i].X, path[i].Y + j])
+                            : _structures.Last();
                         MakeStructure(tempTile);
-                        tempTile = (path[i].Y - j >= 0) ? (_map.Tiles[path[i].X, path[i].Y - j]) : _structures.Last();
+                        tempTile = (path[i].Y - j >= 0)
+                            ? (_map.Tiles[path[i].X, path[i].Y - j])
+                            : _structures.Last();
                         MakeStructure(tempTile);
                     }
                 }
             }
         }
-
-        while (true)
+        int counter = 0;
+        while (counter!=stop)
         {
-            var x = Random.Next(_castles.WallLength, _map.Width - _castles.WallLength - 1);
-            var y = Random.Next(_castles.WallLength, _map.Height - _castles.WallLength - 1);
-            if (!CreateCastle(x, y))
-                continue;
-            break;
+            while (true)
+            {
+                var x = Random.Next(_castles.WallLength, _map.Width - _castles.WallLength - 1);
+                var y = Random.Next(_castles.WallLength, _map.Height - _castles.WallLength - 1);
+                if (!CreateCastle(x, y, true))
+                    continue;
+                break;
+            }
+            List<Tile> road = new List<Tile>();
+            while (true)
+            {
+                var index = Random.Next(0, _cast[counter].CWalls.Count - 1);
+                road.Add(_cast[counter].CWalls[index]);
+                if (!FindRoad(ref road))
+                    continue;
+
+
+                FillMainPath(ref road);
+                _structures.AddRange(road);
+                roads.AddRange(road);
+                break;
+            }
+            int castleCount = Random.Next(2,4);
+            int attempts = 100;
+            while (castleCount != 0)
+            {
+                if (attempts == 0)
+                    break;
+                int index = Random.Next(2, roads.Count - 2);
+                if (roads[index].Biome.Color != Constants.Road)
+                    continue;
+                road.Add(roads[index]);
+                if (!FindRoad(ref road))
+                {
+                    --attempts;
+                    continue;
+                }
+
+                FillMainPath(ref road);
+                --castleCount;
+            }
+
+            FillFullPAth(roads);
+            ++counter;
         }
-
-        List<Tile> road = new List<Tile>();
-        int attempts = 100;
-        while (true)
-        {
-            var index = Random.Next(0, _cast[0].CWalls.Count - 1);
-            road.Add(_cast[0].CWalls[index]);
-            if (!FindRoad(ref road))
-                continue;
-
-
-            FillMainPath(ref road);
-            _structures.AddRange(road);
-            roads.AddRange(road);
-            road.Clear();
-            break;
-        }
-
-
-        int castleCount = _castles.MaxCastleNumber;
-        while (castleCount != 0)
-        {
-              if (attempts == 0)
-                  break;
-              int index = Random.Next(2, roads.Count - 2);
-              if (roads[index].Biome.Color != Constants.Road)
-                  continue;
-              road.Add(roads[index]);
-              if (!FindRoad(ref road))
-              {
-                  --attempts;
-                  continue;
-              }
-
-              FillMainPath(ref road);
-              --castleCount;
-        }
-
-        FillFullPAth(roads);
+        
+        
     }
 
-    private bool CreateCastle(int x, int y)
+    private bool CreateCastle(int x, int y, bool isMainCast)
     {
         var isSuitable = false;
         var walls = new List<Tile>();
@@ -332,14 +339,14 @@ public class MapBuilder
                 var isTopBorder = i == xTop || i == xBot;
                 var isBotBorder = j == yTop || j == yBot;
                 _map.Tiles[i, j].Biome.Color = (isx || isy) ? Constants.Wall : Constants.Floor;
-                if (isBotBorder || isTopBorder)
+                if (isMainCast && (isBotBorder || isTopBorder))
                     walls.Add(_map.Tiles[i, j]);
                 _map.Tiles[i, j].Structure = true;
                 _structures.Add(_map.Tiles[i, j]);
             }
         }
-
-        _cast.Add(new Castle(walls));
+        if(isMainCast)
+            _cast.Add(new Castle(walls));
         return true;
     }
 
@@ -365,7 +372,7 @@ public class MapBuilder
             if (road.Count == _castles.MinPathLength)
                 isStop = true;
             if (!isStop || Random.Next(5) != 0) continue;
-            if (CreateCastle(tempTile.X, tempTile.Y))
+            if (CreateCastle(tempTile.X, tempTile.Y,false))
                 break;
             --counter;
             if (counter == 0)
