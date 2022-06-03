@@ -22,7 +22,7 @@ public class MapBuilder
         public Castle(List<Tile> w) => CWalls = w;
     }
 
-    public MapBuilder(int width, int height, int lenOfPix)
+    public MapBuilder(int width, int height, int lenOfPix,bool?[] accuracy)
     {
         Width = width;
         Height = height;
@@ -44,11 +44,14 @@ public class MapBuilder
         }
 
         FindNeighbours();
-        foreach (var elem in Constants.SmallObj)
-            CreateSmallObjects(elem.Key, elem.Value, 50);
-        GenerateRivers();
+        if(accuracy[2].GetValueOrDefault(false))
+            foreach (var elem in Constants.SmallObj)
+                CreateSmallObjects(elem.Key, elem.Value, 50);
+        if(accuracy[0].GetValueOrDefault(false))
+          GenerateRivers();
         UpdateBitmasks();
-        UpdateCastles();
+        if(accuracy[1].GetValueOrDefault(false))
+            UpdateCastles();
     }
 
     private void FindNeighbours()

@@ -17,12 +17,23 @@
             <option value="@i">@sizes[i]</option>
         }
     </select>
+  
     <select name="lenOfPix">
         @for (int i = 1; i <= 5; ++i)
         {
             <option value="@(i)">@(i)px</option>
         }
+        
     </select>
+   
+    <p>  
+        <span>Create Rivers: </span>
+        @Html.CheckBox("hasRiver", false)
+        <span>Create Castles: </span>
+        @Html.CheckBox("hasCastles", false)
+        <span>Create Particles: </span>
+        @Html.CheckBox("hasParticles", false)
+    </p>
     
     <input class="form-submit-button" type="submit" value="Submit"/>
 }

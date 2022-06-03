@@ -11,13 +11,13 @@ public class MapController:Controller
     public IActionResult Index() => View();
 
     [HttpPost]
-    public IActionResult Index(int? sizeId, int? lenOfPix)
+    public IActionResult Index(int? sizeId, int? lenOfPix, bool? hasRiver=false, bool? hasCastles=false, bool? hasParticles=false)
 
     {
         int[] numbers = {200, 300, 400, 500, 600, 700, 800};
         Side = numbers[sizeId.GetValueOrDefault(0)];
         LenofPix = lenOfPix.GetValueOrDefault(1);
-        Map = new MapBuilder(Side, Side, LenofPix);
+        Map = new MapBuilder(Side, Side, LenofPix, new[]{hasRiver, hasCastles, hasParticles});
         ViewBag.Map = Map;
         return View("One");
     }
