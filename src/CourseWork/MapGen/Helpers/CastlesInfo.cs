@@ -1,4 +1,4 @@
-namespace CourseWork.Map.Helpers;
+namespace CourseWork.MapGen.Helpers;
 
 public class CastlesInfo
 {
@@ -21,4 +21,5 @@ public class CastlesInfo
         RoadWidth = (int) Math.Ceiling(square * widthCof);
         MinPathLength = height / 3;
     }
+    
 }

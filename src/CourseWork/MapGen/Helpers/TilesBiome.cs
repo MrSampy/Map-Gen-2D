@@ -1,4 +1,4 @@
-namespace CourseWork.Map.Helpers;
+namespace CourseWork.MapGen.Helpers;
 
 public class TilesBiome : TilesProperty
 {

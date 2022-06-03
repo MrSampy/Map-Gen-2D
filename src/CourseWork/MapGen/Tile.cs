@@ -1,6 +1,6 @@
-using CourseWork.Map.Helpers;
+using CourseWork.MapGen.Helpers;
 
-namespace CourseWork.Map;
+namespace CourseWork.MapGen;
 
 public class Tile
 {

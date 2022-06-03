@@ -1,4 +1,5 @@
-namespace CourseWork.Map.Helpers;
+namespace CourseWork.MapGen.Helpers;
+
 
 public abstract class TilesProperty
 {

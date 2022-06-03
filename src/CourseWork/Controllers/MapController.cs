@@ -1,23 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using CourseWork.Map;
+using CourseWork.MapGen;
 namespace CourseWork.Controllers;
 
 public class MapController:Controller
 {
-    public static MapBuilder Map;
-    private int Side;
-    private int LenofPix;
+    public static Map Map;
     [HttpGet]
     public IActionResult Index() => View();
-
+    
     [HttpPost]
     public IActionResult Index(int? sizeId, int? lenOfPix, bool? hasRiver=false, bool? hasCastles=false, bool? hasParticles=false)
-
     {
         int[] numbers = {200, 300, 400, 500, 600, 700, 800};
-        Side = numbers[sizeId.GetValueOrDefault(0)];
-        LenofPix = lenOfPix.GetValueOrDefault(1);
-        Map = new MapBuilder(Side, Side, LenofPix, new[]{hasRiver, hasCastles, hasParticles});
+        int side = numbers[sizeId.GetValueOrDefault(0)];
+        MapBuilder mapBuilder = new MapBuilder(side, side, lenOfPix.GetValueOrDefault(1));
+        Map = mapBuilder.BuildMap(hasRiver.GetValueOrDefault(false),hasCastles.GetValueOrDefault(false),hasParticles.GetValueOrDefault(false));
         ViewBag.Map = Map;
         return View("One");
     }
