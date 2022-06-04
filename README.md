@@ -9,6 +9,13 @@ This system allows you to create a procedurally generated map of heights, heat a
 This project was created with classic layered architecture. Map Generator MS contains two logical layers: UI Level (Razor
 Pages) and Business Logic layer (ASP.NET MVC Web APP). 
 
+#### Screenshots
+
+![Hi1](./src/CourseWork/images/Hi1.jpg)![He1](./src/CourseWork/images/He1.jpg)![M1](./src/CourseWork/images/M1.jpg)
+
+
+
+
 ## Authors
 Kolosov Serhii — [@MrSampy](www.t.me/MrSampy)
 
