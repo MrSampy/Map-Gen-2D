@@ -2,7 +2,7 @@
 
 ## Concept Idea
 
-This system allows you to create a procedurally generated map of heights, heat and humidity. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
+This system allows you to create, set up and download a procedurally generated map of heights, heat and moisture. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
 
 ## Architecture
 
@@ -11,9 +11,18 @@ Pages) and Business Logic layer (ASP.NET MVC Web APP).
 
 #### Screenshots
 
-![Hi1](./src/CourseWork/images/Hi1.jpg)![He1](./src/CourseWork/images/He1.jpg)![M1](./src/CourseWork/images/M1.jpg)
+Hight, Heat, Moisture maps with rivers, castles and particles (ores and berries) from one and the same seed. Images extension is 200x200px.
 
+![Hight-Map1](./src/CourseWork/images/1.png)![Heat-Map](./src/CourseWork/images/2.png)![Moisture-Map](./src/CourseWork/images/3.png)
 
+Hight map with rivers. Image extension is 900x900px.
+
+![Hight-Map2](./src/CourseWork/images/Hi3.jpg)
+
+### Requirements
+- NET 6 SDK
+- ASP.NET 6
+- IDE for C#(.NET). Rider(preferred) or Visual Studio 2019+
 
 
 ## Authors
