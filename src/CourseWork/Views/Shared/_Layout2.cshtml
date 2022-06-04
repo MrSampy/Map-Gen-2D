@@ -4,24 +4,24 @@
 <head>
     <title>@ViewData["Title"]</title>
     <script>
-    let functionArr = [];
-    const canvs = [`canvas1`,`canvas2`,`canvas3`];
-    function drawRect(x, y, red, green, blue, lenofpix,num) {
-        let canvas = document.getElementById(canvs[num]);
-        if (canvas.getContext) {
-            let ctx = canvas.getContext("2d");
-            ctx.fillStyle = `rgb(${red},${green},${blue})`;
-            ctx.fillRect(x, y, lenofpix, lenofpix);
+    class JsColor {
+        constructor(r,g,b){
+            this.r = r;
+            this.g = g;
+            this.b = b;  
         }
-    }
-    
-    
-    function drawMap() {
-        for (const func of functionArr)
-            func();
+        compileColor () {
+            return rgb(this.r, this.g, this.b);
+        }
         
     }
-    
+    function drawRect(canvasId, x, y, red, green, blue, lenofpix, num) {
+        let ctx = canvasId[num];
+        if (!ctx) return;
+        ctx.fillStyle = `rgb(${red},${green},${blue})`;
+        ctx.fillRect(x, y, lenofpix, lenofpix);
+    }
+      
     function getImage(canvas){
         let imageData = canvas.toDataURL();
         let image = new Image();
@@ -46,12 +46,9 @@
     <link rel="stylesheet" href="~/Course_work.styles.css" asp-append-version="true"/>
 </head>
 
-<body onload="drawMap()">
-
+<body>
 <h1>@ViewData["Title"]</h1>
-<br /> 
-
+<br />
 @RenderBody()
-
 </body>
 </html>

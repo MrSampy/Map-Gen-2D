@@ -4,7 +4,7 @@ namespace CourseWork.Controllers;
 
 public class MapController:Controller
 {
-    private static Map Map;
+    private static Map _map = null!;
     [HttpGet]
     public IActionResult Index() => View();
     
@@ -14,27 +14,27 @@ public class MapController:Controller
         int[] numbers = {200, 300, 400, 500, 600, 700, 800};
         int side = numbers[sizeId.GetValueOrDefault(0)];
         MapBuilder mapBuilder = new MapBuilder(side, side, lenOfPix.GetValueOrDefault(1));
-        Map = mapBuilder.BuildMap(hasRiver.GetValueOrDefault(false),hasCastles.GetValueOrDefault(false),hasParticles.GetValueOrDefault(false));
-        ViewBag.Map = Map;
+        _map = mapBuilder.BuildMap(hasRiver.GetValueOrDefault(false),hasCastles.GetValueOrDefault(false),hasParticles.GetValueOrDefault(false));
+        ViewBag.Map = _map;
         return View("One");
     }
 
     
     public IActionResult One()
     {
-        ViewBag.Map = Map;
+        ViewBag.Map = _map;
         return View();
     }
     
     public IActionResult Two()
     { 
-        ViewBag.Map = Map;
+        ViewBag.Map = _map;
        return View();
     }
     
     public IActionResult Three()
     {
-        ViewBag.Map = Map;
+        ViewBag.Map = _map;
         return View();
     }
 }

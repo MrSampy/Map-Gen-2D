@@ -3,6 +3,7 @@
     Layout = "_Layout1";
     ViewData["Title"] = "Home Page";
     string[] sizes = {"200x200", "300x300", "400x400", "500x500", "600x600","700x700","800x800"};
+    const int length = 5;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -19,11 +20,12 @@
     </select>
   
     <select name="lenOfPix">
-        @for (int i = 1; i <= 5; ++i)
+            
+        @for (int i = 1; i <= length; ++i)
         {
             <option value="@(i)">@(i)px</option>
         }
-        
+
     </select>
    
     <p>  

@@ -1,34 +1,42 @@
-
 @{
     Layout = "_Layout2";
     ViewData["Title"] = "Moisture Map";
     ViewBag.Num = 2;
 }
 @{
-    int startX = 10;
-    int startY = 10;
-    int newWidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
-    int newHeight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+startX*ViewBag.Map.LenOfPixel;
-    for (int x = 0; x < ViewBag.Map.Width; x++)
-    {
-        for (int y = 0; y < ViewBag.Map.Height; y++)
-        {
-            <script>
-            functionArr.push(() => drawRect(@startX,@startY,@ViewBag.Map.Tiles[x, y].Moisture.Color.Red,
-                                                            @ViewBag.Map.Tiles[x, y].Moisture.Color.Green,
-                                                            @ViewBag.Map.Tiles[x, y].Moisture.Color.Blue,
-                                                            @ViewBag.Map.LenOfPixel,2))
-            </script>
-            startX += ViewBag.Map.LenOfPixel;
-        }
-        startX = 10;
-        startY += ViewBag.Map.LenOfPixel;
-    }
-
-
-
+    int newWidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+10*ViewBag.Map.LenOfPixel;
+    int newHeight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+10*ViewBag.Map.LenOfPixel;
 }
 
+<script>
+    window.onload = () => {
+        const canvasId = ["canvas1","canvas2","canvas3"].map((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                return element.getContext('2d');
+            }
+        });
+        let startX = 10;
+        let startY = 10;
+        @for (int x = 0; x < ViewBag.Map.Width; x++)
+        {
+            @for (int y = 0; y < ViewBag.Map.Height; y++)
+            {
+                <text>
+                    drawRect(canvasId, startX,startY,@ViewBag.Map.Tiles[x, y].Moisture.Color.Red,
+                                                                    @ViewBag.Map.Tiles[x, y].Moisture.Color.Green,
+                                                                    @ViewBag.Map.Tiles[x, y].Moisture.Color.Blue,
+                                                                    @ViewBag.Map.LenOfPixel,2);
+                    startX += @ViewBag.Map.LenOfPixel;
+                </text>
+            }
+            <text>
+                startX = 10;
+                startY += @ViewBag.Map.LenOfPixel;
+            </text>
+        }
+    };
+</script>
 <body>
 <canvas id="canvas3" width="@newWidth" height="@newHeight"></canvas>
     @Html.ActionLink("Prev", "Two", "Map")
