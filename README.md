@@ -4,20 +4,28 @@
 
 This system allows you to create, set up and download a procedurally generated map of heights, heat and moisture. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
 
+## Description of features
+- The size and quantity of some objects (castles, rivers, roads) depends on the area of the map
+- Rivers widen from source to mouth
+- If the road passes through the river, then it becomes a bridge
+- Berries (strawberries, blueberries) are generated only in grassland biome
+- Ores (iron, coal) are generated only in the mountains biome
+
 ## Architecture
 
 This project was created with classic layered architecture. Map Generator MS contains two logical layers: UI Level (Razor
 Pages) and Business Logic layer (ASP.NET MVC Web APP). 
 
-#### Screenshots
+## Screenshots
 
 Hight, Heat, Moisture maps with rivers, castles and particles (ores and berries) from one and the same seed. Images extension is 200x200px.
 
 ![Hight-Map1](./src/CourseWork/images/1.png)![Heat-Map](./src/CourseWork/images/2.png)![Moisture-Map](./src/CourseWork/images/3.png)
 
+
 Hight map with rivers. Image extension is 900x900px.
 
-![Hight-Map2](./src/CourseWork/images/Hi3.jpg)
+![Hight-Map3](./src/CourseWork/images/Hi3.jpg)
 
 ### Requirements
 - NET 6 SDK
