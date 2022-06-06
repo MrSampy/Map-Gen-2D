@@ -5,7 +5,6 @@ public sealed class MapBuilder
 {
     private static readonly Random Random = Random.Shared;
     private readonly Map _map;
-    private int Seed { get; }
     private readonly RiversInfo _rivers;
     private readonly CastlesInfo _castles;
     private readonly List<Castle> _cast;
@@ -22,16 +21,23 @@ public sealed class MapBuilder
         _map = new Map(width,height,lenOfPix);
         _rivers = new RiversInfo(_map.Width, _map.Height);
         _castles = new CastlesInfo(_map.Width, _map.Height);
-        Seed = Random.Next(1, 1000);
+        var heightSeed = Random.Next(1, 1000);
+        var heatSeed = Random.Next(1, 1000);
+        var moistureSeed = Random.Next(1, 1000);
         _cast = new List<Castle>();
         _structures = new List<Tile>();
         _numOfRanges = _map.Height / 50;
-        var perlinNoise = new PerlinNoise(Seed, _map.Width, _map.Height);
+        var perlinNoise1 = new PerlinNoise(heightSeed, _map.Width, _map.Height);
+        var perlinNoise2 = new PerlinNoise(heatSeed, _map.Width, _map.Height);
+        var perlinNoise3 = new PerlinNoise(moistureSeed, _map.Width, _map.Height);
+
         for (var x = 0; x <  _map.Width; x++)
         {
             for (var y = 0; y < _map.Height; y++)
             {
-                _map.Tiles[x, y] = new Tile(x, y, perlinNoise.MakeNumber(x, y));
+                _map.Tiles[x, y] = new Tile(x, y, new []{perlinNoise1.MakeNumber(x, y),
+                    perlinNoise2.MakeNumber(x, y),
+                    perlinNoise3.MakeNumber(x, y)});
             }
         }
         FindNeighbours();
