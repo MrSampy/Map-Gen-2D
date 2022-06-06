@@ -13,6 +13,8 @@ public sealed class Map
         Height = height;
         LenOfPixel = lenOfPix;
         Tiles = new Tile[Width, Height];
+        int[] spacesInString = new int[3] {25, 18, 8};
+
     }
 
 
