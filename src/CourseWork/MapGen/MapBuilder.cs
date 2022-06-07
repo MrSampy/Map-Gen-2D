@@ -3,7 +3,7 @@ namespace CourseWork.MapGen;
 
 public sealed class MapBuilder
 {
-    private static readonly Random Random = Random.Shared;
+    private static Random Random = Random.Shared;
     private readonly Map _map;
     private readonly RiversInfo _rivers;
     private readonly CastlesInfo _castles;
@@ -40,21 +40,34 @@ public sealed class MapBuilder
                     perlinNoise3.MakeNumber(x, y)});
             }
         }
+        UpdateMap();
         FindNeighbours();
     }
 
     public Map BuildMap(bool hasRiver, bool hasCastles, bool hasParticles)
     {
-        const int attempts = 50;
         if(hasParticles)
             foreach (var elem in Constants.SmallObj)
-                AddSmallObjects(elem.Key, elem.Value, attempts);
+                AddSmallObjects(elem.Key, elem.Value);
         if(hasRiver)
             AddRivers();
         UpdateBitmasks();
         if(hasCastles)
             AddCastles();
         return _map;
+    }
+
+    private void UpdateMap()
+    {
+        for (var x = 0; x < _map.Width; x++)
+        {
+            for (var y = 0; y < _map.Height; y++)
+            {
+               _map.Tiles[x,y].UpdateBiome();
+            }
+        }
+
+
     }
 
     private void FindNeighbours()
@@ -87,8 +100,7 @@ public sealed class MapBuilder
             for (var y = 0; y < _map.Height; y++)
             {
                 if (!_map.Tiles[x, y].HasRiver) continue;
-                _map.Tiles[x, y].Biome = new TilesBiome(Constants.Biomes.ShallowWater, Constants.ShallowWater);
-                _map.Tiles[x, y].Moisture = new TilesMoisture(Constants.MoistureType.Wet, Constants.Wet);
+                _map.Tiles[x, y].Biome = new TilesBiome(Constants.Biomes.Coast, Constants.Coast);
             }
         }
     }
@@ -122,10 +134,10 @@ public sealed class MapBuilder
     }
     
 
-    private void AddSmallObjects(RgbColor color, Constants.Biomes biome, int attempt)
+    private void AddSmallObjects(RgbColor color, Constants.Biomes biome)
     {
+        int attempt = 50;
         var counter = _numOfRanges;
-
         while (attempt != 0)
         {
             if (counter == 0)

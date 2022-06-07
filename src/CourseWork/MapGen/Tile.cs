@@ -1,3 +1,4 @@
+using System.Drawing;
 using CourseWork.MapGen.Helpers;
 
 namespace CourseWork.MapGen;
@@ -7,11 +8,9 @@ public sealed class Tile
     public int X { get; }
     public int Y { get; }
     public double HeightValue { get; }
-    public double HeatValue { get; }
-    public double MoistureValue { get; }
     public TilesBiome Biome;
     public readonly TilesHeat Heat;
-    public TilesMoisture Moisture;
+    public readonly TilesMoisture Moisture;
     public readonly bool IsLand;
     public Tile? LeftTile;
     public Tile? RightTile;
@@ -20,15 +19,12 @@ public sealed class Tile
     public bool HasRiver;
     public Tile?[] Neighbours;
     public bool Structure;
-
     public Tile(int x, int y, double[] heightValues)
     {
         X = x;
         Y = y;
         HasRiver = false;
         HeightValue = heightValues[0];
-        HeatValue = heightValues[1];
-        MoistureValue = heightValues[2];
         Structure = false;
         Neighbours = new Tile[4];
         Biome = new TilesBiome(Constants.Biomes.Snow, Constants.Snow);
@@ -38,23 +34,45 @@ public sealed class Tile
             break;
         }
 
-        Heat = new TilesHeat(Constants.HeatType.Coldest, Constants.Coldest);
-        foreach (var elem in Constants.HeatValues.Where(elem => HeatValue < elem.Key))
+        Heat = new TilesHeat(Constants.HeatType.Warmest, Constants.Warmest);
+        foreach (var elem in Constants.HeatValues.Where(elem => heightValues[1] < elem.Key))
         {
             Heat = new TilesHeat(elem.Value.THeat, elem.Value.Color);
             break;
         }
 
-        Moisture = new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter);
-        foreach (var elem in Constants.MoistureValues.Where(elem => MoistureValue < elem.Key))
+        Moisture = new TilesMoisture(Constants.MoistureType.Driest, Constants.Driest);
+        foreach (var elem in Constants.MoistureValues.Where(elem => heightValues[2] < elem.Key))
         {
             Moisture = new TilesMoisture(elem.Value.TMoisture, elem.Value.Color);
             break;
         }
+        Heat.HeatValue = heightValues[1]; 
+        Moisture.MoistureValue = heightValues[2];
+        IsLand = HeightValue>=Constants.HeightValCoast;
+    }
 
-        var isDeepWater = Biome.TBiome != Constants.Biomes.DeepWater;
-        var isShallWater = Biome.TBiome != Constants.Biomes.ShallowWater;
-        IsLand = (isDeepWater && isShallWater);
+    public void UpdateBiome()
+    {
+        var isMountain = HeightValue>=Constants.HeightValDeepForest;
+        var isValid = isMountain || !IsLand;
+        if(isValid) return;
+        var isColdest = Heat.THeat is Constants.HeatType.Coldest or Constants.HeatType.Colder;
+        var isWettest = Moisture.TMoisture is Constants.MoistureType.Wettest or Constants.MoistureType.Wetter;
+        var isDriest = Moisture.TMoisture is Constants.MoistureType.Driest or Constants.MoistureType.Dryer;
+        var isHot = Heat.THeat is Constants.HeatType.Warmest or Constants.HeatType.Warmer;
+        var rnd = new Random();
+        if (isColdest && isWettest)
+        {
+            var color = rnd.Next(10) == 0 ? Constants.SwampTree : Constants.Swamp;
+            Biome = new TilesBiome(Constants.Biomes.Swamp, color);
+        }
+        else if (isDriest && isHot)
+        {
+            var color = rnd.Next(10) == 0 ? Constants.Cactus : Constants.Sand;
+            Biome = new TilesBiome(Constants.Biomes.Sand, color);
+        }
+
     }
 
     private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Biome.TBiome == Biome.TBiome);
@@ -64,18 +82,16 @@ public sealed class Tile
 
     public void UpdateBitmask()
     {
-       bool isHeightBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
-       bool isHeatBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeat(neighbour));
-       bool isMoistureBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualMoisture(neighbour));
+       var isHeightBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
+       var isHeatBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeat(neighbour));
+       var isMoistureBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualMoisture(neighbour));
        if(isHeatBorder)
            Heat.Darkish(0);
        if(isMoistureBorder)
            Moisture.Darkish(0);
-       if (isHeightBorder)
-       {
-           const double shadFactor = 0.8;
-           Biome.Darkish(shadFactor);
-       }
+       if (!isHeightBorder) return;
+       const double shadFactor = 0.8;
+       Biome.Darkish(shadFactor);
 
     }
 
