@@ -23,9 +23,9 @@ public static class Constants
     private static readonly RgbColor Warmer = new (255, 168, 54);
     public static readonly RgbColor Warmest = new (252, 92, 60);
     
-    private static readonly RgbColor Wettest = new (0, 0, 134);
-    private static readonly RgbColor Wetter = new (0, 137, 255);
-    private static readonly RgbColor Wet = new (0, 222, 255);
+    public static readonly RgbColor Wettest = new (0, 0, 134);
+    public static readonly RgbColor Wetter = new (0, 137, 255);
+    public static readonly RgbColor Wet = new (0, 222, 255);
     private static readonly RgbColor Dry = new (137, 255, 0);
     private static readonly RgbColor Dryer = new (255, 239, 0);
     public static readonly RgbColor Driest = new (255, 119, 0);

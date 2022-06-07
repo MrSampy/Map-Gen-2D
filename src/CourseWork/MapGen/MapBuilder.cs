@@ -40,8 +40,8 @@ public sealed class MapBuilder
                     perlinNoise3.MakeNumber(x, y)});
             }
         }
-        UpdateMap();
         UpdateHeatMap();
+        UpdateMoistureMap();
         FindNeighbours();
 
     }
@@ -84,6 +84,27 @@ public sealed class MapBuilder
                 };
             }
         }
+    }
+
+    private void UpdateMoistureMap()
+    {
+        for (var x = 0; x < _map.Width; x++)
+        {
+            for (var y = 0; y < _map.Height; y++)
+            {
+                _map.Tiles[x, y].Moisture = _map.Tiles[x, y].Biome.TBiome switch
+                {
+                    Constants.Biomes.DeepWater or Constants.Biomes.Ocean=> new TilesMoisture(Constants.MoistureType.Wettest, Constants.Wettest),
+                    Constants.Biomes.ShallowWater => new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter),
+                    Constants.Biomes.Snow => new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter),
+                    Constants.Biomes.HardRock => new TilesMoisture(Constants.MoistureType.Wet, Constants.Wet),
+                    Constants.Biomes.Coast => new TilesMoisture(Constants.MoistureType.Wet, Constants.Wet),
+                    _ => _map.Tiles[x, y].Moisture
+                };
+                
+            }
+        }
+
     }
 
     private void FindNeighbours()
