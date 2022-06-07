@@ -17,15 +17,15 @@ public static class Constants
 
     
     public static readonly RgbColor Coldest = new(0, 255, 255);
-    private static readonly RgbColor Colder = new (175, 255, 255);
-    private static readonly RgbColor Cold = new (0, 255, 119);
+    public static readonly RgbColor Colder = new (175, 255, 255);
+    public static readonly RgbColor Cold = new (0, 255, 119);
     private static readonly RgbColor Warm = new (255, 255, 54);
     private static readonly RgbColor Warmer = new (255, 168, 54);
     public static readonly RgbColor Warmest = new (252, 92, 60);
     
     private static readonly RgbColor Wettest = new (0, 0, 134);
-    public static readonly RgbColor Wetter = new (0, 137, 255);
-    public static readonly RgbColor Wet = new (0, 222, 255);
+    private static readonly RgbColor Wetter = new (0, 137, 255);
+    private static readonly RgbColor Wet = new (0, 222, 255);
     private static readonly RgbColor Dry = new (137, 255, 0);
     private static readonly RgbColor Dryer = new (255, 239, 0);
     public static readonly RgbColor Driest = new (255, 119, 0);
@@ -142,13 +142,14 @@ public static class Constants
         {MoistureValDry, new TilesMoisture(MoistureType.Dry, Dry)},
         {MoistureValDrier, new TilesMoisture(MoistureType.Dryer, Dryer)}
     };
-
+    
     public static readonly Dictionary<double, TilesHeat> HeatValues = new()
     {
         {HeatValColdest, new TilesHeat(HeatType.Coldest, Coldest)},
         {HeatValColder, new TilesHeat(HeatType.Colder, Colder)},
         {HeatValCold, new TilesHeat(HeatType.Cold, Cold)},
         {HeatValWarm, new TilesHeat(HeatType.Warm, Warm)},
-        {HeatValWarmer, new TilesHeat(HeatType.Warmer, Warmer)},
+        {HeatValWarmer, new TilesHeat(HeatType.Warmer, Warmer)}
     };
+
 }

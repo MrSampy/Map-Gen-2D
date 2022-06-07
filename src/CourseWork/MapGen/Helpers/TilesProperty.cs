@@ -4,7 +4,6 @@ namespace CourseWork.MapGen.Helpers;
 public abstract class TilesProperty
 {
     public RgbColor Color;
-
     protected TilesProperty(RgbColor color) => Color = color;
 
     public void Darkish(double k)

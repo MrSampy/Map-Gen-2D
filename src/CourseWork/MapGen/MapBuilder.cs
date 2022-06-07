@@ -41,7 +41,9 @@ public sealed class MapBuilder
             }
         }
         UpdateMap();
+        UpdateHeatMap();
         FindNeighbours();
+
     }
 
     public Map BuildMap(bool hasRiver, bool hasCastles, bool hasParticles)
@@ -60,14 +62,28 @@ public sealed class MapBuilder
     private void UpdateMap()
     {
         for (var x = 0; x < _map.Width; x++)
+        for (var y = 0; y < _map.Height; y++)
+                _map.Tiles[x,y].UpdateBiome();
+    }
+    private bool IsCold (Constants.HeatType heat) => heat is Constants.HeatType.Cold 
+    or Constants.HeatType.Colder or Constants.HeatType.Coldest;
+    private void UpdateHeatMap()
+    {
+        for (var x = 0; x < _map.Width; x++)
         {
             for (var y = 0; y < _map.Height; y++)
             {
-               _map.Tiles[x,y].UpdateBiome();
+                _map.Tiles[x, y].Heat = _map.Tiles[x, y].Biome.TBiome switch
+                {
+                    Constants.Biomes.Snow => new TilesHeat(Constants.HeatType.Coldest, Constants.Coldest),
+                    Constants.Biomes.HardRock => new TilesHeat(Constants.HeatType.Colder, Constants.Colder),
+                    Constants.Biomes.Rock => new TilesHeat(Constants.HeatType.Cold, Constants.Cold),
+                    Constants.Biomes.DeepWater => new TilesHeat(Constants.HeatType.Colder, Constants.Colder),
+                    Constants.Biomes.Ocean => new TilesHeat(Constants.HeatType.Cold, Constants.Cold),
+                    _ => _map.Tiles[x, y].Heat
+                };
             }
         }
-
-
     }
 
     private void FindNeighbours()
@@ -81,12 +97,13 @@ public sealed class MapBuilder
                 _map.Tiles[x, y].TopTile = (x - 1 < 0) ? null : _map.Tiles[x - 1, y];
                 _map.Tiles[x, y].BottomTile = (x + 1 >= _map.Width) ? null : _map.Tiles[x + 1, y];
                 _map.Tiles[x, y].Neighbours = new[]
-                    {_map.Tiles[x, y].LeftTile, _map.Tiles[x, y].RightTile, _map.Tiles[x, y].TopTile, _map.Tiles[x, y].BottomTile};
+                    {_map.Tiles[x, y].LeftTile, _map.Tiles[x, y].RightTile, 
+                     _map.Tiles[x, y].TopTile, _map.Tiles[x, y].BottomTile};
             }
         }
     }
     
-        private void UpdateBitmasks()
+    private void UpdateBitmasks()
     {
         for (var x = 0; x < _map.Width; x++)
         for (var y = 0; y < _map.Height; y++)
@@ -128,12 +145,11 @@ public sealed class MapBuilder
                     nextTile = newtTile;
                 }
             }
-
+            
             FindPath(nextTile, ref river);
         }
     }
     
-
     private void AddSmallObjects(RgbColor color, Constants.Biomes biome)
     {
         int attempt = 50;
