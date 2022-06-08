@@ -13,20 +13,23 @@ public sealed class MapBuilder
     private struct Castle
     {
         public readonly List<Tile>  CWalls;
-        public Castle(List<Tile> w) => CWalls = w;
+        public Castle(List<Tile> wall) => CWalls = wall;
     }
 
     public MapBuilder(int width, int height, int lenOfPix)
     {
+        const int mapDivisor = 50;
+        const int minSeedValue = 1;
+        const int maxSeedValue = 1000;
         _map = new Map(width,height,lenOfPix);
         _rivers = new RiversInfo(_map.Width, _map.Height);
         _castles = new CastlesInfo(_map.Width, _map.Height);
-        var heightSeed = Random.Next(1, 1000);
-        var heatSeed = Random.Next(1, 1000);
-        var moistureSeed = Random.Next(1, 1000);
+        var heightSeed = Random.Next(minSeedValue, maxSeedValue);
+        var heatSeed = Random.Next(minSeedValue, maxSeedValue);
+        var moistureSeed = Random.Next(minSeedValue, maxSeedValue);
         _cast = new List<Castle>();
         _structures = new List<Tile>();
-        _numOfRanges = _map.Height / 50;
+        _numOfRanges = _map.Height / mapDivisor;
         var perlinNoise1 = new PerlinNoise(heightSeed, _map.Width, _map.Height);
         var perlinNoise2 = new PerlinNoise(heatSeed, _map.Width, _map.Height);
         var perlinNoise3 = new PerlinNoise(moistureSeed, _map.Width, _map.Height);
@@ -155,51 +158,54 @@ public sealed class MapBuilder
     }
 
     private void FindPath(Tile startTile, ref List<Tile> river)
-    {
-        ref Tile tempTile = ref _map.Tiles[startTile.X, startTile.Y];
+    {   
+        ref var tempTile = ref _map.Tiles[startTile.X, startTile.Y];
         if (river.Contains(tempTile))
         {
             river.Clear();
             return;
         }
 
-        if (tempTile.IsLand && !tempTile.HasRiver)
+        if (!tempTile.IsLand || tempTile.HasRiver) return;
+        const int turnNum = 10;
+        const int range = 2;
+        const int maxNeighbor = 3;
+        river.Add(tempTile);
+        var isClear = Convert.ToBoolean(river.Count);
+        var nextTile = tempTile.GetNextPixRiver(isClear ? river.Last() : tempTile);
+        if ((isClear || Random.Next(turnNum) == 0) && river.Count >= range)
         {
-            river.Add(tempTile);
-            var isClear = Convert.ToBoolean(river.Count);
-            var nextTile = tempTile.GetNextPixRiver(isClear ? river.Last() : tempTile);
-            if ((isClear || Random.Next(10) == 0) && river.Count >= 2)
+            var newtTile = tempTile.Neighbours[Random.Next(maxNeighbor)];
+            var isVal = newtTile != nextTile && newtTile != river[^range];
+            if (newtTile != null && isVal)
             {
-                var newtTile = tempTile.Neighbours[Random.Next(3)];
-                var isVal = newtTile != nextTile && newtTile != river[^2];
-                if (newtTile != null && isVal)
-                {
-                    nextTile = newtTile;
-                }
+                nextTile = newtTile;
             }
-            
-            FindPath(nextTile, ref river);
         }
+            
+        FindPath(nextTile, ref river);
     }
     
     private void AddSmallObjects(RgbColor color, Constants.Biomes biome)
     {
-        int attempt = 50;
+        var attempt = 50;
         var counter = _numOfRanges;
+        const int range = 2;
+        const int particleNum = 20;
         while (attempt != 0)
         {
             if (counter == 0)
                 break;
 
-            var x = Random.Next(1, _map.Width - Constants.RangeOfObj - 2);
-            var y = Random.Next(1, _map.Height - Constants.RangeOfObj - 2);
+            var x = Random.Next(1, _map.Width - Constants.RangeOfObj - range);
+            var y = Random.Next(1, _map.Height - Constants.RangeOfObj - range);
             if (_map.Tiles[x, y].Height!.THeight != biome)
                 --attempt;
             else
             {
                 for (var i = x; i < Constants.RangeOfObj + x; ++i)
                 for (var j = y; j < Constants.RangeOfObj + y; ++j)
-                    if (_map.Tiles[i, j].Height!.THeight == biome && Random.Next(20) == 0)
+                    if (_map.Tiles[i, j].Height!.THeight == biome && Random.Next(particleNum) == 0)
                         _map.Tiles[i, j].Height!.Color = color;
                 --counter;
             }
@@ -260,10 +266,50 @@ public sealed class MapBuilder
 
         UpdateRivers();
     }
-
+    private void FillFullPathCastle(List<Tile> path)
+    {
+        void MakeStructure(Tile tile)
+        {
+            if (tile.IsLand && !_structures.Contains(tile))
+                _map.Tiles[tile.X, tile.Y].Height!.Color =
+                    (!tile.HasRiver) ? Constants.Road : Constants.Bridge;
+        }
+        var isXChange = true;
+        for (var i = 0; i < path.Count; ++i)
+        {
+            isXChange = (path[i] != path.Last()) ? path[i + 1].Y != path[i].Y : isXChange;
+            for (var j = 1; j <= _castles.RoadWidth; j++)
+            {
+                Tile tempTile;
+                if (isXChange)
+                {
+                    tempTile = (path[i].X + j < _map.Width)
+                        ? (_map.Tiles[path[i].X + j, path[i].Y])
+                        : _structures.Last();
+                    MakeStructure(tempTile);
+                    tempTile = (path[i].X - j >= 0)
+                        ? (_map.Tiles[path[i].X - j, path[i].Y])
+                        : _structures.Last();
+                    MakeStructure(tempTile);
+                }
+                else
+                {
+                    tempTile = (path[i].Y + j < _map.Height)
+                        ? (_map.Tiles[path[i].X, path[i].Y + j])
+                        : _structures.Last();
+                    MakeStructure(tempTile);
+                    tempTile = (path[i].Y - j >= 0)
+                        ? (_map.Tiles[path[i].X, path[i].Y - j])
+                        : _structures.Last();
+                    MakeStructure(tempTile);
+                }
+            }
+        }
+    }
     private void AddCastles()
     {
-        int stop = _map.Height / 100;
+        const int cofDivision = 100;
+        var stop = _map.Height / cofDivision;
         var roads = new List<Tile>();
         void FillMainPath(ref List<Tile> path)
         {
@@ -273,46 +319,7 @@ public sealed class MapBuilder
             roads.AddRange(path);
             path.Clear();
         }
-        void FillFullPAth(List<Tile> path)
-        {
-            void MakeStructure(Tile tile)
-            {
-                if (tile.IsLand && !_structures.Contains(tile))
-                    _map.Tiles[tile.X, tile.Y].Height!.Color =
-                        (!tile.HasRiver) ? Constants.Road : Constants.Bridge;
-            }
-            var isXChange = true;
-            for (var i = 0; i < path.Count; ++i)
-            {
-                isXChange = (path[i] != path.Last()) ? path[i + 1].Y != path[i].Y : isXChange;
-                for (var j = 1; j <= _castles.RoadWidth; j++)
-                {
-                    Tile tempTile;
-                    if (isXChange)
-                    {
-                        tempTile = (path[i].X + j < _map.Width)
-                            ? (_map.Tiles[path[i].X + j, path[i].Y])
-                            : _structures.Last();
-                        MakeStructure(tempTile);
-                        tempTile = (path[i].X - j >= 0)
-                            ? (_map.Tiles[path[i].X - j, path[i].Y])
-                            : _structures.Last();
-                        MakeStructure(tempTile);
-                    }
-                    else
-                    {
-                        tempTile = (path[i].Y + j < _map.Height)
-                            ? (_map.Tiles[path[i].X, path[i].Y + j])
-                            : _structures.Last();
-                        MakeStructure(tempTile);
-                        tempTile = (path[i].Y - j >= 0)
-                            ? (_map.Tiles[path[i].X, path[i].Y - j])
-                            : _structures.Last();
-                        MakeStructure(tempTile);
-                    }
-                }
-            }
-        }
+        
         int counter = 0;
         while (counter!=stop)
         {
@@ -338,13 +345,16 @@ public sealed class MapBuilder
                 roads.AddRange(road);
                 break;
             }
-            int castleCount = Random.Next(2,4);
+
+            const int minNumCastles = 2;
+            const int maxNumCastles = 4;
+            int castleCount = Random.Next(minNumCastles,maxNumCastles);
             int attempts = 100;
             while (castleCount != 0)
             {
                 if (attempts == 0)
                     break;
-                int index = Random.Next(2, roads.Count - 2);
+                int index = Random.Next(minNumCastles, roads.Count - minNumCastles);
                 if (roads[index].Height!.Color != Constants.Road)
                     continue;
                 road.Add(roads[index]);
@@ -358,7 +368,7 @@ public sealed class MapBuilder
                 --castleCount;
             }
 
-            FillFullPAth(roads);
+            FillFullPathCastle(roads);
             ++counter;
         }
         
@@ -375,8 +385,7 @@ public sealed class MapBuilder
         {
             for (var j = y; j < _castles.WallLength + y; j++)
             {
-                var range = _map.Tiles[i, j].Height!.HeightValue > Constants.MaxStructureVal ||
-                            _map.Tiles[i, j].Height!.HeightValue < Constants.MinStructureVal;
+                var range = _map.Tiles[i, j].Height!.HeightValue is > Constants.MaxStructureVal or < Constants.MinStructureVal;
                 var isFree = _map.Tiles[i, j].HasRiver || _map.Tiles[i, j].Structure;
                 if (!isFree && !range) continue;
                 isSuitable = true;
@@ -421,10 +430,12 @@ public sealed class MapBuilder
         var numb = 0;
         var isStop = false;
         var counter = 10;
+        const int roadNumber = 5;
+        const int maxRoad = 3;
         while (true)
         {
-            if (Random.Next(5) == 0)
-                numb = Random.Next(3);
+            if (Random.Next(roadNumber) == 0)
+                numb = Random.Next(maxRoad);
             var tempTile = road.Last().Neighbours[numb];
             tempTile ??= road.Last();
             var isStructure = _structures.Contains(tempTile) || road.Contains(tempTile);
@@ -436,7 +447,7 @@ public sealed class MapBuilder
             road.Add(tempTile);
             if (road.Count == _castles.MinPathLength)
                 isStop = true;
-            if (!isStop || Random.Next(5) != 0) continue;
+            if (!isStop || Random.Next(roadNumber) != 0) continue;
             if (CreateCastle(tempTile.X, tempTile.Y,false))
                 break;
             --counter;

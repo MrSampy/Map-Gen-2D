@@ -9,6 +9,7 @@ public sealed class Tile
     public TilesHeight? Height;
     public TilesHeat? Heat;
     public TilesMoisture? Moisture;
+    public TilesBiome Biome;
     public readonly bool IsLand;
     public Tile? LeftTile;
     public Tile? RightTile;

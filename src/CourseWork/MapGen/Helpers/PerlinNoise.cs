@@ -31,13 +31,14 @@ public sealed class PerlinNoise
     public double MakeNumber(int x, int y)
     {
         double tempNum = 0;
-        double lerpCoef = -0.5;
-        for (var counter = 1; counter < 4; counter++)
+        var lerpCof = -0.5;
+        const int maxLength = 4;
+        for (var counter = 1; counter < maxLength; counter++)
         {
             double newX = Math.Pow(_lerpCof, counter) * x * _widthDivisor,
                 newY = Math.Pow(_lerpCof, counter) * y * _heightDivisor;
-            tempNum += (Noise(newX, newY, lerpCoef) + 1) / 2 * _decrCof[counter - 1];
-            lerpCoef += 0.5;
+            tempNum += (Noise(newX, newY, lerpCof) + 1) / 2 * _decrCof[counter - 1];
+            lerpCof += 0.5;
         }
 
         tempNum = Math.Min(1, Math.Max(0, tempNum));
@@ -47,7 +48,9 @@ public sealed class PerlinNoise
 
     private double Noise(double x, double y, double z)
     {
-        int ix = (int) Math.Floor(x), iy = (int) Math.Floor(y), iz = (int) Math.Floor(z);
+        var ix = (int) Math.Floor(x);
+        var iy = (int) Math.Floor(y);
+        var iz = (int) Math.Floor(z);
         var dx0 = x - ix;
         var dy0 = y - iy;
         var dz0 = z - iz;
@@ -83,20 +86,20 @@ public sealed class PerlinNoise
     {
         for (var i = 0; i < GradientSizeTable; i++)
         {
-            var z = 1f - 2f * _random.NextDouble();
-            var r = Math.Sqrt(1f - z * z);
+            var sizeGradient = 1f - 2f * _random.NextDouble();
+            var roundSqrt = Math.Sqrt(1f - sizeGradient * sizeGradient);
             var theta = _lerpCof * Math.PI * _random.NextDouble();
-            _gradients[i * _smoothCof] = r * Math.Cos(theta);
-            _gradients[i * _smoothCof + 1] = r * Math.Sin(theta);
-            _gradients[i * _smoothCof + _lerpCof] = z;
+            _gradients[i * _smoothCof] = roundSqrt * Math.Cos(theta);
+            _gradients[i * _smoothCof + 1] = roundSqrt * Math.Sin(theta);
+            _gradients[i * _smoothCof + _lerpCof] = sizeGradient;
         }
     }
 
     private double Lattice(int ix, int iy, int iz, double dx, double dy, double dz)
     {
         var index = Index(ix, iy, iz);
-        var g = index * _smoothCof;
-        return _gradients[g] * dx + _gradients[g + 1] * dy + _gradients[g + 2] * dz;
+        var gradient = index * _smoothCof;
+        return _gradients[gradient] * dx + _gradients[gradient + 1] * dy + _gradients[gradient + 2] * dz;
     }
 
     private int Index(int ix, int iy, int iz) => Permutate(ix + Permutate(iy + Permutate(iz)));
