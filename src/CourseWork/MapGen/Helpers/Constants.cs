@@ -16,16 +16,16 @@ public static class Constants
     public static readonly RgbColor Swamp = new (101, 85, 63);
 
     
-    public static readonly RgbColor Coldest = new(0, 255, 255);
-    public static readonly RgbColor Colder = new (175, 255, 255);
-    public static readonly RgbColor Cold = new (0, 255, 119);
+    private static readonly RgbColor Coldest = new(0, 255, 255);
+    private static readonly RgbColor Colder = new (175, 255, 255);
+    private static readonly RgbColor Cold = new (0, 255, 119);
     private static readonly RgbColor Warm = new (255, 255, 54);
     private static readonly RgbColor Warmer = new (255, 168, 54);
     public static readonly RgbColor Warmest = new (252, 92, 60);
     
-    public static readonly RgbColor Wettest = new (0, 0, 134);
-    public static readonly RgbColor Wetter = new (0, 137, 255);
-    public static readonly RgbColor Wet = new (0, 222, 255);
+    private static readonly RgbColor Wettest = new (0, 0, 134);
+    private static readonly RgbColor Wetter = new (0, 137, 255);
+    private static readonly RgbColor Wet = new (0, 222, 255);
     private static readonly RgbColor Dry = new (137, 255, 0);
     private static readonly RgbColor Dryer = new (255, 239, 0);
     public static readonly RgbColor Driest = new (255, 119, 0);
@@ -43,7 +43,33 @@ public static class Constants
     public static readonly RgbColor Floor = new (90, 53, 42);
     public static readonly RgbColor Road = new (201, 180, 48);
     public static readonly RgbColor Bridge = new (97, 79, 0);
-
+    
+    public static readonly RgbColor Desert = new (236, 229, 122);
+    public static readonly RgbColor Savanna = new (163, 223, 106);
+    public static readonly RgbColor TropicalRainforest = new (32, 135, 26);
+    public static readonly RgbColor Grassland = new (140, 241, 94);
+    public static readonly RgbColor Woodland = new (122, 188, 90);
+    public static readonly RgbColor SeasonalForest = new (64, 108,31);
+    public static readonly RgbColor TemperateRainforest = new (0, 79, 41);
+    public static readonly RgbColor BorealForest = new (88, 121, 63);
+    public static readonly RgbColor Tundra = new (83, 136, 112);
+    public static readonly RgbColor Ice = new (255, 255, 255);
+    
+    
+    public enum BiomeType
+    {
+        Desert,
+        Savanna,
+        TropicalRainforest,
+        Grassland,
+        Woodland,
+        SeasonalForest,
+        TemperateRainforest,
+        BorealForest,
+        Tundra,
+        Ice
+    }
+    
     public enum Biomes
     {
         DeepWater,
@@ -112,24 +138,27 @@ public static class Constants
     private const double MoistureUpDeepW = 0.7;
     private const double MoistureUpOceanM = 0.75;
     private const double MoistureUpShWh = 0.8;
-    private const double MoistureUpCoastR = 0.85;
+    public const double MoistureUpCoastR = 0.85;
     private const double MoistureUpSand = 1.1;
     
     private const double HeatUpSnow = 0.6;
     private const double HeatUpHardRock = 0.7;
     private const double HeatUpRock = 0.8;
-    private const double HeatUpDeepW = 0.65;
-    private const double HeatUpOcean = 0.75;
-    private const double HeatUpShW = 0.85;
     
+    public static readonly BiomeType[,] BiomeTable = {   
+        //COLDEST        //COLDER          //COLD                  //HOT                          //HOTTER                       //HOTTEST
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland,    BiomeType.Desert,              BiomeType.Desert,              BiomeType.Desert },              //DRIEST
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland,    BiomeType.Desert,              BiomeType.Desert,              BiomeType.Desert },              //DRYER
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.Woodland,     BiomeType.Woodland,            BiomeType.Savanna,             BiomeType.Savanna },             //DRY
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.BorealForest, BiomeType.Woodland,            BiomeType.Savanna,             BiomeType.Savanna },             //WET
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.BorealForest, BiomeType.SeasonalForest,      BiomeType.TropicalRainforest,  BiomeType.TropicalRainforest },  //WETTER
+        { BiomeType.Ice, BiomeType.Tundra, BiomeType.BorealForest, BiomeType.TemperateRainforest, BiomeType.TropicalRainforest,  BiomeType.TropicalRainforest }   //WETTEST
+    };
     public static readonly Dictionary<Biomes,double> HeatUpdate = new()
     {
         {Biomes.Snow,HeatUpSnow },
         {Biomes.HardRock , HeatUpHardRock},
-        {Biomes.Rock, HeatUpRock},
-        {Biomes.DeepWater , HeatUpDeepW},
-        {Biomes.Ocean ,HeatUpOcean},
-        {Biomes.ShallowWater ,HeatUpShW}
+        {Biomes.Rock, HeatUpRock}
     };
     
     public static readonly Dictionary<Biomes,double> MoistureUpdate = new()
@@ -140,8 +169,7 @@ public static class Constants
         {Biomes.Coast , MoistureUpCoastR},
         {Biomes.Sand ,MoistureUpSand},
         {Biomes.Snow ,MoistureUpOceanM},
-        {Biomes.HardRock ,MoistureUpShWh},
-        {Biomes.Rock ,MoistureUpCoastR}
+        {Biomes.HardRock ,MoistureUpShWh}
     };
     
     public static readonly Dictionary<double, TilesBiome> HeightValues = new()

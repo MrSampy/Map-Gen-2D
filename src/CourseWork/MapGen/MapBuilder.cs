@@ -130,7 +130,7 @@ public sealed class MapBuilder
             {
                 if (!_map.Tiles[x, y].HasRiver) continue;
                 _map.Tiles[x, y].Biome = new TilesBiome(Constants.Biomes.Coast, Constants.Coast);
-                _map.Tiles[x, y].Moisture = new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter);
+                _map.Tiles[x, y].UpdateMoisture(_map.Tiles[x, y].Moisture!.MoistureValue*Constants.MoistureUpCoastR);
             }
         }
     }
