@@ -115,6 +115,23 @@ public static class Constants
     private const double MoistureUpCoastR = 0.85;
     private const double MoistureUpSand = 1.1;
     
+    private const double HeatUpSnow = 0.6;
+    private const double HeatUpHardRock = 0.7;
+    private const double HeatUpRock = 0.8;
+    private const double HeatUpDeepW = 0.65;
+    private const double HeatUpOcean = 0.75;
+    private const double HeatUpShW = 0.85;
+    
+    public static readonly Dictionary<Biomes,double> HeatUpdate = new()
+    {
+        {Biomes.Snow,HeatUpSnow },
+        {Biomes.HardRock , HeatUpHardRock},
+        {Biomes.Rock, HeatUpRock},
+        {Biomes.DeepWater , HeatUpDeepW},
+        {Biomes.Ocean ,HeatUpOcean},
+        {Biomes.ShallowWater ,HeatUpShW}
+    };
+    
     public static readonly Dictionary<Biomes,double> MoistureUpdate = new()
     {
         {Biomes.DeepWater,MoistureUpDeepW },
