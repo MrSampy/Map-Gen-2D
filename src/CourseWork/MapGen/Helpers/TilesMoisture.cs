@@ -9,4 +9,9 @@ public sealed class TilesMoisture : TilesProperty
     {
         TMoisture = moisture;
     }
+    public TilesMoisture(Constants.MoistureType moisture, double moistureValue, RgbColor color) : base(color)
+    {
+        MoistureValue = moistureValue;
+        TMoisture = moisture;
+    }
 }

@@ -65,8 +65,6 @@ public sealed class MapBuilder
         for (var y = 0; y < _map.Height; y++)
                 _map.Tiles[x,y].UpdateBiome();
     }
-    private bool IsCold (Constants.HeatType heat) => heat is Constants.HeatType.Cold 
-    or Constants.HeatType.Colder or Constants.HeatType.Coldest;
     private void UpdateHeatMap()
     {
         for (var x = 0; x < _map.Width; x++)
@@ -92,15 +90,12 @@ public sealed class MapBuilder
         {
             for (var y = 0; y < _map.Height; y++)
             {
-                _map.Tiles[x, y].Moisture = _map.Tiles[x, y].Biome.TBiome switch
-                {
-                    Constants.Biomes.DeepWater or Constants.Biomes.Ocean=> new TilesMoisture(Constants.MoistureType.Wettest, Constants.Wettest),
-                    Constants.Biomes.ShallowWater => new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter),
-                    Constants.Biomes.Snow => new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter),
-                    Constants.Biomes.HardRock => new TilesMoisture(Constants.MoistureType.Wet, Constants.Wet),
-                    Constants.Biomes.Coast => new TilesMoisture(Constants.MoistureType.Wet, Constants.Wet),
-                    _ => _map.Tiles[x, y].Moisture
-                };
+                double newHeight = 0;
+                foreach (var biome in Constants.MoistureUpdate.Where(biome => _map.Tiles[x, y].Biome!.TBiome == biome.Key))
+                    newHeight = _map.Tiles[x, y].Moisture!.MoistureValue * biome.Value;
+                
+                if (Convert.ToBoolean(newHeight))
+                    _map.Tiles[x,y].UpdateMoisture(newHeight);
                 
             }
         }
@@ -139,6 +134,7 @@ public sealed class MapBuilder
             {
                 if (!_map.Tiles[x, y].HasRiver) continue;
                 _map.Tiles[x, y].Biome = new TilesBiome(Constants.Biomes.Coast, Constants.Coast);
+                _map.Tiles[x, y].Moisture = new TilesMoisture(Constants.MoistureType.Wetter, Constants.Wetter);
             }
         }
     }

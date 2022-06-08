@@ -15,6 +15,6 @@ public sealed class Map
         Tiles = new Tile[Width, Height];
     }
 
-
+    
 
 }

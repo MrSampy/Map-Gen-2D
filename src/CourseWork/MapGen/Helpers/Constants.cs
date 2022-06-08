@@ -84,13 +84,13 @@ public static class Constants
     private const double HeightValDeepWat = 0.42;
     private const double HeightValOcean = 0.46;
     private const double HeightValShallWat = 0.49;
-    public const double HeightValCoast = 0.53;
-    private const double HeightValSand = 0.54;
+    public const double HeightValCoast = 0.52;
+    private const double HeightValSand = 0.53;
     private const double HeightValGrass = 0.59;
-    private const double HeightValForest = 0.64;
-    public const double HeightValDeepForest = 0.68;
-    private const double HeightValRock = 0.69;
-    private const double HeightValHardRock = 0.7;
+    private const double HeightValForest = 0.62;
+    public const double HeightValDeepForest = 0.66;
+    private const double HeightValRock = 0.68;
+    private const double HeightValHardRock = 0.69;
 
     private const double HeatValColdest = 0.44;
     private const double HeatValColder = 0.48;
@@ -108,6 +108,24 @@ public static class Constants
     public const double MaxStructureVal = 0.65;
     public const double MinStructureVal = 0.56;
     public const int RangeOfObj = 20;
+    
+    private const double MoistureUpDeepW = 0.7;
+    private const double MoistureUpOceanM = 0.75;
+    private const double MoistureUpShWh = 0.8;
+    private const double MoistureUpCoastR = 0.85;
+    private const double MoistureUpSand = 1.1;
+    
+    public static readonly Dictionary<Biomes,double> MoistureUpdate = new()
+    {
+        {Biomes.DeepWater,MoistureUpDeepW },
+        {Biomes.Ocean , MoistureUpOceanM},
+        {Biomes.ShallowWater, MoistureUpShWh},
+        {Biomes.Coast , MoistureUpCoastR},
+        {Biomes.Sand ,MoistureUpSand},
+        {Biomes.Snow ,MoistureUpOceanM},
+        {Biomes.HardRock ,MoistureUpShWh},
+        {Biomes.Rock ,MoistureUpCoastR}
+    };
     
     public static readonly Dictionary<double, TilesBiome> HeightValues = new()
     {

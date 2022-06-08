@@ -4,14 +4,25 @@ public sealed class RiversInfo
 {
     public int MaxRiverCount { get; }
     public int MaxRiverWidth { get; }
-    private Random Random;
+    public double MaxRiverMoisture { get; }
+    public double MinRiverMoisture { get; }
+    public double StepMoisture { get; }
+    public int MsxSteps { get; }
+
+
+    private readonly Random _random;
     public RiversInfo(double width, double length)
     {
         var riverCof = 0.000015;
-        Random rnd = Random.Shared;
-        MaxRiverCount = rnd.Next(1, 5);
+        _random = Random.Shared;
+        MinRiverMoisture = 0.8;
+        MaxRiverMoisture = 0.6;
+        const int cofSteps = 3;
+        const int cofDivision = 100;
+        MsxSteps = (int)(cofSteps * width / cofDivision);
+        StepMoisture = (MinRiverMoisture - MaxRiverMoisture) / MsxSteps;
+        MaxRiverCount = _random.Next(1, 5);
         MaxRiverWidth = (int) Math.Ceiling(width * length * riverCof);
-        Random = Random.Shared;
     }
     
     public void Extend(int riverLength, out List<int[]> extend)
@@ -30,10 +41,10 @@ public sealed class RiversInfo
 
         var arrBorders = new List<int>();
         var counter = 0;
-        arrBorders.Add(Random.Next(1, riverLength / 5));
+        arrBorders.Add(_random.Next(1, riverLength / 5));
         while (counter != 3)
         {
-            var point = Random.Next(1, riverLength - 2);
+            var point = _random.Next(1, riverLength - 2);
             if (arrBorders.Contains(point))
                 continue;
             arrBorders.Add(point);
@@ -43,7 +54,7 @@ public sealed class RiversInfo
         arrBorders.Sort();
         arrBorders.Add(0);
         for (int i = 0; i < 6; ++i)
-            extend.Add(i != 5 ? new[] {Random.Next(border[i][1], border[i][0])} : arrBorders.ToArray());
+            extend.Add(i != 5 ? new[] {_random.Next(border[i][1], border[i][0])} : arrBorders.ToArray());
     }
    
     
