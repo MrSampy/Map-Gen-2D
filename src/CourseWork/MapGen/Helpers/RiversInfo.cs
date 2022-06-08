@@ -8,8 +8,7 @@ public sealed class RiversInfo
     public double MinRiverMoisture { get; }
     public double StepMoisture { get; }
     public int MsxSteps { get; }
-
-
+    
     private readonly Random _random;
     public RiversInfo(double width, double length)
     {
@@ -56,11 +55,4 @@ public sealed class RiversInfo
         for (int i = 0; i < 6; ++i)
             extend.Add(i != 5 ? new[] {_random.Next(border[i][1], border[i][0])} : arrBorders.ToArray());
     }
-   
-    
-    
-    
-    
-    
-    
 }

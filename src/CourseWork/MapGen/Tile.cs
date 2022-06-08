@@ -6,8 +6,7 @@ public sealed class Tile
 {
     public int X { get; }
     public int Y { get; }
-    public double HeightValue { get; set; }
-    public TilesBiome? Biome;
+    public TilesHeight? Height;
     public TilesHeat? Heat;
     public TilesMoisture? Moisture;
     public readonly bool IsLand;
@@ -18,6 +17,7 @@ public sealed class Tile
     public bool HasRiver;
     public Tile?[] Neighbours;
     public bool Structure;
+    public bool IsMountain;
     public Tile(int x, int y, IReadOnlyList<double> heightValues)
     {
         X = x;
@@ -28,7 +28,8 @@ public sealed class Tile
         UpdateHeight(heightValues[0]);
         UpdateHeat(heightValues[1]);
         UpdateMoisture(heightValues[2]);
-        IsLand = HeightValue>=Constants.HeightValCoast;
+        IsLand = Height!.HeightValue>=Constants.HeightValCoast;
+        IsMountain = Height.HeightValue > Constants.HeightValDeepForest;
     }
 
     public void UpdateMoisture(double newMoisture)
@@ -55,22 +56,20 @@ public sealed class Tile
 
 
     }
-    public void UpdateHeight(double newBiome)
+    private void UpdateHeight(double newBiome)
     {
-        Biome = new TilesBiome(Constants.Biomes.Snow, Constants.Snow);
+        Height = new TilesHeight(Constants.Biomes.Snow, Constants.Snow);
         foreach (var elem in Constants.HeightValues.Where(elem => newBiome < elem.Key))
         {
-            Biome = new TilesBiome(elem.Value.TBiome, elem.Value.Color);
+            Height = new TilesHeight(elem.Value.THeight, elem.Value.Color);
             break;
         }
 
-        HeightValue = newBiome;
+        Height.HeightValue = newBiome;
     }
     public void UpdateBiome()
     {
-        var isMountain = HeightValue>=Constants.HeightValDeepForest;
-        var isValid = isMountain || !IsLand;
-        if(isValid) return;
+        if(IsMountain || !IsLand) return;
         var isColdest = Heat!.THeat is Constants.HeatType.Coldest or Constants.HeatType.Colder;
         var isWettest = Moisture!.TMoisture is Constants.MoistureType.Wettest or Constants.MoistureType.Wetter;
         var isDriest = Moisture.TMoisture is Constants.MoistureType.Driest or Constants.MoistureType.Dryer;
@@ -79,17 +78,17 @@ public sealed class Tile
         if (isColdest && isWettest)
         {
             var color = rnd.Next(10) == 0 ? Constants.SwampTree : Constants.Swamp;
-            Biome = new TilesBiome(Constants.Biomes.Swamp, color);
+            Height = new TilesHeight(Constants.Biomes.Swamp, color);
         }
         else if (isDriest && isHot)
         {
             var color = rnd.Next(10) == 0 ? Constants.Cactus : Constants.Sand;
-            Biome = new TilesBiome(Constants.Biomes.Sand, color);
+            Height = new TilesHeight(Constants.Biomes.Sand, color);
         }
 
     }
 
-    private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Biome!.TBiome == Biome!.TBiome);
+    private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Height!.THeight == Height!.THeight);
     private bool IsEqualHeat(Tile? tile) => (tile != null && tile.Heat!.THeat == Heat!.THeat);
     private bool IsEqualMoisture(Tile? tile) => (tile != null && tile.Moisture!.TMoisture == Moisture!.TMoisture);
 
@@ -105,13 +104,13 @@ public sealed class Tile
            Moisture!.Darkish(0);
        if (!biomeIsBorder) return;
        const double shadFactor = 0.8;
-       Biome!.Darkish(shadFactor);
+       Height!.Darkish(shadFactor);
     }
 
     public Tile GetNextPixRiver(Tile skipped)
     {
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
-            (tile1 != null && skipped != tile1 && tile1.HeightValue < tile2!.HeightValue);
+            (tile1 != null && skipped != tile1 && tile1.Height!.HeightValue < tile2!.Height!.HeightValue);
 
         Tile tempTile = new Tile(-1, -1,new double[]{10,10,10});
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc)!);

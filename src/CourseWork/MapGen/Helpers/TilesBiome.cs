@@ -1,11 +1,12 @@
 namespace CourseWork.MapGen.Helpers;
 
-public sealed class TilesBiome : TilesProperty
+public class TilesBiome:TilesProperty
 {
-    public Constants.Biomes TBiome { get; }
+    public Constants.BiomeType TBiome { get; }
 
-    public TilesBiome(Constants.Biomes biome, RgbColor color) : base(color)
+    public TilesBiome(Constants.BiomeType biome, RgbColor color) : base(color)
     {
         TBiome = biome;
     }
+    
 }

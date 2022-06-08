@@ -55,7 +55,6 @@ public static class Constants
     public static readonly RgbColor Tundra = new (83, 136, 112);
     public static readonly RgbColor Ice = new (255, 255, 255);
     
-    
     public enum BiomeType
     {
         Desert,
@@ -95,18 +94,17 @@ public static class Constants
         Warmer,
         Warmest
     }
-
-
+    
     public enum MoistureType
     {
-        Wettest,
-        Wetter,
-        Wet,
-        Dry,
+        Driest,
         Dryer,
-        Driest
+        Dry,
+        Wet,
+        Wetter,
+        Wettest
     }
-
+    
     private const double HeightValDeepWat = 0.42;
     private const double HeightValOcean = 0.46;
     private const double HeightValShallWat = 0.49;
@@ -154,6 +152,19 @@ public static class Constants
         { BiomeType.Ice, BiomeType.Tundra, BiomeType.BorealForest, BiomeType.SeasonalForest,      BiomeType.TropicalRainforest,  BiomeType.TropicalRainforest },  //WETTER
         { BiomeType.Ice, BiomeType.Tundra, BiomeType.BorealForest, BiomeType.TemperateRainforest, BiomeType.TropicalRainforest,  BiomeType.TropicalRainforest }   //WETTEST
     };
+    public static readonly Dictionary<BiomeType,RgbColor> BiomesUpdate = new()
+    {
+        {BiomeType.Ice,Ice },
+        {BiomeType.Desert, Desert},
+        {BiomeType.Grassland, Grassland},
+        {BiomeType.Savanna , Savanna},
+        {BiomeType.Tundra ,Tundra},
+        {BiomeType.Woodland ,Woodland},
+        {BiomeType.BorealForest ,BorealForest},
+        {BiomeType.SeasonalForest ,SeasonalForest},
+        {BiomeType.TemperateRainforest ,TemperateRainforest},
+        {BiomeType.TropicalRainforest ,TropicalRainforest}
+    };
     public static readonly Dictionary<Biomes,double> HeatUpdate = new()
     {
         {Biomes.Snow,HeatUpSnow },
@@ -172,18 +183,18 @@ public static class Constants
         {Biomes.HardRock ,MoistureUpShWh}
     };
     
-    public static readonly Dictionary<double, TilesBiome> HeightValues = new()
+    public static readonly Dictionary<double, TilesHeight> HeightValues = new()
     {
-        {HeightValDeepWat, new TilesBiome(Biomes.DeepWater, DeepWater)},
-        {HeightValOcean, new TilesBiome(Biomes.Ocean, Ocean)},
-        {HeightValShallWat, new TilesBiome(Biomes.ShallowWater, ShallowWater)},
-        {HeightValCoast, new TilesBiome(Biomes.Coast, Coast)},
-        {HeightValSand, new TilesBiome(Biomes.Sand, Sand)},
-        {HeightValGrass, new TilesBiome(Biomes.Grass, Grass)},
-        {HeightValForest, new TilesBiome(Biomes.Forest, Forest)},
-        {HeightValDeepForest, new TilesBiome(Biomes.DeepForest, DeepForest)},
-        {HeightValRock, new TilesBiome(Biomes.Rock, Rock)},
-        {HeightValHardRock, new TilesBiome(Biomes.HardRock, HardRock)}
+        {HeightValDeepWat, new TilesHeight(Biomes.DeepWater, DeepWater)},
+        {HeightValOcean, new TilesHeight(Biomes.Ocean, Ocean)},
+        {HeightValShallWat, new TilesHeight(Biomes.ShallowWater, ShallowWater)},
+        {HeightValCoast, new TilesHeight(Biomes.Coast, Coast)},
+        {HeightValSand, new TilesHeight(Biomes.Sand, Sand)},
+        {HeightValGrass, new TilesHeight(Biomes.Grass, Grass)},
+        {HeightValForest, new TilesHeight(Biomes.Forest, Forest)},
+        {HeightValDeepForest, new TilesHeight(Biomes.DeepForest, DeepForest)},
+        {HeightValRock, new TilesHeight(Biomes.Rock, Rock)},
+        {HeightValHardRock, new TilesHeight(Biomes.HardRock, HardRock)}
 
     };
 
