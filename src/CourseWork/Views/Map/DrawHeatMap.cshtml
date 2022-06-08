@@ -2,7 +2,6 @@
 @{
     Layout = "_Layout2";
     ViewData["Title"] = "Heat Map";
-    ViewBag.Num = 1;
 }
 
 @{
@@ -12,7 +11,7 @@
 
 <script>
     window.onload = () => {
-        const canvasId = ["canvas1","canvas2","canvas3"].map((id) => {
+        const canvasId = ["canvas1","canvas2","canvas3","canvas4"].map((id) => {
             const element = document.getElementById(id);
             if (element) {
                 return element.getContext('2d');
@@ -41,9 +40,9 @@
 </script>
 <body>
 <canvas id="canvas2" width="@newWidth" height="@newHeight"></canvas>
-   @Html.ActionLink("Prev", "One", "Map")
+   @Html.ActionLink("Prev", "DrawHeightMap", "Map")
    @Html.ActionLink("Restart", "Index", "Map")
-   @Html.ActionLink("Next", "Three", "Map")
+   @Html.ActionLink("Next", "DrawMoistureMap", "Map")
   <button onclick="saveCanvasAsImageFile(1,`Heat Map`)">
   Download
   </button>

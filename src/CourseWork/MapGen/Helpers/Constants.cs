@@ -44,19 +44,26 @@ public static class Constants
     public static readonly RgbColor Road = new (201, 180, 48);
     public static readonly RgbColor Bridge = new (97, 79, 0);
     
-    public static readonly RgbColor Desert = new (236, 229, 122);
-    public static readonly RgbColor Savanna = new (163, 223, 106);
-    public static readonly RgbColor TropicalRainforest = new (32, 135, 26);
-    public static readonly RgbColor Grassland = new (140, 241, 94);
-    public static readonly RgbColor Woodland = new (122, 188, 90);
-    public static readonly RgbColor SeasonalForest = new (64, 108,31);
-    public static readonly RgbColor TemperateRainforest = new (0, 79, 41);
-    public static readonly RgbColor BorealForest = new (88, 121, 63);
-    public static readonly RgbColor Tundra = new (83, 136, 112);
-    public static readonly RgbColor Ice = new (255, 255, 255);
+    private static readonly RgbColor Desert = new (236, 229, 122);
+    private static readonly RgbColor Savanna = new (163, 223, 106);
+    private static readonly RgbColor TropicalRainforest = new (32, 135, 26);
+    private static readonly RgbColor Grassland = new (140, 241, 94);
+    private static readonly RgbColor Woodland = new (122, 188, 90);
+    private static readonly RgbColor SeasonalForest = new (64, 108,31);
+    private static readonly RgbColor TemperateRainforest = new (0, 79, 41);
+    private static readonly RgbColor BorealForest = new (88, 121, 63);
+    private static readonly RgbColor Tundra = new (83, 136, 112);
+    private static readonly RgbColor Ice = new (255, 255, 255);
     
     public enum BiomeType
     {
+        DeepWater,
+        Ocean,
+        ShallowWater,
+        Coast,
+        Rock,
+        HardRock,
+        Snow,
         Desert,
         Savanna,
         TropicalRainforest,
@@ -67,6 +74,7 @@ public static class Constants
         BorealForest,
         Tundra,
         Ice
+
     }
     
     public enum Biomes
@@ -75,13 +83,13 @@ public static class Constants
         Ocean,
         ShallowWater,
         Coast,
+        Rock,
+        HardRock,
+        Snow,
         Sand,
         Grass,
         Forest,
         DeepForest,
-        Rock,
-        HardRock,
-        Snow,
         Swamp
         }
     
@@ -106,10 +114,10 @@ public static class Constants
     }
     
     private const double HeightValDeepWat = 0.42;
-    private const double HeightValOcean = 0.46;
-    private const double HeightValShallWat = 0.49;
-    public const double HeightValCoast = 0.52;
-    private const double HeightValSand = 0.53;
+    private const double HeightValOcean = 0.44;
+    private const double HeightValShallWat = 0.47;
+    public const double HeightValCoast = 0.51;
+    private const double HeightValSand = 0.52;
     private const double HeightValGrass = 0.59;
     private const double HeightValForest = 0.62;
     public const double HeightValDeepForest = 0.66;
@@ -163,7 +171,14 @@ public static class Constants
         {BiomeType.BorealForest ,BorealForest},
         {BiomeType.SeasonalForest ,SeasonalForest},
         {BiomeType.TemperateRainforest ,TemperateRainforest},
-        {BiomeType.TropicalRainforest ,TropicalRainforest}
+        {BiomeType.TropicalRainforest ,TropicalRainforest},
+        {BiomeType.DeepWater ,DeepWater},
+        {BiomeType.Ocean ,Ocean},
+        {BiomeType.ShallowWater ,ShallowWater},
+        {BiomeType.Coast ,Coast},
+        {BiomeType.HardRock ,HardRock},
+        {BiomeType.Rock ,Rock},
+        {BiomeType.Snow ,Snow},
     };
     public static readonly Dictionary<Biomes,double> HeatUpdate = new()
     {

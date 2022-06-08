@@ -1,8 +1,9 @@
+
 @{
     Layout = "_Layout2";
-    ViewData["Title"] = "Moisture Map";
-    ViewBag.Num = 2;
+    ViewData["Title"] = "Height Map";
 }
+
 @{
     int newWidth = ViewBag.Map.Width*ViewBag.Map.LenOfPixel+10*ViewBag.Map.LenOfPixel;
     int newHeight = ViewBag.Map.Height*ViewBag.Map.LenOfPixel+10*ViewBag.Map.LenOfPixel;
@@ -10,7 +11,7 @@
 
 <script>
     window.onload = () => {
-        const canvasId = ["canvas1","canvas2","canvas3"].map((id) => {
+        const canvasId = ["canvas1","canvas2","canvas3","canvas4"].map((id) => {
             const element = document.getElementById(id);
             if (element) {
                 return element.getContext('2d');
@@ -23,10 +24,10 @@
             @for (int y = 0; y < ViewBag.Map.Height; y++)
             {
                 <text>
-                    drawRect(canvasId, startX,startY,@ViewBag.Map.Tiles[x, y].Moisture.Color.Red,
-                                                                    @ViewBag.Map.Tiles[x, y].Moisture.Color.Green,
-                                                                    @ViewBag.Map.Tiles[x, y].Moisture.Color.Blue,
-                                                                    @ViewBag.Map.LenOfPixel,2);
+                    drawRect(canvasId, startX,startY,@ViewBag.Map.Tiles[x, y].Height.Color.Red,
+                                                                    @ViewBag.Map.Tiles[x, y].Height.Color.Green,
+                                                                    @ViewBag.Map.Tiles[x, y].Height.Color.Blue,
+                                                                    @ViewBag.Map.LenOfPixel,0);
                     startX += @ViewBag.Map.LenOfPixel;
                 </text>
             }
@@ -38,11 +39,11 @@
     };
 </script>
 <body>
-<canvas id="canvas3" width="@newWidth" height="@newHeight"></canvas>
-    @Html.ActionLink("Prev", "Two", "Map")
+<canvas id="canvas1" width="@newWidth" height="@newHeight"></canvas>
+    @Html.ActionLink("Prev", "DrawBiomeMap", "Map")
     @Html.ActionLink("Restart", "Index", "Map")
-    @Html.ActionLink("Next", "One", "Map")
-<button onclick="saveCanvasAsImageFile(2,`Moisture Map`)">
+    @Html.ActionLink("Next", "DrawHeatMap", "Map")
+<button onclick="saveCanvasAsImageFile(0,`Height Map`)">
 Download
 </button>
 </body>

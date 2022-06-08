@@ -6,8 +6,8 @@ public abstract class TilesProperty
     public RgbColor Color;
     protected TilesProperty(RgbColor color) => Color = color;
 
-    public void Darkish(double k)
+    public void Darkish(double darckCof)
     {
-        Color = new RgbColor((int) (Color.Red * k), (int) (Color.Green * k), (int) (Color.Blue * k));
+        Color = new RgbColor((int) (Color.Red * darckCof), (int) (Color.Green * darckCof), (int) (Color.Blue * darckCof));
     }
 }

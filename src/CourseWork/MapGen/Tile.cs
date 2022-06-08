@@ -89,23 +89,27 @@ public sealed class Tile
 
     }
 
-    private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Height!.THeight == Height!.THeight);
+    private bool IsEqualHeight(Tile? tile) => (tile != null && tile.Height!.THeight == Height!.THeight);
     private bool IsEqualHeat(Tile? tile) => (tile != null && tile.Heat!.THeat == Heat!.THeat);
     private bool IsEqualMoisture(Tile? tile) => (tile != null && tile.Moisture!.TMoisture == Moisture!.TMoisture);
+    private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Biome.TBiome == Biome.TBiome);
 
 
     public void UpdateBitmask()
     {
-       var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
+       var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeight(neighbour));
        var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeat(neighbour));
        var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualMoisture(neighbour));
+       var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
+       const double shadFactor = 0.8;
        if(heatIsBorder)
           Heat!.Darkish(0);
        if(moistureIsBorder)
            Moisture!.Darkish(0);
-       if (!biomeIsBorder) return;
-       const double shadFactor = 0.8;
-       Height!.Darkish(shadFactor);
+       if(biomeIsBorder)
+           Biome.Darkish(shadFactor);
+       if (heightIsBorder)
+           Height!.Darkish(shadFactor);
     }
 
     public Tile GetNextPixRiver(Tile skipped)

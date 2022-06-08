@@ -47,8 +47,6 @@ public sealed class MapBuilder
         UpdateMoistureMap();
         UpdateBiomeMap();
         FindNeighbours();
-
-
     }
 
     public Map BuildMap(bool hasRiver, bool hasCastles, bool hasParticles)
@@ -70,13 +68,20 @@ public sealed class MapBuilder
         {
             for (var y = 0; y < _map.Height; y++)
             {
-                if (_map.Tiles[x, y].IsLand && !_map.Tiles[x, y].IsMountain)
+                Constants.BiomeType biome;
+                var isCoast = !_map.Tiles[x, y].IsLand || _map.Tiles[x, y].Height!.THeight == Constants.Biomes.Sand;
+                if (!isCoast && !_map.Tiles[x, y].IsMountain )
                 {
-                    _map.Tiles[x, y].Height!.Color = Constants.BiomesUpdate[Constants.BiomeTable[
-                        (int)_map.Tiles[x,y].Moisture!.TMoisture,
-                        (int)_map.Tiles[x,y].Heat!.THeat]];
+                    var x1 = (int) _map.Tiles[x, y].Moisture!.TMoisture;
+                    var y1 = (int) _map.Tiles[x, y].Heat!.THeat; 
+                    biome = Constants.BiomeTable[x1, y1];
                 }
-
+                else
+                {
+                    var numOfBiome = (int) _map.Tiles[x, y].Height!.THeight;
+                    biome = (Constants.BiomeType) numOfBiome;
+                }
+                _map.Tiles[x, y].Biome = new TilesBiome(biome, Constants.BiomesUpdate[biome]);
             }
         }
     }

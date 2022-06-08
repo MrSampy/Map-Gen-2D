@@ -16,23 +16,28 @@ public class MapController:Controller
         MapBuilder mapBuilder = new MapBuilder(side, side, lenOfPix.GetValueOrDefault(1));
         _map = mapBuilder.BuildMap(hasRiver.GetValueOrDefault(false),hasCastles.GetValueOrDefault(false),hasParticles.GetValueOrDefault(false));
         ViewBag.Map = _map;
-        return View("One");
+        return View("DrawHeightMap");
     }
 
     
-    public IActionResult One()
+    public IActionResult DrawHeightMap()
     {
         ViewBag.Map = _map;
         return View();
     }
     
-    public IActionResult Two()
+    public IActionResult DrawHeatMap()
     { 
         ViewBag.Map = _map;
        return View();
     }
     
-    public IActionResult Three()
+    public IActionResult DrawMoistureMap()
+    {
+        ViewBag.Map = _map;
+        return View();
+    }
+    public IActionResult DrawBiomeMap()
     {
         ViewBag.Map = _map;
         return View();

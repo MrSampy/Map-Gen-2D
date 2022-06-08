@@ -1,4 +1,6 @@
-﻿let functionArr = [];
+﻿
+const canvasId = ["canvas1","canvas2","canvas3","canvas4"]
+
 function drawRect(canvasId, x, y, red, green, blue, lenofpix, num) {
     let ctx = canvasId[num];
     if (!ctx) return;
@@ -6,11 +8,6 @@ function drawRect(canvasId, x, y, red, green, blue, lenofpix, num) {
     ctx.fillRect(x, y, lenofpix, lenofpix);
 }
 
-function drawMap() {
-    for (const func of functionArr)
-        func();
-
-}
 function getImage(canvas){
     let imageData = canvas.toDataURL();
     let image = new Image();
@@ -27,6 +24,6 @@ function saveImage(image) {
 }
 
 function saveCanvasAsImageFile(num){
-    let image = getImage(document.getElementById(canvs[num]));
+    let image = getImage(document.getElementById(canvasId[num]));
     saveImage(image);
 }
