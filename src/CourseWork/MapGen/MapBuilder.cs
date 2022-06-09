@@ -158,6 +158,8 @@ public sealed class MapBuilder
                 if (!_map.Tiles[x, y].HasRiver) continue;
                 _map.Tiles[x, y].Height = new TilesHeight(Constants.Biomes.Coast, Constants.Coast);
                 _map.Tiles[x, y].UpdateMoisture(_map.Tiles[x, y].Moisture!.MoistureValue*Constants.MoistureUpCoastR);
+                _map.Tiles[x, y].Biome.Color = Constants.RiversUpdate[_map.Tiles[x, y].Biome.TBiome];
+
             }
         }
     }
@@ -217,6 +219,43 @@ public sealed class MapBuilder
         }
     }
 
+    private void ExtendRiver(List<Tile> river)
+    {
+        _rivers.Extend(river.Count, out var extension);
+        var isXChange = true;
+        var extendCounter = extension.Count - 2;
+        var extendCoord = 0;
+
+        for (int i = 0; i < river.Count; ++i)
+        {
+            if (i == extension[^1][extendCoord])
+            {
+                ++extendCoord;
+                --extendCounter;
+            }
+
+            isXChange = (river[i] != river.Last()) ? river[i + 1].Y != river[i].Y : isXChange;
+            for (int j = 1; j <= extension[extendCounter][0]; j++)
+            {
+                if (isXChange)
+                {
+                    if (river[i].X + j < _map.Width)
+                        _map.Tiles[river[i].X + j, river[i].Y].HasRiver = true;
+                    if (river[i].X - j >= 0)
+                        _map.Tiles[river[i].X - j, river[i].Y].HasRiver = true;
+                }
+                else
+                {
+                    if (river[i].Y + j < _map.Height)
+                        _map.Tiles[river[i].X, river[i].Y + j].HasRiver = true;
+                    if (river[i].Y - j >= 0)
+                        _map.Tiles[river[i].X, river[i].Y - j].HasRiver = true;
+                }
+            }
+        }
+        
+    }
+
     private void AddRivers()
     {
         var riverCount = _rivers.MaxRiverCount;
@@ -224,48 +263,18 @@ public sealed class MapBuilder
         {
             var x = Random.Next(_rivers.MaxRiverWidth, _map.Width - _rivers.MaxRiverWidth - 1);
             var y = Random.Next(_rivers.MaxRiverWidth, _map.Height - _rivers.MaxRiverWidth - 1);
-            if (_map.Tiles[x, y].Height!.HeightValue < Constants.MinRiverHeight)
+            var isCorrectLand = _map.Tiles[x, y].HasRiver ||
+                                _map.Tiles[x, y].Height!.HeightValue < Constants.MinRiverGeneration;
+            if (!_map.Tiles[x, y].IsLand || isCorrectLand)
                 continue;
             var river = new List<Tile>();
             FindPath(_map.Tiles[x, y], ref river);
             var isSand = (river.Count == 0) || river.Last().Height!.THeight != Constants.Biomes.Sand;
-            if (isSand)
+            if (isSand || river.Count <= Constants.MinRiverLength)
                 continue;
             foreach (var riv in river)
                 _map.Tiles[riv.X, riv.Y].HasRiver = true;
-            _rivers.Extend(river.Count, out var extension);
-            var isXChange = true;
-            var extendCounter = extension.Count - 2;
-            var extendCoord = 0;
-
-            for (int i = 0; i < river.Count; ++i)
-            {
-                if (i == extension[^1][extendCoord])
-                {
-                    ++extendCoord;
-                    --extendCounter;
-                }
-
-                isXChange = (river[i] != river.Last()) ? river[i + 1].Y != river[i].Y : isXChange;
-                for (int j = 1; j <= extension[extendCounter][0]; j++)
-                {
-                    if (isXChange)
-                    {
-                        if (river[i].X + j < _map.Width)
-                            _map.Tiles[river[i].X + j, river[i].Y].HasRiver = true;
-                        if (river[i].X - j >= 0)
-                            _map.Tiles[river[i].X - j, river[i].Y].HasRiver = true;
-                    }
-                    else
-                    {
-                        if (river[i].Y + j < _map.Height)
-                            _map.Tiles[river[i].X, river[i].Y + j].HasRiver = true;
-                        if (river[i].Y - j >= 0)
-                            _map.Tiles[river[i].X, river[i].Y - j].HasRiver = true;
-                    }
-                }
-            }
-
+            ExtendRiver(river);
             --riverCount;
         }
 

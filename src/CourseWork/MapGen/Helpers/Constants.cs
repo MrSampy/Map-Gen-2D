@@ -54,7 +54,11 @@ public static class Constants
     private static readonly RgbColor BorealForest = new (88, 121, 63);
     private static readonly RgbColor Tundra = new (83, 136, 112);
     private static readonly RgbColor Ice = new (255, 255, 255);
-    
+
+    private static readonly RgbColor IceRiver = new(181,213,226);
+    private static readonly RgbColor PartIceRiver = new(128,199,229);
+    private static readonly RgbColor ColdRiver = new(75,186,223);
+
     public enum BiomeType
     {
         DeepWater,
@@ -113,11 +117,11 @@ public static class Constants
         Wettest
     }
     
-    private const double HeightValDeepWat = 0.42;
-    private const double HeightValOcean = 0.44;
-    private const double HeightValShallWat = 0.47;
-    public const double HeightValCoast = 0.51;
-    private const double HeightValSand = 0.52;
+    private const double HeightValDeepWat = 0.4;
+    private const double HeightValOcean = 0.43;
+    private const double HeightValShallWat = 0.46;
+    public const double HeightValCoast = 0.5;
+    private const double HeightValSand = 0.51;
     private const double HeightValGrass = 0.59;
     private const double HeightValForest = 0.62;
     public const double HeightValDeepForest = 0.66;
@@ -135,8 +139,9 @@ public static class Constants
     private const double MoistureValWet = 0.57;
     private const double MoistureValDry = 0.66;
     private const double MoistureValDrier = 0.69;
-    
-    public const double MinRiverHeight = 0.62;
+
+    public const int MinRiverLength = 30;
+    public const double MinRiverGeneration= 0.59;
     public const double MaxStructureVal = 0.65;
     public const double MinStructureVal = 0.56;
     public const int RangeOfObj = 20;
@@ -179,6 +184,24 @@ public static class Constants
         {BiomeType.HardRock ,HardRock},
         {BiomeType.Rock ,Rock},
         {BiomeType.Snow ,Snow},
+    };
+    public static readonly Dictionary<BiomeType,RgbColor> RiversUpdate = new()
+    {
+        {BiomeType.Ice,IceRiver },
+        {BiomeType.Desert, Coast},
+        {BiomeType.Grassland, Coast},
+        {BiomeType.Savanna , Coast},
+        {BiomeType.Tundra ,PartIceRiver},
+        {BiomeType.Woodland ,Coast},
+        {BiomeType.BorealForest ,ColdRiver},
+        {BiomeType.SeasonalForest ,ColdRiver},
+        {BiomeType.TemperateRainforest ,Coast},
+        {BiomeType.TropicalRainforest ,Coast},
+        {BiomeType.HardRock ,IceRiver},
+        {BiomeType.Coast ,Coast},
+        {BiomeType.Rock ,PartIceRiver},
+        {BiomeType.Snow ,IceRiver}
+        
     };
     public static readonly Dictionary<Biomes,double> HeatUpdate = new()
     {

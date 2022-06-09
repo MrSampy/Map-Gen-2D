@@ -18,7 +18,7 @@ public sealed class Tile
     public bool HasRiver;
     public Tile?[] Neighbours;
     public bool Structure;
-    public bool IsMountain;
+    public readonly bool IsMountain;
     public Tile(int x, int y, IReadOnlyList<double> heightValues)
     {
         X = x;
@@ -88,19 +88,20 @@ public sealed class Tile
         }
 
     }
-
-    private bool IsEqualHeight(Tile? tile) => (tile != null && tile.Height!.THeight == Height!.THeight);
-    private bool IsEqualHeat(Tile? tile) => (tile != null && tile.Heat!.THeat == Heat!.THeat);
-    private bool IsEqualMoisture(Tile? tile) => (tile != null && tile.Moisture!.TMoisture == Moisture!.TMoisture);
-    private bool IsEqualBiome(Tile? tile) => (tile != null && tile.Biome.TBiome == Biome.TBiome);
-
+    
+    private delegate bool IsEqual(Tile? tile);
+    private bool IsEqualTile(Tile? tile, IsEqual func) => tile != null && func(tile);
 
     public void UpdateBitmask()
     {
-       var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeight(neighbour));
-       var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualHeat(neighbour));
-       var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualMoisture(neighbour));
-       var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualBiome(neighbour));
+        var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
+           acc && IsEqualTile(neighbour,tile => tile!.Height!.THeight == Height!.THeight));
+       var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
+           acc && IsEqualTile(neighbour,tile => tile!.Heat!.THeat == Heat!.THeat));
+       var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
+           acc && IsEqualTile(neighbour,tile => tile!.Moisture!.TMoisture == Moisture!.TMoisture));
+       var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
+           acc && IsEqualTile(neighbour,tile => tile!.Biome.TBiome == Biome.TBiome));
        const double shadFactor = 0.8;
        if(heatIsBorder)
           Heat!.Darkish(0);
@@ -115,7 +116,7 @@ public sealed class Tile
     public Tile GetNextPixRiver(Tile skipped)
     {
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
-            (tile1 != null && skipped != tile1 && tile1.Height!.HeightValue < tile2!.Height!.HeightValue);
+            tile1 != null && skipped != tile1 && tile1.Height!.HeightValue < tile2!.Height!.HeightValue;
 
         Tile tempTile = new Tile(-1, -1,new double[]{10,10,10});
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc)!);
