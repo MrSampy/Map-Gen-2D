@@ -17,6 +17,11 @@ This system allows you to create, set up and download a procedurally generated m
 2. Heat and Moisture maps are renewed using Height map(Mountains are cold and humid, and oceans are humid)
 3. Using the Whittaker Classification Scheme, a biome map is generated.
 
+![Scheme](./src/CourseWork/images/Scheme.jpg)
+
+![Scheme1](./src/CourseWork/images/Scheme1.jpg)
+
+![Scheme2](./src/CourseWork/images/Scheme3.jpg)
 
 ## Architecture
 
