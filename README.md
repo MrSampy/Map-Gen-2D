@@ -10,6 +10,13 @@ This system allows you to create, set up and download a procedurally generated m
 - If the road passes through the river, then it becomes a bridge
 - Berries (strawberries, blueberries) are generated only in grassland biome
 - Ores (iron, coal) are generated only in the mountains biome
+- Corals (Pink, Violet) are generated only in the coast biome
+
+## Description of map generation
+1. Three maps(Height, Heat and Moisture) are generated using Perlin noise with different seeds
+2. Heat and Moisture maps are renewed using Height map(Mountains are cold and humid, and oceans are humid)
+3. Using the Whittaker Classification Scheme, a biome map is generated.
+
 
 ## Architecture
 
@@ -18,11 +25,14 @@ Pages) and Business Logic layer (ASP.NET MVC Web APP).
 
 ## Screenshots
 
-Hight, Heat, Moisture maps with rivers, castles and particles (ores and berries) from one and the same seed. Images extension are 200x200px and 300x300px.
+Hight, Heat, Moisture and Biome maps with rivers, castles and particles (ores, berries and corals) from one and the same seed. Images extension are 200x200px and 300x300px.
 
-![Hight-Map1](./src/CourseWork/images/1.png)![Heat-Map](./src/CourseWork/images/2.png)![Moisture-Map](./src/CourseWork/images/3.png)
+![Height-Map1](./src/CourseWork/images/111.png)![Heat-Map](./src/CourseWork/images/222.png)
+![Moisture-Map](./src/CourseWork/images/333.png)![Biome-Map](./src/CourseWork/images/444.png)
 
-![Hight-Map1](./src/CourseWork/images/11.png)![Heat-Map](./src/CourseWork/images/22.png)![Moisture-Map](./src/CourseWork/images/33.png)
+![Height-Map1](./src/CourseWork/images/Height.png)![Heat-Map](./src/CourseWork/images/Heat.png)
+
+![Moisture-Map](./src/CourseWork/images/Moisture.png)![Biome-Map](./src/CourseWork/images/Biome.png)
 
 Hight map with rivers. Image extension is 900x900px.
 
