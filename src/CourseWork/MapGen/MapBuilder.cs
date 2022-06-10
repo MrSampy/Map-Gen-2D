@@ -85,13 +85,7 @@ public sealed class MapBuilder
             }
         }
     }
-
-    private void UpdateMap()
-    {
-        for (var x = 0; x < _map.Width; x++)
-        for (var y = 0; y < _map.Height; y++)
-                _map.Tiles[x,y].UpdateBiome();
-    }
+    
     private void UpdateHeatMap()
     {
         for (var x = 0; x < _map.Width; x++)
@@ -219,7 +213,7 @@ public sealed class MapBuilder
         }
     }
 
-    private void ExtendRiver(List<Tile> river)
+    private void ExtendRiver(IReadOnlyList<Tile> river)
     {
         _rivers.Extend(river.Count, out var extension);
         var isXChange = true;
@@ -234,7 +228,7 @@ public sealed class MapBuilder
                 --extendCounter;
             }
 
-            isXChange = (river[i] != river.Last()) ? river[i + 1].Y != river[i].Y : isXChange;
+            isXChange = (river[i] != river[^1]) ? river[i + 1].Y != river[i].Y : isXChange;
             for (int j = 1; j <= extension[extendCounter][0]; j++)
             {
                 if (isXChange)
@@ -280,7 +274,7 @@ public sealed class MapBuilder
 
         UpdateRivers();
     }
-    private void FillFullPathCastle(List<Tile> path)
+    private void FillFullPathCastle(IReadOnlyList<Tile> path)
     {
         void MakeStructure(Tile tile)
         {
@@ -324,19 +318,18 @@ public sealed class MapBuilder
     {
         const int cofDivision = 100;
         var stop = _map.Height / cofDivision;
-        var roads = new List<Tile>();
-        void FillMainPath(ref List<Tile> path)
+        var allRoads = new List<Tile>();
+        void FillMainPath(List<Tile> path)
         {
             foreach (var tile in path.Where(tile => !_structures.Contains(_map.Tiles[tile.X, tile.Y])))
                 _map.Tiles[tile.X, tile.Y].Height!.Color = (!tile.HasRiver) ? Constants.Road : Constants.Bridge;
             _structures.AddRange(path);
-            roads.AddRange(path);
-            path.Clear();
         }
         
-        int counter = 0;
+        var counter = 0;
         while (counter!=stop)
         {
+            var roads = new List<Tile>();
             while (true)
             {
                 var x = Random.Next(_castles.WallLength, _map.Width - _castles.WallLength - 1);
@@ -345,30 +338,28 @@ public sealed class MapBuilder
                     continue;
                 break;
             }
-            List<Tile> road = new List<Tile>();
+            
             while (true)
             {
+                var road = new List<Tile>();
                 var index = Random.Next(0, _cast[counter].CWalls.Count - 1);
                 road.Add(_cast[counter].CWalls[index]);
                 if (!FindRoad(ref road))
                     continue;
-
-
-                FillMainPath(ref road);
-                _structures.AddRange(road);
+                FillMainPath(road);
                 roads.AddRange(road);
                 break;
             }
-
             const int minNumCastles = 2;
             const int maxNumCastles = 4;
-            int castleCount = Random.Next(minNumCastles,maxNumCastles);
-            int attempts = 100;
+            var castleCount = Random.Next(minNumCastles,maxNumCastles);
+            var attempts = 100;
             while (castleCount != 0)
             {
+                var road = new List<Tile>();
                 if (attempts == 0)
                     break;
-                int index = Random.Next(minNumCastles, roads.Count - minNumCastles);
+                var index = Random.Next(minNumCastles, roads.Count - minNumCastles);
                 if (roads[index].Height!.Color != Constants.Road)
                     continue;
                 road.Add(roads[index]);
@@ -378,15 +369,16 @@ public sealed class MapBuilder
                     continue;
                 }
 
-                FillMainPath(ref road);
+                FillMainPath(road);
+                roads.AddRange(road);
                 --castleCount;
             }
-
-            FillFullPathCastle(roads);
             ++counter;
+            allRoads.AddRange(roads);
         }
         
-        
+        FillFullPathCastle(allRoads);
+
     }
 
     private bool CreateCastle(int x, int y, bool isMainCast)

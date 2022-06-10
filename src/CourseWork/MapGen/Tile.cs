@@ -68,33 +68,13 @@ public sealed class Tile
 
         Height.HeightValue = newBiome;
     }
-    public void UpdateBiome()
-    {
-        if(IsMountain || !IsLand) return;
-        var isColdest = Heat!.THeat is Constants.HeatType.Coldest or Constants.HeatType.Colder;
-        var isWettest = Moisture!.TMoisture is Constants.MoistureType.Wettest or Constants.MoistureType.Wetter;
-        var isDriest = Moisture.TMoisture is Constants.MoistureType.Driest or Constants.MoistureType.Dryer;
-        var isHot = Heat.THeat is Constants.HeatType.Warmest or Constants.HeatType.Warmer;
-        var rnd = new Random();
-        if (isColdest && isWettest)
-        {
-            var color = rnd.Next(10) == 0 ? Constants.SwampTree : Constants.Swamp;
-            Height = new TilesHeight(Constants.Biomes.Swamp, color);
-        }
-        else if (isDriest && isHot)
-        {
-            var color = rnd.Next(10) == 0 ? Constants.Cactus : Constants.Sand;
-            Height = new TilesHeight(Constants.Biomes.Sand, color);
-        }
-
-    }
     
     private delegate bool IsEqual(Tile? tile);
     private bool IsEqualTile(Tile? tile, IsEqual func) => tile != null && func(tile);
 
     public void UpdateBitmask()
     {
-        var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
+       var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.Height!.THeight == Height!.THeight));
        var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.Heat!.THeat == Heat!.THeat));

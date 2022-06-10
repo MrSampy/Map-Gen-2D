@@ -6,14 +6,14 @@ public static class Constants
     private static readonly RgbColor Ocean = new (0, 60, 255);
     private static readonly RgbColor ShallowWater = new (0, 118, 169);
     public static readonly RgbColor Coast = new (53, 195, 255);
-    public static readonly RgbColor Sand = new (249, 221, 84);
+    private static readonly RgbColor Sand = new (249, 221, 84);
     private static readonly RgbColor Grass = new (57, 205, 72);
     private static readonly RgbColor Forest = new (2, 137, 15);
     private static readonly RgbColor DeepForest = new (17, 65, 22);
     private static readonly RgbColor Rock = new (191, 185, 183);
     private static readonly RgbColor HardRock = new (154, 148, 186);
     public static readonly RgbColor Snow = new (236, 256, 238);
-    public static readonly RgbColor Swamp = new (101, 85, 63);
+
 
     
     private static readonly RgbColor Coldest = new(0, 255, 255);
@@ -36,8 +36,7 @@ public static class Constants
     private static readonly RgbColor Coal = new (0, 0, 0);
     private static readonly RgbColor PinkCoral = new (201, 71, 255);
     private static readonly RgbColor VioletCoral = new (83, 0, 155);
-    public static readonly RgbColor SwampTree = new (60, 102, 62);
-    public static readonly RgbColor Cactus = new (25, 189, 31);
+
 
     public static readonly RgbColor Wall = new (58, 53, 53);
     public static readonly RgbColor Floor = new (90, 53, 42);
@@ -93,8 +92,7 @@ public static class Constants
         Sand,
         Grass,
         Forest,
-        DeepForest,
-        Swamp
+        DeepForest
         }
     
     public enum HeatType
