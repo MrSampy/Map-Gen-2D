@@ -1,8 +1,8 @@
-# Map Generator system
+# 2D Map Generator system
 
 ## Concept Idea
 
-This system allows you to create, set up and download a procedurally generated map of heights, heat and moisture. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
+This system allows you to create, set up and download a procedurally generated 2d map of heights, heat, moisture and biome. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
 
 ## Description of features
 - The size and quantity of some objects (castles, rivers, roads) depends on the area of the map
