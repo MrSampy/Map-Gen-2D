@@ -110,7 +110,6 @@ public sealed class MapBuilder
                 double newHeight = 0;
                 foreach (var biome in Constants.MoistureUpdate.Where(biome => _map.Tiles[x, y].Height!.THeight == biome.Key))
                     newHeight = _map.Tiles[x, y].Moisture!.MoistureValue * biome.Value;
-                
                 if (Convert.ToBoolean(newHeight))
                     _map.Tiles[x,y].UpdateMoisture(newHeight);
                 
@@ -151,7 +150,8 @@ public sealed class MapBuilder
             {
                 if (!_map.Tiles[x, y].HasRiver) continue;
                 _map.Tiles[x, y].Height = new TilesHeight(Constants.Biomes.Coast, Constants.Coast);
-                _map.Tiles[x, y].UpdateMoisture(_map.Tiles[x, y].Moisture!.MoistureValue*Constants.MoistureUpCoastR);
+                var moistureCof = _map.Tiles[x, y].Moisture!.MoistureValue*Constants.MoistureUpCoastR;
+                _map.Tiles[x, y].UpdateMoisture(moistureCof);
                 _map.Tiles[x, y].Biome.Color = Constants.RiversUpdate[_map.Tiles[x, y].Biome.TBiome];
 
             }
@@ -220,7 +220,7 @@ public sealed class MapBuilder
         var extendCounter = extension.Count - 2;
         var extendCoord = 0;
 
-        for (int i = 0; i < river.Count; ++i)
+        for (var i = 0; i < river.Count; ++i)
         {
             if (i == extension[^1][extendCoord])
             {
@@ -319,7 +319,7 @@ public sealed class MapBuilder
         const int cofDivision = 100;
         var stop = _map.Height / cofDivision;
         var allRoads = new List<Tile>();
-        void FillMainPath(List<Tile> path)
+        void FillMainPath(IReadOnlyCollection<Tile> path)
         {
             foreach (var tile in path.Where(tile => !_structures.Contains(_map.Tiles[tile.X, tile.Y])))
                 _map.Tiles[tile.X, tile.Y].Height!.Color = (!tile.HasRiver) ? Constants.Road : Constants.Bridge;
