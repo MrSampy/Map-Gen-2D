@@ -17,11 +17,11 @@ This system allows you to create, set up and download a procedurally generated 2
 2. Heat and Moisture maps are renewed using Height map(Mountains are cold and humid, and oceans are humid)
 3. Using the Whittaker Classification Scheme, a biome map is generated.
 
-![Scheme](./src/CourseWork/images/Scheme.jpg)
+![Scheme](./src/src/images/Scheme.jpg)
 
-![Scheme1](./src/CourseWork/images/Scheme1.jpg)
+![Scheme1](./src/src/images/Scheme1.jpg)
 
-![Scheme2](./src/CourseWork/images/Scheme3.jpg)
+![Scheme2](./src/src/images/Scheme3.jpg)
 
 ## Architecture
 
@@ -32,16 +32,17 @@ Pages) and Business Logic layer (ASP.NET MVC Web APP).
 
 Hight, Heat, Moisture and Biome maps with rivers, castles and particles (ores, berries and corals) from one and the same seed. Images extension are 200x200px and 300x300px.
 
-![Height-Map1](./src/CourseWork/images/111.png)![Heat-Map](./src/CourseWork/images/222.png)
-![Moisture-Map](./src/CourseWork/images/333.png)![Biome-Map](./src/CourseWork/images/444.png)
+![Height-Map1](./src/src/images/111.png)![Heat-Map](./src/src/images/222.png)
 
-![Height-Map1](./src/CourseWork/images/Height.png)![Heat-Map](./src/CourseWork/images/Heat.png)
+![Moisture-Map](./src/src/images/333.png)![Biome-Map](./src/src/images/444.png)
 
-![Moisture-Map](./src/CourseWork/images/Moisture.png)![Biome-Map](./src/CourseWork/images/Biome.png)
+![Height-Map1](./src/src/images/Height.png)![Heat-Map](./src/src/images/Heat.png)
+
+![Moisture-Map](./src/src/images/Moisture.png)![Biome-Map](./src/src/images/Biome.png)
 
 Hight map with rivers. Image extension is 900x900px.
 
-![Hight-Map3](./src/CourseWork/images/123.png)
+![Hight-Map3](./src/src/images/123.png)
 
 ### Requirements
 - NET 6 SDK
