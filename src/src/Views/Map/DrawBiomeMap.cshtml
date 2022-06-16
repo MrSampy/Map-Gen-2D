@@ -24,9 +24,9 @@
             @for (int y = 0; y < ViewBag.Map.Height; y++)
             {
                 <text>
-                    drawRect(canvasId, startX,startY,@ViewBag.Map.Tiles[x, y].Biome.Color.Red,
-                                                                    @ViewBag.Map.Tiles[x, y].Biome.Color.Green,
-                                                                    @ViewBag.Map.Tiles[x, y].Biome.Color.Blue,
+                    drawRect(canvasId, startX,startY,@ViewBag.Map.Tiles[x, y].BiomeInfo.Color.Red,
+                                                                    @ViewBag.Map.Tiles[x, y].BiomeInfo.Color.Green,
+                                                                    @ViewBag.Map.Tiles[x, y].BiomeInfo.Color.Blue,
                                                                     @ViewBag.Map.LenOfPixel,3);
                     startX += @ViewBag.Map.LenOfPixel;
                 </text>

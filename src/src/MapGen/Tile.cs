@@ -6,15 +6,11 @@ public sealed class Tile
 {
     public int X { get; }
     public int Y { get; }
-    public TilesHeight? Height;
-    public TilesHeat? Heat;
-    public TilesMoisture? Moisture;
-    public TilesBiome Biome;
+    public TilesHeight? HeightInfo;
+    public TilesHeat? HeatInfo;
+    public TilesMoisture? MoistureInfo;
+    public TilesBiome BiomeInfo;
     public readonly bool IsLand;
-    public Tile? LeftTile;
-    public Tile? RightTile;
-    public Tile? TopTile;
-    public Tile? BottomTile;
     public bool HasRiver;
     public Tile?[] Neighbours;
     public bool Structure;
@@ -29,44 +25,44 @@ public sealed class Tile
         UpdateHeight(heightValues[0]);
         UpdateHeat(heightValues[1]);
         UpdateMoisture(heightValues[2]);
-        IsLand = Height!.HeightValue>=Constants.HeightValCoast;
-        IsMountain = Height.HeightValue > Constants.HeightValDeepForest;
+        IsLand = HeightInfo!.NoiseValue>=Constants.HeightValCoast;
+        IsMountain = HeightInfo.NoiseValue > Constants.HeightValDeepForest;
     }
 
     public void UpdateMoisture(double newMoisture)
     {
-        Moisture = new TilesMoisture(Constants.MoistureType.Driest, Constants.Driest);
+        MoistureInfo = new TilesMoisture(Constants.MoistureType.Driest, Constants.Driest);
         foreach (var elem in Constants.MoistureValues.Where(elem => newMoisture < elem.Key))
         {
-            Moisture = new TilesMoisture(elem.Value.TMoisture, elem.Value.Color);
+            MoistureInfo = new TilesMoisture(elem.Value.Moisture, elem.Value.Color);
             break;
         }
-        Moisture.MoistureValue = newMoisture;
+        MoistureInfo.NoiseValue = newMoisture;
 
     }
 
     public void UpdateHeat(double newHeat)
     {
-        Heat = new TilesHeat(Constants.HeatType.Warmest, Constants.Warmest);
-        foreach (var elem in Constants.HeatValues.Where(elem => newHeat< elem.Key))
+        HeatInfo = new TilesHeat(Constants.HeatType.Warmest, Constants.Warmest);
+        foreach (var elem in Constants.ValuesHeat.Where(elem => newHeat< elem.Key))
         {
-            Heat = new TilesHeat(elem.Value.THeat, elem.Value.Color);
+            HeatInfo = new TilesHeat(elem.Value.Heat, elem.Value.Color);
             break;
         }
-        Heat.HeatValue = newHeat; 
+        HeatInfo.NoiseValue = newHeat; 
 
 
     }
     private void UpdateHeight(double newBiome)
     {
-        Height = new TilesHeight(Constants.Biomes.Snow, Constants.Snow);
+        HeightInfo = new TilesHeight(Constants.Biomes.Snow, Constants.Snow);
         foreach (var elem in Constants.HeightValues.Where(elem => newBiome < elem.Key))
         {
-            Height = new TilesHeight(elem.Value.THeight, elem.Value.Color);
+            HeightInfo = new TilesHeight(elem.Value.Height, elem.Value.Color);
             break;
         }
 
-        Height.HeightValue = newBiome;
+        HeightInfo.NoiseValue = newBiome;
     }
     
     private delegate bool IsEqual(Tile? tile);
@@ -75,28 +71,28 @@ public sealed class Tile
     public void UpdateBitmask()
     {
        var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.Height!.THeight == Height!.THeight));
+           acc && IsEqualTile(neighbour,tile => tile!.HeightInfo!.Height == HeightInfo!.Height));
        var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.Heat!.THeat == Heat!.THeat));
+           acc && IsEqualTile(neighbour,tile => tile!.HeatInfo!.Heat == HeatInfo!.Heat));
        var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.Moisture!.TMoisture == Moisture!.TMoisture));
+           acc && IsEqualTile(neighbour,tile => tile!.MoistureInfo!.Moisture == MoistureInfo!.Moisture));
        var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.Biome.TBiome == Biome.TBiome));
+           acc && IsEqualTile(neighbour,tile => tile!.BiomeInfo.Biome == BiomeInfo.Biome));
        const double shadFactor = 0.8;
        if(heatIsBorder)
-          Heat!.Darkish(0);
+          HeatInfo!.Darkish(0);
        if(moistureIsBorder)
-           Moisture!.Darkish(0);
+           MoistureInfo!.Darkish(0);
        if(biomeIsBorder)
-           Biome.Darkish(shadFactor);
+           BiomeInfo.Darkish(shadFactor);
        if (heightIsBorder)
-           Height!.Darkish(shadFactor);
+           HeightInfo!.Darkish(shadFactor);
     }
 
     public Tile GetNextPixRiver(Tile skipped)
     {
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
-            tile1 != null && skipped != tile1 && tile1.Height!.HeightValue < tile2!.Height!.HeightValue;
+            tile1 != null && skipped != tile1 && tile1.HeightInfo!.NoiseValue < tile2!.HeightInfo!.NoiseValue;
 
         Tile tempTile = new Tile(-1, -1,new double[]{10,10,10});
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc)!);

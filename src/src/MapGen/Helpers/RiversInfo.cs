@@ -4,23 +4,15 @@ public sealed class RiversInfo
 {
     public int MaxRiverCount { get; }
     public int MaxRiverWidth { get; }
-    public double MaxRiverMoisture { get; }
-    public double MinRiverMoisture { get; }
-    public double StepMoisture { get; }
-    public int MsxSteps { get; }
-    
+
     private readonly Random _random;
     public RiversInfo(double width, double length)
     {
-        var riverCof = 0.000015;
+        const double riverCof = 0.000015;
+        const int minRiverCount = 1;
+        const int maxRiverCount = 5;
         _random = Random.Shared;
-        MinRiverMoisture = 0.8;
-        MaxRiverMoisture = 0.6;
-        const int cofSteps = 3;
-        const int cofDivision = 100;
-        MsxSteps = (int)(cofSteps * width / cofDivision);
-        StepMoisture = (MinRiverMoisture - MaxRiverMoisture) / MsxSteps;
-        MaxRiverCount = _random.Next(1, 5);
+        MaxRiverCount = _random.Next(minRiverCount, maxRiverCount);
         MaxRiverWidth = (int) Math.Ceiling(width * length * riverCof);
     }
     
@@ -56,7 +48,11 @@ public sealed class RiversInfo
 
         arrBorders.Sort();
         arrBorders.Add(0);
-        for (var i = 0; i < maxExtension + 1; ++i)
-            extend.Add(i != maxExtension ? new[] {_random.Next(border[i][1], border[i][0])} : arrBorders.ToArray());
+        for (var i = 0; i < maxExtension; ++i)
+        {
+            var elem =  new[] {_random.Next(border[i][1], border[i][0])};
+            extend.Add(elem);
+        }
+        extend.Add(arrBorders.ToArray());
     }
 }

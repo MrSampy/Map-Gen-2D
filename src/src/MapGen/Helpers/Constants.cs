@@ -14,8 +14,6 @@ public static class Constants
     private static readonly RgbColor HardRock = new (154, 148, 186);
     public static readonly RgbColor Snow = new (236, 256, 238);
 
-
-    
     private static readonly RgbColor Coldest = new(0, 255, 255);
     private static readonly RgbColor Colder = new (175, 255, 255);
     private static readonly RgbColor Cold = new (0, 255, 119);
@@ -126,11 +124,11 @@ public static class Constants
     private const double HeightValRock = 0.68;
     private const double HeightValHardRock = 0.69;
 
-    private const double HeatValColdest = 0.44;
-    private const double HeatValColder = 0.48;
-    private const double HeatValCold = 0.57;
-    private const double HeatValWarm = 0.66;
-    private const double HeatValWarmer = 0.69;
+    private const double ValColdest = 0.44;
+    private const double ValColder = 0.48;
+    private const double ValCold = 0.57;
+    private const double ValWarm = 0.66;
+    private const double ValWarmer = 0.69;
     
     private const double MoistureValWettest = 0.44;
     private const double MoistureValWetter = 0.48;
@@ -150,9 +148,9 @@ public static class Constants
     public const double MoistureUpCoastR = 0.85;
     private const double MoistureUpSand = 1.1;
     
-    private const double HeatUpSnow = 0.6;
-    private const double HeatUpHardRock = 0.7;
-    private const double HeatUpRock = 0.8;
+    private const double UpSnow = 0.6;
+    private const double UpHardRock = 0.7;
+    private const double UpRock = 0.8;
     
     public static readonly BiomeType[,] BiomeTable = {   
         //COLDEST        //COLDER          //COLD                  //HOT                          //HOTTER                       //HOTTEST
@@ -201,11 +199,11 @@ public static class Constants
         {BiomeType.Snow ,IceRiver}
         
     };
-    public static readonly Dictionary<Biomes,double> HeatUpdate = new()
+    public static readonly Dictionary<Biomes,double> UpdateHeat = new()
     {
-        {Biomes.Snow,HeatUpSnow },
-        {Biomes.HardRock , HeatUpHardRock},
-        {Biomes.Rock, HeatUpRock}
+        {Biomes.Snow,UpSnow },
+        {Biomes.HardRock , UpHardRock},
+        {Biomes.Rock, UpRock}
     };
     
     public static readonly Dictionary<Biomes,double> MoistureUpdate = new()
@@ -253,13 +251,12 @@ public static class Constants
         {MoistureValDrier, new TilesMoisture(MoistureType.Dryer, Dryer)}
     };
     
-    public static readonly Dictionary<double, TilesHeat> HeatValues = new()
+    public static readonly Dictionary<double, TilesHeat> ValuesHeat = new()
     {
-        {HeatValColdest, new TilesHeat(HeatType.Coldest, Coldest)},
-        {HeatValColder, new TilesHeat(HeatType.Colder, Colder)},
-        {HeatValCold, new TilesHeat(HeatType.Cold, Cold)},
-        {HeatValWarm, new TilesHeat(HeatType.Warm, Warm)},
-        {HeatValWarmer, new TilesHeat(HeatType.Warmer, Warmer)}
+        {ValColdest, new TilesHeat(HeatType.Coldest, Coldest)},
+        {ValColder, new TilesHeat(HeatType.Colder, Colder)},
+        {ValCold, new TilesHeat(HeatType.Cold, Cold)},
+        {ValWarm, new TilesHeat(HeatType.Warm, Warm)},
+        {ValWarmer, new TilesHeat(HeatType.Warmer, Warmer)}
     };
-
 }
