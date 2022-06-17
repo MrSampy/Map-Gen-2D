@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork", ".\src\src\src.csproj", "{D6D5F905-50ED-4481-8CCA-CC87DF9769EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", ".\src\src\src.csproj", "{D6D5F905-50ED-4481-8CCA-CC87DF9769EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0C5A55F4-C6A8-44AD-9AE1-1D9D02CBD1FE}"
 EndProject
