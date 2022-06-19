@@ -1,6 +1,6 @@
 namespace CourseWork.MapGen.Helpers;
 
-public class TilesBiome:TilesProperty
+public class TilesBiome : TilesProperty
 {
     public Constants.BiomeType Biome { get; }
 

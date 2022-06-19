@@ -14,5 +14,4 @@ public sealed class Map
         LenOfPixel = lenOfPix;
         Tiles = new Tile[Width, Height];
     }
-
 }

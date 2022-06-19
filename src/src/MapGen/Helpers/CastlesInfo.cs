@@ -19,5 +19,4 @@ public sealed class CastlesInfo
         RoadWidth = (int) Math.Ceiling(square * widthCof);
         MinPathLength = height / 3;
     }
-    
 }
