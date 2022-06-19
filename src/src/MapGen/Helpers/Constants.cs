@@ -151,7 +151,7 @@ public static class Constants
     private const double UpSnow = 0.6;
     private const double UpHardRock = 0.7;
     private const double UpRock = 0.8;
-    
+
     public static readonly BiomeType[,] BiomeTable = {   
         //COLDEST        //COLDER          //COLD                  //HOT                          //HOTTER                       //HOTTEST
         { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland,    BiomeType.Desert,              BiomeType.Desert,              BiomeType.Desert },              //DRIEST
@@ -238,7 +238,6 @@ public static class Constants
         {Blueberry, Biomes.Grass},
         {Iron, Biomes.Rock},
         {Coal, Biomes.Rock},
-        {Coal, Biomes.HardRock},
         {PinkCoral,Biomes.Coast},
         {VioletCoral,Biomes.Coast}
     };

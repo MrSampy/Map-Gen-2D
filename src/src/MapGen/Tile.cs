@@ -64,33 +64,30 @@ public sealed class Tile
 
         HeightInfo.NoiseNumber = newBiome;
     }
-    
-    private delegate bool IsEqual(Tile? tile);
-    private bool IsEqualTile(Tile? tile, IsEqual func) => tile != null && func(tile);
+    private bool IsEqualTile(Tile? tile, Func<Tile, bool> func) => tile != null && func(tile);
 
     public void UpdateBitmask()
     {
-       var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.HeightInfo!.Height == HeightInfo!.Height));
-       
-       var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.HeatInfo!.Heat == HeatInfo!.Heat));
-       
-       var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.MoistureInfo!.Moisture == MoistureInfo!.Moisture));
-      
-       var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
-           acc && IsEqualTile(neighbour,tile => tile!.BiomeInfo.Biome == BiomeInfo.Biome));
-      
-       const double shadFactor = 0.8;
-       if(heatIsBorder)
-          HeatInfo!.Darkish(0);
-       if(moistureIsBorder)
-           MoistureInfo!.Darkish(0);
-       if(biomeIsBorder)
-           BiomeInfo.Darkish(shadFactor);
-       if (heightIsBorder)
-           HeightInfo!.Darkish(shadFactor);
+        var functions = new Func<Tile, bool>[]
+        {
+            tile => tile.HeightInfo!.Height == HeightInfo!.Height,
+            tile => tile.HeatInfo!.Heat == HeatInfo!.Heat,
+            tile => tile.MoistureInfo!.Moisture == MoistureInfo!.Moisture,
+            tile => tile.BiomeInfo.Biome == BiomeInfo.Biome
+        };
+        
+        var settings = functions.Select(t => 
+            !Neighbours.Aggregate(true, (acc, neighbour) => acc && IsEqualTile(neighbour, t))).ToList();
+
+        const double shadFactor = 0.8;
+        if (settings[0])
+            HeightInfo!.Darkish(shadFactor);
+        if(settings[1])
+            HeatInfo!.Darkish(0);
+        if(settings[2])
+            MoistureInfo!.Darkish(0);
+        if(settings[3])
+            BiomeInfo.Darkish(shadFactor);
     }
 
     public Tile GetNextPixRiver(Tile skipped)
@@ -98,7 +95,7 @@ public sealed class Tile
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
             tile1 != null && skipped != tile1 && tile1.HeightInfo!.NoiseNumber < tile2!.HeightInfo!.NoiseNumber;
 
-        Tile tempTile = new Tile(-1, -1,new double[]{10,10,10});
+        var tempTile = new Tile(-1, -1,new double[]{10,10,10});
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc)!);
         return tempTile;
     }

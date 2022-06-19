@@ -1,7 +1,7 @@
 using CourseWork.MapGen.Helpers;
 namespace CourseWork.MapGen;
 
-public sealed class MapBuilder
+public class MapBuilder
 {
     private static readonly Random Random = Random.Shared;
     private readonly Map _map;
@@ -67,7 +67,7 @@ public sealed class MapBuilder
         return _map;
     }
     
-    private void UpdateBiomeMap()
+    protected internal void UpdateBiomeMap()
     {
         for (var x = 0; x < _map.Width; x++)
         {
@@ -125,7 +125,7 @@ public sealed class MapBuilder
 
     }
 
-    private void FindNeighbours()
+    protected internal void FindNeighbours()
     {
         for (var x = 0; x < _map.Width; x++)
         {
@@ -140,7 +140,7 @@ public sealed class MapBuilder
         }
     }
     
-    private void UpdateBitmasks()=>
+    protected internal void UpdateBitmasks()=>
         Parallel.For(0, _map.Width, x =>
         {
             Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBitmask());
