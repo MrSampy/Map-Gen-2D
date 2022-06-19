@@ -67,29 +67,11 @@ public class MapBuilder
         return _map;
     }
     
-    protected internal void UpdateBiomeMap()
-    {
-        for (var x = 0; x < _map.Width; x++)
+    protected internal void UpdateBiomeMap()=>
+        Parallel.For(0, _map.Width, x =>
         {
-            for (var y = 0; y < _map.Height; y++)
-            {
-                Constants.BiomeType biome;
-                var isCoast = !_map.Tiles[x, y].IsLand || _map.Tiles[x, y].HeightInfo!.Height == Constants.Biomes.Sand;
-                if (!isCoast && !_map.Tiles[x, y].IsMountain )
-                {
-                    var x1 = (int) _map.Tiles[x, y].MoistureInfo!.Moisture;
-                    var y1 = (int) _map.Tiles[x, y].HeatInfo!.Heat; 
-                    biome = Constants.BiomeTable[x1, y1];
-                }
-                else
-                {
-                    var numOfBiome = (int) _map.Tiles[x, y].HeightInfo!.Height;
-                    biome = (Constants.BiomeType) numOfBiome;
-                }
-                _map.Tiles[x, y].BiomeInfo = new TilesBiome(biome, Constants.BiomesUpdate[biome]);
-            }
-        }
-    }
+            Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBiome());
+        });
     
     private void UpdateHeatMap()
     {

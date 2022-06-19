@@ -14,19 +14,19 @@ public sealed class Tile
     public bool HasRiver;
     public Tile?[] Neighbours;
     public bool Structure;
-    public readonly bool IsMountain;
-    public Tile(int x, int y, IReadOnlyList<double> heightValues)
+    private readonly bool _isMountain;
+    public Tile(int x, int y, IReadOnlyList<double> heightNumbers)
     {
         X = x;
         Y = y;
         HasRiver = false;
         Structure = false;
         Neighbours = new Tile[4];
-        UpdateHeight(heightValues[0]);
-        UpdateHeat(heightValues[1]);
-        UpdateMoisture(heightValues[2]);
+        UpdateHeight(heightNumbers[0]);
+        UpdateHeat(heightNumbers[1]);
+        UpdateMoisture(heightNumbers[2]);
         IsLand = HeightInfo!.NoiseNumber>=Constants.HeightValCoast;
-        IsMountain = HeightInfo.NoiseNumber > Constants.HeightValDeepForest;
+        _isMountain = HeightInfo.NoiseNumber > Constants.HeightValDeepForest;
     }
 
     public void UpdateMoisture(double newMoisture)
@@ -49,9 +49,7 @@ public sealed class Tile
             HeatInfo = new TilesHeat(elem.Value.Heat, elem.Value.Color);
             break;
         }
-        HeatInfo.NoiseNumber = newHeat; 
-
-
+        HeatInfo.NoiseNumber = newHeat;
     }
     private void UpdateHeight(double newBiome)
     {
@@ -63,6 +61,23 @@ public sealed class Tile
         }
 
         HeightInfo.NoiseNumber = newBiome;
+    }
+    public void UpdateBiome()
+    {
+        Constants.BiomeType biome;
+        var isCoast = !IsLand || HeightInfo!.Height == Constants.Biomes.Sand;
+        if (!isCoast && !_isMountain )
+        {
+            var x1 = (int) MoistureInfo!.Moisture;
+            var y1 = (int) HeatInfo!.Heat; 
+            biome = Constants.BiomeTable[x1, y1];
+        }
+        else
+        {
+            var numOfBiome = (int) HeightInfo!.Height;
+            biome = (Constants.BiomeType) numOfBiome;
+        }
+        BiomeInfo = new TilesBiome(biome, Constants.BiomesUpdate[biome]);
     }
     private bool IsEqualTile(Tile? tile, Func<Tile, bool> func) => tile != null && func(tile);
 

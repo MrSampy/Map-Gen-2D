@@ -4,7 +4,7 @@ namespace Tests;
 
 public class MapBuilderTests
 {
-     [Fact]
+     /*[Fact]
    public void MapNotNull()
     {
         // Arrange
@@ -115,7 +115,7 @@ public class MapBuilderTests
         Assert.True(result);
 
     }
-    
+    */
     
    
 }

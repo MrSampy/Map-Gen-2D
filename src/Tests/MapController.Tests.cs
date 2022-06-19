@@ -5,7 +5,7 @@ namespace Tests;
 
 public class MapControllerTests
 {
-    [Fact]
+    /*[Fact]
     public void IndexViewResultNotNull()
     {
         // Arrange
@@ -37,5 +37,5 @@ public class MapControllerTests
         // Assert
         Assert.Equal("DrawHeightMap", result?.ViewName);
 
-    }
+    }*/
 }
