@@ -140,12 +140,12 @@ public sealed class MapBuilder
         }
     }
     
-    private void UpdateBitmasks()
-    {
-        for (var x = 0; x < _map.Width; x++)
-        for (var y = 0; y < _map.Height; y++)
-            _map.Tiles[x, y].UpdateBitmask();
-    }
+    private void UpdateBitmasks()=>
+        Parallel.For(0, _map.Width, x =>
+        {
+            Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBitmask());
+        });
+    
 
     private void UpdateRivers()
     {
