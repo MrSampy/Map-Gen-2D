@@ -25,8 +25,8 @@ public sealed class Tile
         UpdateHeight(heightValues[0]);
         UpdateHeat(heightValues[1]);
         UpdateMoisture(heightValues[2]);
-        IsLand = HeightInfo!.NoiseValue>=Constants.HeightValCoast;
-        IsMountain = HeightInfo.NoiseValue > Constants.HeightValDeepForest;
+        IsLand = HeightInfo!.NoiseNumber>=Constants.HeightValCoast;
+        IsMountain = HeightInfo.NoiseNumber > Constants.HeightValDeepForest;
     }
 
     public void UpdateMoisture(double newMoisture)
@@ -37,7 +37,7 @@ public sealed class Tile
             MoistureInfo = new TilesMoisture(elem.Value.Moisture, elem.Value.Color);
             break;
         }
-        MoistureInfo.NoiseValue = newMoisture;
+        MoistureInfo.NoiseNumber = newMoisture;
 
     }
 
@@ -49,7 +49,7 @@ public sealed class Tile
             HeatInfo = new TilesHeat(elem.Value.Heat, elem.Value.Color);
             break;
         }
-        HeatInfo.NoiseValue = newHeat; 
+        HeatInfo.NoiseNumber = newHeat; 
 
 
     }
@@ -62,7 +62,7 @@ public sealed class Tile
             break;
         }
 
-        HeightInfo.NoiseValue = newBiome;
+        HeightInfo.NoiseNumber = newBiome;
     }
     
     private delegate bool IsEqual(Tile? tile);
@@ -72,12 +72,16 @@ public sealed class Tile
     {
        var heightIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.HeightInfo!.Height == HeightInfo!.Height));
+       
        var heatIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.HeatInfo!.Heat == HeatInfo!.Heat));
+       
        var moistureIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.MoistureInfo!.Moisture == MoistureInfo!.Moisture));
+      
        var biomeIsBorder = !Neighbours.Aggregate(true, (acc, neighbour) => 
            acc && IsEqualTile(neighbour,tile => tile!.BiomeInfo.Biome == BiomeInfo.Biome));
+      
        const double shadFactor = 0.8;
        if(heatIsBorder)
           HeatInfo!.Darkish(0);
@@ -92,7 +96,7 @@ public sealed class Tile
     public Tile GetNextPixRiver(Tile skipped)
     {
         bool IsNextTile(Tile? tile1, Tile? tile2) =>
-            tile1 != null && skipped != tile1 && tile1.HeightInfo!.NoiseValue < tile2!.HeightInfo!.NoiseValue;
+            tile1 != null && skipped != tile1 && tile1.HeightInfo!.NoiseNumber < tile2!.HeightInfo!.NoiseNumber;
 
         Tile tempTile = new Tile(-1, -1,new double[]{10,10,10});
         tempTile = Neighbours.Aggregate(tempTile, (acc, neighbour) => (IsNextTile(neighbour, acc) ? neighbour : acc)!);

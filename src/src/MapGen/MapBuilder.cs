@@ -100,7 +100,7 @@ public sealed class MapBuilder
                 double newHeight = 0;
                 foreach (var biome in Constants.UpdateHeat.Where(biome 
                              => _map.Tiles[x, y].HeightInfo!.Height == biome.Key))
-                    newHeight = _map.Tiles[x, y].HeatInfo!.NoiseValue * biome.Value;
+                    newHeight = _map.Tiles[x, y].HeatInfo!.NoiseNumber * biome.Value;
                 if (Convert.ToBoolean(newHeight))
                     _map.Tiles[x,y].UpdateHeat(newHeight);
             }
@@ -116,7 +116,7 @@ public sealed class MapBuilder
                 double newHeight = 0;
                 foreach (var biome in Constants.MoistureUpdate.Where(biome
                              => _map.Tiles[x, y].HeightInfo!.Height == biome.Key))
-                    newHeight = _map.Tiles[x, y].MoistureInfo!.NoiseValue * biome.Value;
+                    newHeight = _map.Tiles[x, y].MoistureInfo!.NoiseNumber * biome.Value;
                 if (Convert.ToBoolean(newHeight))
                     _map.Tiles[x,y].UpdateMoisture(newHeight);
                 
@@ -155,7 +155,7 @@ public sealed class MapBuilder
             {
                 if (!_map.Tiles[x, y].HasRiver) continue;
                 _map.Tiles[x, y].HeightInfo = new TilesHeight(Constants.Biomes.Coast, Constants.Coast);
-                var moistureCof = _map.Tiles[x, y].MoistureInfo!.NoiseValue*Constants.MoistureUpCoastR;
+                var moistureCof = _map.Tiles[x, y].MoistureInfo!.NoiseNumber*Constants.MoistureUpCoastR;
                 _map.Tiles[x, y].UpdateMoisture(moistureCof);
                 _map.Tiles[x, y].BiomeInfo.Color = Constants.RiversUpdate[_map.Tiles[x, y].BiomeInfo.Biome];
 
@@ -260,7 +260,7 @@ public sealed class MapBuilder
         {
             var x = Random.Next(_rivers.MaxRiverWidth, _map.Width - _rivers.MaxRiverWidth - 1);
             var y = Random.Next(_rivers.MaxRiverWidth, _map.Height - _rivers.MaxRiverWidth - 1);
-            var isMinRiverGen = _map.Tiles[x, y].HeightInfo!.NoiseValue < Constants.MinRiverGeneration;
+            var isMinRiverGen = _map.Tiles[x, y].HeightInfo!.NoiseNumber < Constants.MinRiverGeneration;
             var isCorrectLand = _map.Tiles[x, y].HasRiver || isMinRiverGen;
             if (!_map.Tiles[x, y].IsLand || isCorrectLand)
                 continue;
@@ -391,7 +391,7 @@ public sealed class MapBuilder
         {
             for (var j = y; j < _castles.WallLength + y; j++)
             {
-                var range = _map.Tiles[i, j].HeightInfo!.NoiseValue 
+                var range = _map.Tiles[i, j].HeightInfo!.NoiseNumber 
                     is > Constants.MaxStructureVal or < Constants.MinStructureVal;
                 var isFree = _map.Tiles[i, j].HasRiver || _map.Tiles[i, j].Structure;
                 if (!isFree && !range) continue;

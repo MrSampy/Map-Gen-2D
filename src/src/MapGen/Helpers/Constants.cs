@@ -117,11 +117,11 @@ public static class Constants
     private const double HeightValOcean = 0.43;
     private const double HeightValShallWat = 0.46;
     public const double HeightValCoast = 0.5;
-    private const double HeightValSand = 0.51;
+    public const double HeightValSand = 0.51;
     private const double HeightValGrass = 0.59;
     private const double HeightValForest = 0.62;
     public const double HeightValDeepForest = 0.66;
-    private const double HeightValRock = 0.68;
+    public const double HeightValRock = 0.68;
     private const double HeightValHardRock = 0.69;
 
     private const double ValColdest = 0.44;
@@ -238,10 +238,11 @@ public static class Constants
         {Blueberry, Biomes.Grass},
         {Iron, Biomes.Rock},
         {Coal, Biomes.Rock},
+        {Coal, Biomes.HardRock},
         {PinkCoral,Biomes.Coast},
         {VioletCoral,Biomes.Coast}
     };
-    
+
     public static readonly Dictionary<double, TilesMoisture> MoistureValues = new()
     {
         {MoistureValWettest, new TilesMoisture(MoistureType.Wettest, Wettest)},
