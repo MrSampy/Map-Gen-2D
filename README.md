@@ -2,7 +2,7 @@
 
 ## Concept Idea
 
-This system allows you to create, set up and download a procedurally generated 2d map of heights, heat, moisture and biome. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
+This system allows you to create, set up and download a procedurally generated 2D map of heights, heat, moisture and biome. This can be useful for making games of RoguelIke, RTS, Survival or RPG genres, or for playing D&D;
 
 ## Description of features
 - The size and quantity of some objects (castles, rivers, roads) depends on the area of the map
@@ -11,6 +11,7 @@ This system allows you to create, set up and download a procedurally generated 2
 - Berries (strawberries, blueberries) are generated only in grassland biome
 - Ores (iron, coal) are generated only in the mountains biome
 - Corals (Pink, Violet) are generated only in the coast biome
+- The color of the river depends on the biome in which it flows
 
 ## Description of map generation
 1. Three maps(Height, Heat and Moisture) are generated using Perlin noise with different seeds
@@ -63,7 +64,7 @@ This program is distributed under an MIT License.
 
 ## Future
 1. Use Perlin Noise to generate houses in Castles 
-2. Add generation of coral reef
+2. Improve map creation algorithm
 3. Add generation different types of mountains
 4. Add collapsing the map on both axes
 5. Add Spherical map generation
