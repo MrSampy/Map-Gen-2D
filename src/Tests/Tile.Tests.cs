@@ -10,7 +10,7 @@ public class TileTests
         // Arrange
         const int x = 0;
         const int y = 0;
-        var heightNumbers = new double[] {0.651, 0.622, 0.586};
+        var heightNumbers = new [] {0.651, 0.622, 0.586};
     
         // Act
         var tile = new Tile(x, y, heightNumbers);
@@ -25,7 +25,7 @@ public class TileTests
         // Arrange
         const int x = 0;
         const int y = 0;
-        var heightNumbers = new double[] {0.651, 0.578, 0.343};
+        var heightNumbers = new [] {0.651, 0.578, 0.343};
 
         // Act
         var tile = new Tile(x, y, heightNumbers);
@@ -40,7 +40,7 @@ public class TileTests
         // Arrange
         const int x = 0;
         const int y = 0;
-        var heightNumbers = new double[] {0.456, 0.649, 0.453};
+        var heightNumbers = new [] {0.456, 0.649, 0.453};
 
         // Act
         var tile = new Tile(x, y, heightNumbers);

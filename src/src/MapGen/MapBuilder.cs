@@ -2,7 +2,7 @@ using CourseWork.MapGen.Helpers;
 
 namespace CourseWork.MapGen;
 
-public class MapBuilder
+public sealed class MapBuilder
 {
     private static readonly Random Random = Random.Shared;
     private readonly Map _map;
