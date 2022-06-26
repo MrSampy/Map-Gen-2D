@@ -2,6 +2,7 @@ namespace CourseWork.MapGen.Helpers;
 
 public static class Constants
 {
+    #region Colors
     private static readonly RgbColor DeepWater = new(0, 27, 115);
     private static readonly RgbColor Ocean = new(0, 60, 255);
     private static readonly RgbColor ShallowWater = new(0, 118, 169);
@@ -9,7 +10,7 @@ public static class Constants
     private static readonly RgbColor Sand = new(249, 221, 84);
     private static readonly RgbColor Grass = new(57, 205, 72);
     private static readonly RgbColor Forest = new(2, 137, 15);
-    public static readonly RgbColor DeepForest = new(17, 65, 22);
+    private static readonly RgbColor DeepForest = new(17, 65, 22);
     private static readonly RgbColor Rock = new(191, 185, 183);
     private static readonly RgbColor HardRock = new(154, 148, 186);
     public static readonly RgbColor Snow = new(236, 256, 238);
@@ -56,6 +57,9 @@ public static class Constants
     private static readonly RgbColor PartIceRiver = new(128, 199, 229);
     private static readonly RgbColor ColdRiver = new(75, 186, 223);
 
+    #endregion
+    
+    #region Types
     public enum BiomeType
     {
         DeepWater,
@@ -112,15 +116,19 @@ public static class Constants
         Wettest
     }
 
+    #endregion
+    
+    #region ConstNumbers
+    
     private const double HeightValDeepWat = 0.4;
     private const double HeightValOcean = 0.43;
     private const double HeightValShallWat = 0.46;
     public const double HeightValCoast = 0.5;
-    public const double HeightValSand = 0.51;
+    private const double HeightValSand = 0.51;
     private const double HeightValGrass = 0.59;
     private const double HeightValForest = 0.62;
     public const double HeightValDeepForest = 0.66;
-    public const double HeightValRock = 0.68;
+    private const double HeightValRock = 0.68;
     private const double HeightValHardRock = 0.69;
 
     private const double ValColdest = 0.44;
@@ -151,7 +159,11 @@ public static class Constants
     private const double UpHardRock = 0.7;
     private const double UpRock = 0.8;
 
-    public static readonly BiomeType[,] BiomeTable = new BiomeType[6,6] {   
+    #endregion
+    
+    #region IEnumerables
+    
+    public static readonly BiomeType[,] BiomeTable = {   
         //COLDEST        //COLDER          //COLD                  //HOT                          //HOTTER                       //HOTTEST
         { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland,    BiomeType.Desert,              BiomeType.Desert,              BiomeType.Desert },              //DRYEST
         { BiomeType.Ice, BiomeType.Tundra, BiomeType.Grassland,    BiomeType.Desert,              BiomeType.Desert,              BiomeType.Desert },              //DRYER
@@ -258,4 +270,6 @@ public static class Constants
         {ValWarm, new TilesHeat(HeatType.Warm, Warm)},
         {ValWarmer, new TilesHeat(HeatType.Warmer, Warmer)}
     };
+    #endregion
+    
 }

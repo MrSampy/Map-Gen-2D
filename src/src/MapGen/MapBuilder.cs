@@ -72,8 +72,7 @@ public sealed class MapBuilder
     }
 
     private void UpdateBiomeMap() =>
-        Parallel.For(0, _map.Width, x => 
-            { Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBiome()); });
+        Parallel.For(0, _map.Width, x => { Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBiome()); });
 
     private void UpdateHeatMap()
     {
@@ -82,27 +81,13 @@ public sealed class MapBuilder
             for (var y = 0; y < _map.Height; y++)
             {
                 double newHeight = 0;
+
                 foreach (var biome in Constants.UpdateHeat.Where(biome
                              => _map.Tiles[x, y].HeightInfo!.Height == biome.Key))
                     newHeight = _map.Tiles[x, y].HeatInfo!.NoiseNumber * biome.Value;
+
                 if (Convert.ToBoolean(newHeight))
                     _map.Tiles[x, y].UpdateHeat(newHeight);
-            }
-        }
-    }
-
-    private void UpdateMoistureMap()
-    {
-        for (var x = 0; x < _map.Width; x++)
-        {
-            for (var y = 0; y < _map.Height; y++)
-            {
-                double newHeight = 0;
-                foreach (var biome in Constants.MoistureUpdate.Where(biome
-                             => _map.Tiles[x, y].HeightInfo!.Height == biome.Key))
-                    newHeight = _map.Tiles[x, y].MoistureInfo!.NoiseNumber * biome.Value;
-                if (Convert.ToBoolean(newHeight))
-                    _map.Tiles[x, y].UpdateMoisture(newHeight);
             }
         }
     }
@@ -123,8 +108,7 @@ public sealed class MapBuilder
     }
 
     private void UpdateBitmasks() =>
-        Parallel.For(0, _map.Width, x => 
-            { Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBitmask()); });
+        Parallel.For(0, _map.Width, x => { Parallel.For(0, _map.Height, y => _map.Tiles[x, y].UpdateBitmask()); });
 
 
     private void UpdateRivers()
@@ -155,9 +139,12 @@ public sealed class MapBuilder
         const int turnNum = 10;
         const int range = 2;
         const int maxNeighbor = 3;
+
         river.Add(tempTile);
+
         var isClear = Convert.ToBoolean(river.Count);
         var nextTile = tempTile.GetNextPixRiver(isClear ? river.Last() : tempTile);
+
         if ((isClear || Random.Next(turnNum) == 0) && river.Count >= range)
         {
             var newtTile = tempTile.Neighbours[Random.Next(maxNeighbor)];
@@ -174,6 +161,7 @@ public sealed class MapBuilder
         var counter = _numOfRanges;
         const int bordersRange = 2;
         const int particleNum = 20;
+
         while (attempt != 0)
         {
             if (counter == 0)
@@ -181,17 +169,38 @@ public sealed class MapBuilder
 
             var x = Random.Next(1, _map.Width - Constants.RangeOfParticles - bordersRange);
             var y = Random.Next(1, _map.Height - Constants.RangeOfParticles - bordersRange);
+
             if (_map.Tiles[x, y].HeightInfo!.Height != biome)
+            {
                 --attempt;
+            }
             else
             {
                 for (var i = x; i < Constants.RangeOfParticles + x; ++i)
                 for (var j = y; j < Constants.RangeOfParticles + y; ++j)
                     if (_map.Tiles[i, j].HeightInfo!.Height == biome && Random.Next(particleNum) == 0)
                         _map.Tiles[i, j].HeightInfo!.Color = color;
+
                 --counter;
             }
         }
+    }
+
+    private Dictionary<(int x, int y), bool> GetCondition(Tile tile, bool isXChange, int changeNumber)
+    {
+        var conditionsX = new Dictionary<(int x, int y), bool>
+        {
+            {(x: tile.X + changeNumber, y: tile.Y), tile.X + changeNumber < _map.Width},
+            {(x: tile.X - changeNumber, y: tile.Y), tile.X - changeNumber >= 0}
+        };
+
+        var conditionsY = new Dictionary<(int x, int y), bool>
+        {
+            {(x: tile.X, y: tile.Y + changeNumber), tile.Y + changeNumber < _map.Height},
+            {(x: tile.X, y: tile.Y - changeNumber), tile.Y - changeNumber >= 0}
+        };
+
+        return isXChange ? conditionsX : conditionsY;
     }
 
     private void ExtendRiver(IReadOnlyList<Tile> river)
@@ -213,20 +222,10 @@ public sealed class MapBuilder
             isXChange = (river[i] != river[^1]) ? river[i + 1].Y != river[i].Y : isXChange;
             for (var j = 1; j <= extension[extendCounter][0]; j++)
             {
-                if (isXChange)
-                {
-                    if (river[i].X + j < _map.Width)
-                        _map.Tiles[river[i].X + j, river[i].Y].HasRiver = true;
-                    if (river[i].X - j >= 0)
-                        _map.Tiles[river[i].X - j, river[i].Y].HasRiver = true;
-                }
-                else
-                {
-                    if (river[i].Y + j < _map.Height)
-                        _map.Tiles[river[i].X, river[i].Y + j].HasRiver = true;
-                    if (river[i].Y - j >= 0)
-                        _map.Tiles[river[i].X, river[i].Y - j].HasRiver = true;
-                }
+                var conditions = GetCondition(river[i], isXChange, j);
+
+                foreach (var condition in conditions.Where(condition => condition.Value))
+                    _map.Tiles[condition.Key.x, condition.Key.y].HasRiver = true;
             }
         }
     }
@@ -240,15 +239,20 @@ public sealed class MapBuilder
             var y = Random.Next(_rivers.MaxRiverWidth, _map.Height - _rivers.MaxRiverWidth - 1);
             var isMinRiverGen = _map.Tiles[x, y].HeightInfo!.NoiseNumber < Constants.MinRiverGeneration;
             var isCorrectLand = _map.Tiles[x, y].HasRiver || isMinRiverGen;
+
             if (!_map.Tiles[x, y].IsLand || isCorrectLand)
                 continue;
+
             var river = new List<Tile>();
             FindPath(_map.Tiles[x, y], ref river);
             var isSand = river.Count == 0 || river.Last().HeightInfo!.Height != Constants.Biomes.Sand;
+
             if (isSand || river.Count <= Constants.MinRiverLength)
                 continue;
+
             foreach (var riv in river)
                 _map.Tiles[riv.X, riv.Y].HasRiver = true;
+
             ExtendRiver(river);
             --riverCount;
         }
@@ -256,46 +260,36 @@ public sealed class MapBuilder
         UpdateRivers();
     }
 
+    private void MakeStructure(Tile tile)
+    {
+        if (!tile.IsLand || _structures.Contains(tile)) return;
+        var color = !tile.HasRiver ? Constants.Road : Constants.Bridge;
+        _map.Tiles[tile.X, tile.Y].HeightInfo!.Color = color;
+    }
+
     private void FillFullPathCastle(IReadOnlyList<Tile> path)
     {
-        void MakeStructure(Tile tile)
-        {
-            if (!tile.IsLand || _structures.Contains(tile)) return;
-            var color = !tile.HasRiver ? Constants.Road : Constants.Bridge;
-            _map.Tiles[tile.X, tile.Y].HeightInfo!.Color = color;
-        }
-
         var isXChange = true;
         for (var i = 0; i < path.Count; ++i)
         {
             isXChange = (path[i] != path.Last()) ? path[i + 1].Y != path[i].Y : isXChange;
             for (var j = 1; j <= _castles.RoadWidth; j++)
             {
-                Tile tempTile;
-                if (isXChange)
-                {
-                    tempTile = path[i].X + j < _map.Width
-                        ? _map.Tiles[path[i].X + j, path[i].Y]
-                        : _structures.Last();
+                var conditions = GetCondition(path[i], isXChange, j);
+
+                foreach (var tempTile in conditions.Select(condition => condition.Value
+                             ? _map.Tiles[condition.Key.x, condition.Key.y]
+                             : _structures.Last()))
                     MakeStructure(tempTile);
-                    tempTile = path[i].X - j >= 0
-                        ? _map.Tiles[path[i].X - j, path[i].Y]
-                        : _structures.Last();
-                    MakeStructure(tempTile);
-                }
-                else
-                {
-                    tempTile = path[i].Y + j < _map.Height
-                        ? _map.Tiles[path[i].X, path[i].Y + j]
-                        : _structures.Last();
-                    MakeStructure(tempTile);
-                    tempTile = path[i].Y - j >= 0
-                        ? _map.Tiles[path[i].X, path[i].Y - j]
-                        : _structures.Last();
-                    MakeStructure(tempTile);
-                }
             }
         }
+    }
+
+    private void FillMainPath(IReadOnlyCollection<Tile> path)
+    {
+        foreach (var tile in path.Where(tile => !_structures.Contains(_map.Tiles[tile.X, tile.Y])))
+            _map.Tiles[tile.X, tile.Y].HeightInfo!.Color = !tile.HasRiver ? Constants.Road : Constants.Bridge;
+        _structures.AddRange(path);
     }
 
     private void AddCastles()
@@ -303,14 +297,6 @@ public sealed class MapBuilder
         const int cofDivision = 100;
         var stop = _map.Height / cofDivision;
         var allRoads = new List<Tile>();
-
-        void FillMainPath(IReadOnlyCollection<Tile> path)
-        {
-            foreach (var tile in path.Where(tile => !_structures.Contains(_map.Tiles[tile.X, tile.Y])))
-                _map.Tiles[tile.X, tile.Y].HeightInfo!.Color = !tile.HasRiver ? Constants.Road : Constants.Bridge;
-            _structures.AddRange(path);
-        }
-
         var counter = 0;
         while (counter != stop)
         {
@@ -457,5 +443,23 @@ public sealed class MapBuilder
         }
 
         return true;
+    }
+
+    private void UpdateMoistureMap()
+    {
+        for (var x = 0; x < _map.Width; x++)
+        {
+            for (var y = 0; y < _map.Height; y++)
+            {
+                double newHeight = 0;
+
+                foreach (var biome in Constants.MoistureUpdate.Where(biome
+                             => _map.Tiles[x, y].HeightInfo!.Height == biome.Key))
+                    newHeight = _map.Tiles[x, y].MoistureInfo!.NoiseNumber * biome.Value;
+
+                if (Convert.ToBoolean(newHeight))
+                    _map.Tiles[x, y].UpdateMoisture(newHeight);
+            }
+        }
     }
 }
