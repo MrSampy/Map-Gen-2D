@@ -60,7 +60,7 @@ If you have any ideas for improving the program, feel free to add new Issues on 
 You can also create Pull Requests on the [Pull Requests](https://github.com/MrSampy/Course-work/pulls) page.
 
 ## License
-This program is distributed under an MIT License.
+>**Note**: This program is distributed under an MIT License.
 
 ## Future
 1. Use Perlin Noise to generate houses in Castles 
